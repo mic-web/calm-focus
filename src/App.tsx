@@ -5,7 +5,7 @@ import PauseIcon from './PauseIcon'
 import PlayIcon from './PlayIcon'
 
 const milliSecondsPerSecond = 1000
-const sessionMinutes = 25
+const sessionMinutes = 0.1
 const sessionSeconds = sessionMinutes * 60
 
 enum States {
@@ -34,7 +34,7 @@ const App: React.FC = () => {
     setIsActive(true)
   }
   function reset() {
-    setSecondsLeft(sessionMinutes)
+    setSecondsLeft(secondsLeft)
     setIsActive(false)
     setIsInitial(true)
   }
