@@ -1,97 +1,185 @@
-import React from "react";
-import clsx from "clsx";
-import "./App.css";
+import React from 'react'
+import './App.css'
+import ResetIcon from './ResetIcon'
+import PauseIcon from './PauseIcon'
+import PlayIcon from './PlayIcon'
 
-const milliSecondsPerMinute = 60 * 10
-const sessionMinutes = 2
+const milliSecondsPerSecond = 1000
+const sessionMinutes = 25
+const sessionSeconds = sessionMinutes * 60
+
+enum States {
+  INITIAL = 'INITIAL',
+  COMPLETED = 'COMPLETED',
+  RUNNING = 'RUNNING',
+  PAUSED = 'PAUSED',
+}
+
+const StateClassMap = {
+  [States.INITIAL]: 'initial',
+  [States.COMPLETED]: 'completed',
+  [States.RUNNING]: 'running',
+  [States.PAUSED]: 'paused',
+}
 
 const App: React.FC = () => {
-  const [minutesLeft, setMinutesLeft] = React.useState(sessionMinutes);
-  const [isActive, setIsActive] = React.useState(false);
-  const [isComplete, setIsComplete] = React.useState(false);
+  const [secondsLeft, setSecondsLeft] = React.useState(sessionSeconds)
+  const [isActive, setIsActive] = React.useState(false)
+  const [isInitial, setIsInitial] = React.useState(true)
 
-  function toggle() {
-    setIsActive(!isActive);
+  function pause() {
+    setIsActive(false)
   }
-
+  function start() {
+    setIsActive(true)
+  }
   function reset() {
-    setMinutesLeft(sessionMinutes);
-    setIsActive(false);
-    setIsComplete(false)
+    setSecondsLeft(sessionMinutes)
+    setIsActive(false)
+    setIsInitial(true)
   }
 
   React.useEffect(() => {
+    function tick() {
+      setSecondsLeft(secondsLeft > 0 ? secondsLeft - 1 : 0)
+    }
     let interval: number = -1
     if (isActive) {
-      interval = window.setInterval(tick, milliSecondsPerMinute);
-    } else if (!isActive && minutesLeft !== 0) {
-      clearInterval(interval);
+      setIsInitial(false)
+      interval = window.setInterval(tick, milliSecondsPerSecond)
+    } else if (!isActive && secondsLeft !== 0) {
+      clearInterval(interval)
     }
-    return () => clearInterval(interval);
-  }, [isActive, minutesLeft]);
+    return () => {
+      clearInterval(interval)
+    }
+  }, [isActive, secondsLeft])
 
-  function tick() {
-    if (!isTimeOver()) {
-      setMinutesLeft(minutesLeft - 1);
+  function getProgress() {
+    if (getState() === States.INITIAL) {
+      return 1
+    } else {
+      return (sessionSeconds - secondsLeft) / sessionSeconds
     }
   }
 
-  function isTimeOver() {
-    return minutesLeft === 0
+  function getState() {
+    if (isInitial) {
+      return States.INITIAL
+    } else if (secondsLeft === 0) {
+      return States.COMPLETED
+    } else if (!isActive) {
+      return States.PAUSED
+    } else {
+      return States.RUNNING
+    }
   }
-
-  let progress = 1
-  if (isActive || minutesLeft < sessionMinutes) {
-    progress = (sessionMinutes - minutesLeft) / sessionMinutes
-  }
-
+  const minutesLeft = Math.round(secondsLeft / 60)
   return (
-    <div className={clsx("App", isTimeOver() && "time-over")}>
-      <main className={`main-container ${isActive ? 'active' : 'inactive'}`}>
+    <div className={`app app--${StateClassMap[getState()]}`}>
+      <div className={`completed-background`}></div>
+      <main className={`main-container`}>
         <div className={`time-container`}>
-          <Circle progress={progress} />
-          <div className='time-left'>{minutesLeft}</div>
+          <Circle progress={getProgress()} />
+          <div className="time-left">{minutesLeft}</div>
         </div>
         <div className="controls">
-        <button className="button reset" onClick={reset}>Reset</button>
-        <button className={`button button-primary button-primary-${isActive ? 'active' : 'inactive'} ${isComplete ? 'disabled' : ''}`} onClick={toggle}>
-          {isActive ? 'Pause' : 'Start'}
-        </button>
+          <StartButton
+            state={getState()}
+            start={start}
+            pause={pause}
+            resume={start}
+          />
+          <ResetIcon
+            onClick={reset}
+            className={`
+              icon-button
+              reset
+            `}
+          />
         </div>
       </main>
+      {getState() === States.COMPLETED && (
+        <div className="hint">Pause for 5 minutes</div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-interface CircleProps {
+type StartButtonProps = {
+  state: States
+  start: () => void
+  pause: () => void
+  resume: () => void
+}
+
+const StartButton: React.FC<StartButtonProps> = ({
+  state,
+  start,
+  pause,
+  resume,
+}) => {
+  switch (state) {
+    case States.INITIAL:
+    case States.COMPLETED:
+      return (
+        <PlayIcon
+          className={`
+            icon-button
+            icon-button-primary
+            ${state === States.COMPLETED && 'disabled'}
+          `}
+          onClick={start}
+        />
+      )
+    case States.RUNNING:
+      return (
+        <PauseIcon
+          className={`
+            icon-button
+            icon-button-secondary
+          `}
+          onClick={pause}
+        />
+      )
+    case States.PAUSED:
+      return (
+        <PlayIcon
+          className={`
+            icon-button
+            icon-button-primary
+          `}
+          onClick={resume}
+        />
+      )
+  }
+}
+
+type CircleProps = {
   progress: number
 }
 
-const Circle: React.FC<CircleProps> = (props) => {
+const Circle: React.FC<CircleProps> = props => {
   const progress = props.progress
   const radius = 60
-  const stroke = 4
- 
-  const normalizedRadius = radius - stroke * 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = circumference - progress * circumference;
+  const stroke = 2
+
+  const normalizedRadius = radius - stroke * 2
+  const circumference = normalizedRadius * 2 * Math.PI
+  const strokeDashoffset = circumference - progress * circumference
   return (
-    <svg
-      height={radius * 2}
-      width={radius * 2}
-     >
+    <svg height={radius * 2} width={radius * 2}>
       <circle
-        stroke="white"
-        fill="transparent"
-        strokeWidth={ stroke }
-        strokeDasharray={ circumference + ' ' + circumference }
-        style={ { strokeDashoffset } }
-        r={ normalizedRadius }
-        cx={ radius }
-        cy={ radius }
-       />
+        className="circle"
+        strokeWidth={stroke}
+        strokeDasharray={circumference + ' ' + circumference}
+        style={{ strokeDashoffset }}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+      />
     </svg>
   )
 }
 
-export default App;
+export default App
