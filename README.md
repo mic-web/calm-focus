@@ -10,8 +10,12 @@ The app design is focused on avoiding distraction until the time is over (after 
 
 # Roadmap
 
+- [ ] add impressum
+- [ ] add gsvo
 - [ ] use styled components:
   - https://www.styled-components.com/docs/basics#installation
   - refactor components (IconButton)
 - [ ] add browser notifications
+- [ ] Improve UX
+  - [ ] show checkmark instead of 0 when finished
 - [ ] allow activating a 5 min "pause" round (button next to the pause hint text)
