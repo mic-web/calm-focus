@@ -135,10 +135,11 @@
   display: flex;
   text-align: center;
   color: var(--white-color);
-  opacity: 0.5;
   font-size: 0.7em;
   position: absolute;
-  bottom: 20px;
+  top: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 20px;
 }
 
 .circle {

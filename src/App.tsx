@@ -5,7 +5,7 @@ import PauseIcon from './svgs/PauseIcon'
 import PlayIcon from './svgs/PlayIcon'
 
 const milliSecondsPerSecond = 1000
-const sessionMinutes = 0.1
+const sessionMinutes = 25
 const sessionSeconds = sessionMinutes * 60
 
 enum States {
@@ -78,6 +78,9 @@ const App: React.FC = () => {
   return (
     <div className={`app app--${StateClassMap[getState()]}`}>
       <div className={`completed-background`}></div>
+      {getState() === States.COMPLETED && (
+        <div className="hint">Pause for 5 minutes</div>
+      )}
       <main className={`main-container`}>
         <div className={`time-container`}>
           <Circle progress={getProgress()} />
@@ -99,9 +102,6 @@ const App: React.FC = () => {
           />
         </div>
       </main>
-      {getState() === States.COMPLETED && (
-        <div className="hint">Pause for 5 minutes</div>
-      )}
     </div>
   )
 }
