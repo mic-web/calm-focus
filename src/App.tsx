@@ -1,8 +1,8 @@
 import React from 'react'
 import './App.css'
-import ResetIcon from './ResetIcon'
-import PauseIcon from './PauseIcon'
-import PlayIcon from './PlayIcon'
+import ResetIcon from './svgs/ResetIcon'
+import PauseIcon from './svgs/PauseIcon'
+import PlayIcon from './svgs/PlayIcon'
 
 const milliSecondsPerSecond = 1000
 const sessionMinutes = 0.1
