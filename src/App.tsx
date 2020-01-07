@@ -6,7 +6,7 @@ import PlayIcon from './svgs/PlayIcon'
 
 const milliSecondsPerSecond = 1000
 const sessionMinutes = 25
-const sessionSeconds = sessionMinutes * 60
+const sessionSeconds = sessionMinutes * 60 - 1
 
 enum States {
   INITIAL = 'INITIAL',
@@ -34,7 +34,7 @@ const App: React.FC = () => {
     setIsActive(true)
   }
   function reset() {
-    setSecondsLeft(secondsLeft)
+    setSecondsLeft(sessionSeconds)
     setIsActive(false)
     setIsInitial(true)
   }
@@ -74,7 +74,8 @@ const App: React.FC = () => {
       return States.RUNNING
     }
   }
-  const minutesLeft = Math.round(secondsLeft / 60)
+  const minutesLeft = Math.floor(secondsLeft / 60)
+  const secondsOfMinuteLeft = secondsLeft % 60
   return (
     <div className={`app app--${StateClassMap[getState()]}`}>
       <div className={`completed-background`}></div>
@@ -84,7 +85,15 @@ const App: React.FC = () => {
       <main className={`main-container`}>
         <div className={`time-container`}>
           <Circle progress={getProgress()} />
-          <div className="time-left">{minutesLeft}</div>
+          <div className="time-left">
+            {(getState() === States.INITIAL && <small>READY</small>) ||
+              (getState() === States.COMPLETED && <small>DONE</small>) || (
+                <>
+                  {minutesLeft}
+                  <small>{secondsOfMinuteLeft}</small>
+                </>
+              )}
+          </div>
         </div>
         <div className="controls">
           <StartButton
