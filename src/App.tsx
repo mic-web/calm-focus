@@ -1,49 +1,104 @@
 import React from 'react'
-import './App.css'
-import ResetIcon from './svgs/ResetIcon'
-import PauseIcon from './svgs/PauseIcon'
-import PlayIcon from './svgs/PlayIcon'
+import styled, { keyframes, css, ThemeProvider } from 'styled-components'
+import ResetButton from './components/ResetButton'
+import StartButton from './components/StartButton'
+import Background from './components/Background'
+import Box from './components/Box'
+import AnimatedCircle from './components/AnimatedCircle'
+import Timer from './components/Timer'
+import Hint from './components/Hint'
+import GlobalStyle from './style/GlobalStyle'
+import theme from './style/theme'
+import { States } from './types'
 
 const milliSecondsPerSecond = 1000
-const sessionMinutes = 25
+const sessionMinutes = 1
 const sessionSeconds = sessionMinutes * 60 - 1
 
-enum States {
-  INITIAL = 'INITIAL',
-  COMPLETED = 'COMPLETED',
-  RUNNING = 'RUNNING',
-  PAUSED = 'PAUSED',
-}
-
-const StateClassMap = {
-  [States.INITIAL]: 'initial',
-  [States.COMPLETED]: 'completed',
-  [States.RUNNING]: 'running',
-  [States.PAUSED]: 'paused',
-}
+const AppContainer = styled.div`
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  ${(props) => css`
+    background: ${props.theme.colors.dark};
+    background: ${props.theme.colors.darkGradient};
+    color: ${props.theme.colors.white};
+  `}
+`
+const MainContainer = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  z-index: 1; /* Put elements on top of completed-background */
+`
+const tickShine = keyframes`
+  0% {
+    opacity: 0.8;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+const TimeContainer = styled.div<{ state: States }>`
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: stretch;
+  margin-top: auto;
+  height: 40vh;
+  ${(props) => {
+    switch (props.state) {
+      case States.RUNNING:
+        return css`
+          animation: 1s ${tickShine} infinite;
+        `
+      case States.COMPLETED:
+        return css`
+          opacity: 1;
+        `
+      default:
+        return css`
+          transition: opacity 2s ease;
+          opacity: 0.4;
+        `
+    }
+  }}
+`
+const HintContainer = styled.div`
+  display: flex;
+  position: absolute;
+  align-self: center;
+`
+const ControlsContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: auto;
+`
 
 const App: React.FC = () => {
   const [secondsLeft, setSecondsLeft] = React.useState(sessionSeconds)
   const [isActive, setIsActive] = React.useState(false)
   const [isInitial, setIsInitial] = React.useState(true)
 
-  function pause() {
-    setIsActive(false)
-  }
-  function start() {
-    setIsActive(true)
-  }
-  function reset() {
-    setSecondsLeft(sessionSeconds)
-    setIsActive(false)
-    setIsInitial(true)
-  }
-
   React.useEffect(() => {
     function tick() {
       setSecondsLeft(secondsLeft > 0 ? secondsLeft - 1 : 0)
     }
-    let interval: number = -1
+    let interval = -1
     if (isActive) {
       setIsInitial(false)
       interval = window.setInterval(tick, milliSecondsPerSecond)
@@ -55,139 +110,63 @@ const App: React.FC = () => {
     }
   }, [isActive, secondsLeft])
 
-  function getProgress() {
-    if (getState() === States.INITIAL) {
-      return 1
-    } else {
-      return (sessionSeconds - secondsLeft) / sessionSeconds
-    }
-  }
-
   function getState() {
     if (isInitial) {
       return States.INITIAL
-    } else if (secondsLeft === 0) {
-      return States.COMPLETED
-    } else if (!isActive) {
-      return States.PAUSED
-    } else {
-      return States.RUNNING
     }
+    if (secondsLeft === 0) {
+      return States.COMPLETED
+    }
+    if (!isActive) {
+      return States.PAUSED
+    }
+    return States.RUNNING
   }
-  const minutesLeft = Math.floor(secondsLeft / 60)
-  const secondsOfMinuteLeft = secondsLeft % 60
-  return (
-    <div className={`app app--${StateClassMap[getState()]}`}>
-      <div className={`completed-background`}></div>
-      {getState() === States.COMPLETED && (
-        <div className="hint">Pause for 5 minutes</div>
-      )}
-      <main className={`main-container`}>
-        <div className={`time-container`}>
-          <Circle progress={getProgress()} />
-          <div className="time-left">
-            {(getState() === States.INITIAL && <small>READY</small>) ||
-              (getState() === States.COMPLETED && <small>DONE</small>) || (
-                <>
-                  {minutesLeft}
-                  <small>{secondsOfMinuteLeft}</small>
-                </>
-              )}
-          </div>
-        </div>
-        <div className="controls">
-          <StartButton
-            state={getState()}
-            start={start}
-            pause={pause}
-            resume={start}
-          />
-          <ResetIcon
-            onClick={reset}
-            className={`
-              icon-button
-              reset
-            `}
-          />
-        </div>
-      </main>
-    </div>
-  )
-}
-
-type StartButtonProps = {
-  state: States
-  start: () => void
-  pause: () => void
-  resume: () => void
-}
-
-const StartButton: React.FC<StartButtonProps> = ({
-  state,
-  start,
-  pause,
-  resume,
-}) => {
-  switch (state) {
-    case States.INITIAL:
-    case States.COMPLETED:
-      return (
-        <PlayIcon
-          className={`
-            icon-button
-            icon-button-primary
-            ${state === States.COMPLETED && 'disabled'}
-          `}
-          onClick={start}
-        />
-      )
-    case States.RUNNING:
-      return (
-        <PauseIcon
-          className={`
-            icon-button
-            icon-button-secondary
-          `}
-          onClick={pause}
-        />
-      )
-    case States.PAUSED:
-      return (
-        <PlayIcon
-          className={`
-            icon-button
-            icon-button-primary
-          `}
-          onClick={resume}
-        />
-      )
+  function getProgress() {
+    if (getState() === States.INITIAL) {
+      return 1
+    }
+    return (sessionSeconds - secondsLeft) / sessionSeconds
   }
-}
+  function pause() {
+    setIsActive(false)
+  }
+  function reset() {
+    setSecondsLeft(sessionSeconds)
+    setIsActive(false)
+    setIsInitial(true)
+  }
+  function start() {
+    if (getState() === States.COMPLETED) {
+      reset()
+    }
+    setIsActive(true)
+  }
 
-type CircleProps = {
-  progress: number
-}
-
-const Circle: React.FC<CircleProps> = props => {
-  const progress = props.progress
-  const radius = 60
-  const stroke = 2
-
-  const normalizedRadius = radius - stroke * 2
-  const circumference = normalizedRadius * 2 * Math.PI
-  const strokeDashoffset = circumference - progress * circumference
   return (
-    <svg height={radius * 2} width={radius * 2}>
-      <circle
-        className="circle"
-        strokeWidth={stroke}
-        strokeDasharray={circumference + ' ' + circumference}
-        style={{ strokeDashoffset }}
-        r={normalizedRadius}
-        cx={radius}
-        cy={radius}
-      />
-    </svg>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <AppContainer>
+        <Background state={getState()} />
+        <MainContainer>
+          <TimeContainer state={getState()}>
+            <AnimatedCircle progress={getProgress()} />
+            <Timer state={getState()} secondsLeft={secondsLeft} />
+          </TimeContainer>
+          <ControlsContainer>
+            <Box mt={2} className={{ alignItems: 'center' }}>
+              <StartButton state={getState()} start={start} pause={pause} resume={start} />
+            </Box>
+            <Box mt={2}>
+              <ResetButton state={getState()} reset={reset} />
+            </Box>
+          </ControlsContainer>
+          <HintContainer>
+            <Hint state={getState()} />
+          </HintContainer>
+        </MainContainer>
+      </AppContainer>
+    </ThemeProvider>
   )
 }
 
