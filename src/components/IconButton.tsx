@@ -6,13 +6,14 @@ type Props = {
   disabled?: boolean
   subtle?: boolean
   invisible?: boolean
+  title?: string
   onClick: (e?: React.MouseEvent) => void
   className?: string
   css?: string
 }
 
-const IconButton: React.FC<Props> = ({ onClick, className, children }) => (
-  <button className={className} onClick={onClick} type="button" onKeyUp={() => onClick()} tabIndex={0}>
+const IconButton: React.FC<Props> = ({ onClick, className, children, title }) => (
+  <button className={className} onClick={onClick} type="button" onKeyUp={() => onClick()} tabIndex={0} title={title}>
     {children}
   </button>
 )

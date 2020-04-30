@@ -18,6 +18,7 @@ const ResetButton: React.FC<ResetButtonProps> = ({ state, className, reset }) =>
       className={className}
       subtle={state === States.RUNNING}
       invisible={state === States.INITIAL}
+      title="Reset time"
     >
       <ResetIcon />
     </IconButton>

@@ -12,8 +12,32 @@ import theme from './style/theme'
 import { States } from './types'
 
 const milliSecondsPerSecond = 1000
-const sessionMinutes = 1
+const sessionMinutes = 0.1
 const sessionSeconds = sessionMinutes * 60 - 1
+
+const startDateKey = 'startDate'
+const saveStartDate = () => window.localStorage.setItem(startDateKey, new Date().toString())
+const deleteStartDate = () => window.localStorage.removeItem(startDateKey)
+
+const getSavedSeconds = (): number | null => {
+  const savedStartDate = window.localStorage.getItem(startDateKey)
+  if (!savedStartDate) {
+    return null
+  }
+  const passedSeconds = (new Date().getTime() - new Date(savedStartDate).getTime()) / 1000
+  const remainingSeconds = Math.round(sessionSeconds - passedSeconds)
+  if (remainingSeconds < 0) {
+    deleteStartDate()
+    return null
+  }
+  return remainingSeconds
+}
+let initialSeconds = getSavedSeconds()
+const wasActive = initialSeconds !== null
+const wasInitial = initialSeconds === null
+if (!initialSeconds) {
+  initialSeconds = sessionSeconds
+}
 
 const AppContainer = styled.div`
   text-align: center;
@@ -90,9 +114,9 @@ const ControlsContainer = styled.div`
 `
 
 const App: React.FC = () => {
-  const [secondsLeft, setSecondsLeft] = React.useState(sessionSeconds)
-  const [isActive, setIsActive] = React.useState(false)
-  const [isInitial, setIsInitial] = React.useState(true)
+  const [secondsLeft, setSecondsLeft] = React.useState(initialSeconds)
+  const [isActive, setIsActive] = React.useState(wasActive)
+  const [isInitial, setIsInitial] = React.useState(wasInitial)
 
   React.useEffect(() => {
     function tick() {
@@ -105,10 +129,13 @@ const App: React.FC = () => {
     } else if (!isActive && secondsLeft !== 0) {
       clearInterval(interval)
     }
+    if (secondsLeft === 0) {
+      deleteStartDate()
+    }
     return () => {
       clearInterval(interval)
     }
-  }, [isActive, secondsLeft])
+  }, [isActive, secondsLeft, isInitial])
 
   function getState() {
     if (isInitial) {
@@ -116,9 +143,6 @@ const App: React.FC = () => {
     }
     if (secondsLeft === 0) {
       return States.COMPLETED
-    }
-    if (!isActive) {
-      return States.PAUSED
     }
     return States.RUNNING
   }
@@ -128,19 +152,18 @@ const App: React.FC = () => {
     }
     return (sessionSeconds - secondsLeft) / sessionSeconds
   }
-  function pause() {
-    setIsActive(false)
-  }
   function reset() {
     setSecondsLeft(sessionSeconds)
     setIsActive(false)
     setIsInitial(true)
+    deleteStartDate()
   }
   function start() {
     if (getState() === States.COMPLETED) {
       reset()
     }
     setIsActive(true)
+    saveStartDate()
   }
 
   return (
@@ -154,11 +177,10 @@ const App: React.FC = () => {
             <Timer state={getState()} secondsLeft={secondsLeft} />
           </TimeContainer>
           <ControlsContainer>
-            <Box mt={2} className={{ alignItems: 'center' }}>
-              <StartButton state={getState()} start={start} pause={pause} resume={start} />
-            </Box>
             <Box mt={2}>
-              <ResetButton state={getState()} reset={reset} />
+              {(getState() === States.RUNNING && <ResetButton state={getState()} reset={reset} />) || (
+                <StartButton state={getState()} start={start} />
+              )}
             </Box>
           </ControlsContainer>
           <HintContainer>

@@ -12,6 +12,7 @@ If you have enough screens available, it's encouraged to keep this app open on o
 
 - [x] Refactor components
 - [x] Use styled components
+- [ ] Move time related things into own component
 - [ ] Remember start time in local storage
 - [ ] Extend theme (spacing, font-size)
 - [ ] Add browser notifications
