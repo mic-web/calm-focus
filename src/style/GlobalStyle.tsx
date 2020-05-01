@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
 
 import { normalize } from 'styled-normalize'
-import lakeImage from '../img/lake-2000.jpg'
+import lakeImage from '../img/lake-compressed.jpg'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}

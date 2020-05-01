@@ -133,7 +133,9 @@ const App: React.FC = () => {
     }
     if (secondsLeft === 0) {
       deleteStartDate()
-      notification.showNotification('Done', `Take a break for ${breakMinutes} minutes`)
+      if (!document.hasFocus()) {
+        notification.showNotification('Done', `Take a break for ${breakMinutes} minutes`)
+      }
     }
     return () => {
       clearInterval(interval)
