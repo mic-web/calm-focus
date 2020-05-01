@@ -10,5 +10,8 @@ module.exports = merge(common, {
     contentBase: path.resolve(__dirname, vars.distDir),
     hot: true,
     port: 3000,
+    https: true,
+    disableHostCheck: true,
+    host: '0.0.0.0',
   },
 })

@@ -10,10 +10,12 @@ import Hint from './components/Hint'
 import GlobalStyle from './style/GlobalStyle'
 import theme from './style/theme'
 import { States } from './types'
+import notification from './notification'
 
 const milliSecondsPerSecond = 1000
-const sessionMinutes = 0.1
+const sessionMinutes = 0.05
 const sessionSeconds = sessionMinutes * 60 - 1
+const breakMinutes = 5
 
 const startDateKey = 'startDate'
 const saveStartDate = () => window.localStorage.setItem(startDateKey, new Date().toString())
@@ -131,6 +133,7 @@ const App: React.FC = () => {
     }
     if (secondsLeft === 0) {
       deleteStartDate()
+      notification.showNotification('Done', `Take a break for ${breakMinutes} minutes`)
     }
     return () => {
       clearInterval(interval)
@@ -159,6 +162,10 @@ const App: React.FC = () => {
     deleteStartDate()
   }
   function start() {
+    if (!notification.isGranted() && notification.checkAvailability()) {
+      notification.askPermission().catch((error) => console.error(error))
+    }
+
     if (getState() === States.COMPLETED) {
       reset()
     }
