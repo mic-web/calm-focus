@@ -9,8 +9,6 @@ declare module 'styled-components' {
       dark: string
       white: string
       darkBlue: string
-      darkGradient: string
-      lightGradient: string
     }
     spacing: number
   }

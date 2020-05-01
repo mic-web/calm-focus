@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
 
 import { normalize } from 'styled-normalize'
+import lakeImage from '../img/lake-2000.jpg'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
@@ -9,8 +10,13 @@ const GlobalStyle = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+    touch-action: none;
+    background: rgb(39, 44, 55);
+    background: url(${lakeImage});
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
   }
   svg {
     width: 100%;
@@ -29,22 +35,17 @@ const GlobalStyle = createGlobalStyle`
     line-height: normal;
     outline: none;
     border-style: none;
+    /* Remove excess padding and border in Firefox 4+ */
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+    }
     &:active {
       outline: none;
       border-style: none;
     }
     border-radius: 0;
-    padding: 0;
-    border: none;
-    font: inherit;
-    color: inherit;
     background-color: transparent;
-
-    /* Remove excess padding and border in Firefox 4+ */
-    &::-moz-focus-inner {
-        border: 0;
-        padding: 0;
-    }
   }
 `
 export default GlobalStyle

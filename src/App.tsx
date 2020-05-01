@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { keyframes, css, ThemeProvider } from 'styled-components'
 import ResetButton from './components/ResetButton'
 import StartButton from './components/StartButton'
-import Background from './components/Background'
+import BackgroundOverlay from './components/BackgroundOverlay'
 import Box from './components/Box'
 import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
@@ -49,9 +49,8 @@ const AppContainer = styled.div`
   align-items: center;
   flex-direction: column;
   font-size: calc(10px + 2vmin);
+  position: relative;
   ${(props) => css`
-    background: ${props.theme.colors.dark};
-    background: ${props.theme.colors.darkGradient};
     color: ${props.theme.colors.white};
   `}
 `
@@ -94,7 +93,7 @@ const TimeContainer = styled.div<{ state: States }>`
       default:
         return css`
           transition: opacity 2s ease;
-          opacity: 0.4;
+          opacity: 0.8;
         `
     }
   }}
@@ -103,6 +102,7 @@ const HintContainer = styled.div`
   display: flex;
   position: absolute;
   align-self: center;
+  bottom: 0;
 `
 const ControlsContainer = styled.div`
   display: flex;
@@ -174,29 +174,35 @@ const App: React.FC = () => {
   }
 
   return (
+    <AppContainer>
+      <BackgroundOverlay state={getState()} />
+      <MainContainer>
+        <TimeContainer state={getState()}>
+          <AnimatedCircle progress={getProgress()} />
+          <Timer state={getState()} secondsLeft={secondsLeft} />
+        </TimeContainer>
+        <ControlsContainer>
+          <Box mt={2}>
+            {(getState() === States.RUNNING && <ResetButton state={getState()} reset={reset} />) || (
+              <StartButton state={getState()} start={start} />
+            )}
+          </Box>
+        </ControlsContainer>
+        <HintContainer>
+          <Hint state={getState()} breakMinutes={5} />
+        </HintContainer>
+      </MainContainer>
+    </AppContainer>
+  )
+}
+
+const ThemedApp = () => {
+  return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <AppContainer>
-        <Background state={getState()} />
-        <MainContainer>
-          <TimeContainer state={getState()}>
-            <AnimatedCircle progress={getProgress()} />
-            <Timer state={getState()} secondsLeft={secondsLeft} />
-          </TimeContainer>
-          <ControlsContainer>
-            <Box mt={2}>
-              {(getState() === States.RUNNING && <ResetButton state={getState()} reset={reset} />) || (
-                <StartButton state={getState()} start={start} />
-              )}
-            </Box>
-          </ControlsContainer>
-          <HintContainer>
-            <Hint state={getState()} />
-          </HintContainer>
-        </MainContainer>
-      </AppContainer>
+      <App />
     </ThemeProvider>
   )
 }
 
-export default App
+export default ThemedApp

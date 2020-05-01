@@ -6,6 +6,7 @@ type Props = {
   disabled?: boolean
   subtle?: boolean
   invisible?: boolean
+  highlight?: boolean
   title?: string
   onClick: (e?: React.MouseEvent) => void
   className?: string
@@ -23,13 +24,11 @@ const StyledIconButton = styled(IconButton)`
   fill: #fff;
   display: flex;
   text-align: center;
-  height: 25px;
-  width: 25px;
-  padding: 5px;
+  height: 35px;
+  width: 35px;
   transition: opacity 0.5s ease, transform 0.3s ease;
   border: none;
   background: none;
-  padding: 0;
   ${(props) =>
     (props.invisible && {
       visibility: 'hidden',
@@ -39,7 +38,7 @@ const StyledIconButton = styled(IconButton)`
       pointerEvents: 'none',
     }) ||
     (props.subtle && {
-      opacity: 0.5,
+      opacity: 0.6,
     })}
 
   ${(props) => css`
