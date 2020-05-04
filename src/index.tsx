@@ -29,3 +29,34 @@ if ('serviceWorker' in navigator) {
 } else {
   console.warn('Service workers not supported')
 }
+
+let deferredPrompt: any
+function showInstallPromotion() {
+  setTimeout(() => {
+    deferredPrompt.prompt()
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult: any) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt')
+      } else {
+        console.log('User dismissed the install prompt')
+        localStorage.setItem('denyedInstallation', 'true')
+      }
+    })
+  }, 1000)
+}
+
+if (!localStorage.getItem('denyedInstallation')) {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault()
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e
+    // Update UI notify the user they can install the PWA
+    showInstallPromotion()
+  })
+
+  window.addEventListener('appinstalled', (evt) => {
+    console.log('Successfully installed')
+  })
+}
