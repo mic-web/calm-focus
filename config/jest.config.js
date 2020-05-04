@@ -1,8 +1,8 @@
 const path = require('path')
-const vars = require('./common-vars')
+const paths = require('./paths')
 
 module.exports = {
-  rootDir: vars.srcDir,
+  rootDir: paths.srcDir,
   setupFilesAfterEnv: [path.resolve(__dirname, 'jest.setup.js')],
   testEnvironment: 'jsdom',
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],

@@ -2,14 +2,17 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const vars = require('./common-vars')
+const WorkboxPlugin = require('workbox-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+
+const paths = require('./paths')
 
 module.exports = {
-  context: path.resolve(__dirname, vars.srcDir),
+  context: path.resolve(__dirname, paths.srcDir),
   entry: './index.tsx',
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, vars.distDir),
+    path: path.resolve(__dirname, paths.distDir),
   },
   devtool: 'source-map',
   resolve: {
@@ -50,11 +53,22 @@ module.exports = {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
-      favicon: path.resolve(__dirname, vars.srcDir, 'favicon.ico'),
+      favicon: path.resolve(__dirname, paths.srcDir, 'favicon.ico'),
+      title: 'Progressive Web App',
     }),
-
-    new CleanWebpackPlugin(),
+    new CopyPlugin([
+      {
+        from: path.resolve(__dirname, paths.publicDir),
+        to: path.resolve(__dirname, paths.distDir),
+      },
+      path.resolve(__dirname, paths.srcDir, 'manifest.webmanifest'),
+    ]),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+    }),
   ],
 }

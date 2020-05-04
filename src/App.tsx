@@ -13,7 +13,7 @@ import { States } from './types'
 import notification from './notification'
 
 const milliSecondsPerSecond = 1000
-const sessionMinutes = 0.05
+const sessionMinutes = 25
 const sessionSeconds = sessionMinutes * 60 - 1
 const breakMinutes = 5
 
