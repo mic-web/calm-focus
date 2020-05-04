@@ -31,32 +31,40 @@ if ('serviceWorker' in navigator) {
 }
 
 let deferredPrompt: any
-function showInstallPromotion() {
-  setTimeout(() => {
-    deferredPrompt.prompt()
-    // Wait for the user to respond to the prompt
-    deferredPrompt.userChoice.then((choiceResult: any) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt')
-      } else {
-        console.log('User dismissed the install prompt')
-        localStorage.setItem('denyedInstallation', 'true')
-      }
-    })
-  }, 1000)
+function askForInstallation() {
+  deferredPrompt.prompt()
+  // Wait for the user to respond to the prompt
+  deferredPrompt.userChoice.then((choiceResult: any) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the install prompt')
+    } else {
+      console.log('User dismissed the install prompt')
+      localStorage.setItem('denyedInstallation', 'true')
+    }
+  })
+  deferredPrompt = null
 }
 
-if (!localStorage.getItem('denyedInstallation')) {
-  window.addEventListener('beforeinstallprompt', (e) => {
+let asked = false
+function onInstallPrompt(e: any) {
+  if (!asked) {
+    asked = true
     // Prevent the mini-infobar from appearing on mobile
     e.preventDefault()
     // Stash the event so it can be triggered later.
     deferredPrompt = e
     // Update UI notify the user they can install the PWA
-    showInstallPromotion()
-  })
-
-  window.addEventListener('appinstalled', (evt) => {
-    console.log('Successfully installed')
-  })
+    window.removeEventListener('beforeinstallprompt', onInstallPrompt)
+    askForInstallation()
+  }
 }
+
+if (!localStorage.getItem('denyedInstallation')) {
+  window.addEventListener('beforeinstallprompt', onInstallPrompt)
+} else {
+  console.log("Installation has been denied earlier, don't ask again")
+}
+
+window.addEventListener('appinstalled', (evt) => {
+  console.log('Successfully installed', evt)
+})
