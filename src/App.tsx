@@ -7,6 +7,7 @@ import Box from './components/Box'
 import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
 import Hint from './components/Hint'
+import PictureCredits from './components/PictureCredits'
 import GlobalStyle from './style/GlobalStyle'
 import theme from './style/theme'
 import { States } from './types'
@@ -114,6 +115,12 @@ const ControlsContainer = styled.div`
   margin-right: 10px;
   margin-bottom: auto;
 `
+const CreditsContainer = styled.div`
+  display: flex;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+`
 
 const App: React.FC = () => {
   const [secondsLeft, setSecondsLeft] = React.useState(initialSeconds)
@@ -178,6 +185,9 @@ const App: React.FC = () => {
   return (
     <AppContainer>
       <BackgroundOverlay state={getState()} />
+      <CreditsContainer>
+        <PictureCredits />
+      </CreditsContainer>
       <MainContainer>
         <TimeContainer state={getState()}>
           <AnimatedCircle progress={getProgress()} />

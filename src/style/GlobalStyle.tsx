@@ -22,6 +22,17 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: auto;
   }
+  a {
+    color: #aaa;
+    text-decoration: none;
+    &:hover {
+      cursor: pointer;
+      color: #ccc;
+    }
+  }
+  small {
+    font-size: 0.5em;
+  }
   button {
     /* Mainly reset default button styles */
     border: none;
