@@ -24,13 +24,13 @@ If you have enough screens available, it's encouraged to keep this app open on o
   - [x] refer to creator
 - [x] Favicon
 - [x] PWA
-- [ ] Installable PWA for mobile
-- [ ] Allow push notification on mobile
+- [x] Installable PWA for mobile
+- [x] Allow push notification on mobile
+- [x] Refactor: Move time related code into own component
 - [ ] Fix:
   - [ ] timing of animation and timer start
 - [ ] Add impressum
 - [ ] Add gsvo
-- [ ] Refactor: Move time related code into own component
 - [ ] Improve Typography
 - [ ] Improve theme (spacing, font-size, graphics)
 - [ ] Continuous deployment

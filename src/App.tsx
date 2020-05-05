@@ -11,37 +11,9 @@ import PictureCredits from './components/PictureCredits'
 import GlobalStyle from './style/GlobalStyle'
 import theme from './style/theme'
 import { States } from './types'
-import notification from './notifications'
-import sounds from './sounds'
-
-const milliSecondsPerSecond = 1000
-const sessionMinutes = 0.05
-const sessionSeconds = sessionMinutes * 60 - 1
-const breakMinutes = 5
-
-const startDateKey = 'startDate'
-const saveStartDate = () => window.localStorage.setItem(startDateKey, new Date().toString())
-const deleteStartDate = () => window.localStorage.removeItem(startDateKey)
-
-const getSavedSeconds = (): number | null => {
-  const savedStartDate = window.localStorage.getItem(startDateKey)
-  if (!savedStartDate) {
-    return null
-  }
-  const passedSeconds = (new Date().getTime() - new Date(savedStartDate).getTime()) / 1000
-  const remainingSeconds = Math.round(sessionSeconds - passedSeconds)
-  if (remainingSeconds < 0) {
-    deleteStartDate()
-    return null
-  }
-  return remainingSeconds
-}
-let initialSeconds = getSavedSeconds()
-const wasActive = initialSeconds !== null
-const wasInitial = initialSeconds === null
-if (!initialSeconds) {
-  initialSeconds = sessionSeconds
-}
+import * as notification from './notifications'
+import * as timer from './timer'
+import * as sounds from './sounds'
 
 const AppContainer = styled.div`
   text-align: center;
@@ -122,10 +94,12 @@ const CreditsContainer = styled.div`
   bottom: 10px;
 `
 
+const initialState = timer.getInitialState()
+
 const App: React.FC = () => {
-  const [secondsLeft, setSecondsLeft] = React.useState(initialSeconds)
-  const [isActive, setIsActive] = React.useState(wasActive)
-  const [isInitial, setIsInitial] = React.useState(wasInitial)
+  const [secondsLeft, setSecondsLeft] = React.useState(initialState.secondsLeft)
+  const [isActive, setIsActive] = React.useState(initialState.isActive)
+  const [isInitial, setIsInitial] = React.useState(initialState.isInitial)
 
   React.useEffect(() => {
     function tick() {
@@ -134,15 +108,13 @@ const App: React.FC = () => {
     let interval = -1
     if (isActive) {
       setIsInitial(false)
-      interval = window.setInterval(tick, milliSecondsPerSecond)
+      interval = window.setInterval(tick, timer.milliSecondsPerSecond)
     } else if (!isActive && secondsLeft !== 0) {
       clearInterval(interval)
     }
     if (secondsLeft === 0) {
-      deleteStartDate()
-      if (!document.hasFocus()) {
-        notification.showNotification('Done', { body: `Take a break for ${breakMinutes} minutes` })
-      }
+      timer.deleteStartDate()
+      notification.showNotification('Done', { body: `Take a break for ${timer.breakMinutes} minutes` })
       sounds.playTimeOver()
     }
     return () => {
@@ -163,19 +135,19 @@ const App: React.FC = () => {
     if (getState() === States.INITIAL) {
       return 1
     }
-    return (sessionSeconds - secondsLeft) / sessionSeconds
+    return timer.getPercentage(secondsLeft)
   }
   function reset() {
-    setSecondsLeft(sessionSeconds)
+    setSecondsLeft(timer.sessionSeconds)
     setIsActive(false)
     setIsInitial(true)
-    deleteStartDate()
+    timer.deleteStartDate()
   }
   function start(event?: React.MouseEvent) {
     // Init audio for iOS
     sounds.initOnInteraction(event)
 
-    if (!notification.isGranted() && notification.isNotificationAvailable()) {
+    if (!notification.browserNotificationGranted() && notification.browserNotificationSupported()) {
       notification.askPermission().catch((error) => console.error(error))
     }
 
@@ -183,7 +155,7 @@ const App: React.FC = () => {
       reset()
     }
     setIsActive(true)
-    saveStartDate()
+    timer.saveStartDate()
   }
 
   return (

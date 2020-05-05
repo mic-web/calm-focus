@@ -1,13 +1,13 @@
 import serviceWorker from './service-worker'
 
-const browserNotificationSupported = () => {
-  console.log('Notification available?', !!window.Notification)
+export const browserNotificationSupported = () => {
+  console.log('Browser notification available?', !!window.Notification)
   return !!window.Notification
 }
 
 let granted = false
 
-function askPermission() {
+export const askPermission = () => {
   if (!browserNotificationSupported()) {
     return Promise.reject(new Error('Notifications not available'))
   }
@@ -27,23 +27,18 @@ function askPermission() {
   })
 }
 
-const browserNotificationGranted = () => granted
+export const browserNotificationGranted = () => granted
 
-const showNotification = (title: string, options: NotificationOptions) => {
+export const showNotification = (title: string, options: NotificationOptions) => {
   if (serviceWorker.isSupported() && serviceWorker.isReady()) {
+    console.log('Show service worker notification')
     serviceWorker.showNotification(title, options)
   } else if (browserNotificationGranted() && browserNotificationSupported()) {
+    console.log('Show browser notification')
     const notification = new Notification(title, options)
     notification.onclick = () => {
       window.focus()
       notification.close()
     }
   }
-}
-
-export default {
-  isNotificationAvailable: browserNotificationSupported,
-  askPermission,
-  isGranted: browserNotificationGranted,
-  showNotification,
 }
