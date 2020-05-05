@@ -11,10 +11,11 @@ import PictureCredits from './components/PictureCredits'
 import GlobalStyle from './style/GlobalStyle'
 import theme from './style/theme'
 import { States } from './types'
-import notification from './notification'
+import notification from './notifications'
+import sounds from './sounds'
 
-const milliSecondsPerSecond = 1000
-const sessionMinutes = 25
+const milliSecondsPerSecond = 10
+const sessionMinutes = 1
 const sessionSeconds = sessionMinutes * 60 - 1
 const breakMinutes = 5
 
@@ -143,6 +144,7 @@ const App: React.FC = () => {
       if (!document.hasFocus()) {
         notification.showNotification('Done', `Take a break for ${breakMinutes} minutes`)
       }
+      sounds.playTimeOver()
     }
     return () => {
       clearInterval(interval)
@@ -171,7 +173,7 @@ const App: React.FC = () => {
     deleteStartDate()
   }
   function start() {
-    if (!notification.isGranted() && notification.checkAvailability()) {
+    if (!notification.isGranted() && notification.isNotificationAvailable()) {
       notification.askPermission().catch((error) => console.error(error))
     }
 

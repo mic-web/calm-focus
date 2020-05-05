@@ -1,15 +1,12 @@
-const checkAvailability = () => {
-  if (!window.Notification) {
-    return false
-  }
-
-  return true
+const isNotificationAvailable = () => {
+  console.log('Notification available?', !!window.Notification)
+  return !!window.Notification
 }
 
 let granted = false
 
 function askPermission() {
-  if (!checkAvailability()) {
+  if (!isNotificationAvailable()) {
     return Promise.reject(new Error('Notifications not available'))
   }
   return new Promise((resolve, reject) => {
@@ -31,7 +28,7 @@ function askPermission() {
 const isGranted = () => granted
 
 const showNotification = (title: string, body: string, icon?: string) => {
-  if (isGranted() && checkAvailability()) {
+  if (isGranted() && isNotificationAvailable()) {
     const notification = new Notification(title, {
       body,
       icon,
@@ -44,7 +41,7 @@ const showNotification = (title: string, body: string, icon?: string) => {
 }
 
 export default {
-  checkAvailability,
+  isNotificationAvailable,
   askPermission,
   isGranted,
   showNotification,

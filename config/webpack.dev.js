@@ -11,5 +11,7 @@ module.exports = merge(common, {
     hot: true,
     port: 3000,
     disableHostCheck: true,
+    host: '0.0.0.0',
+    https: true,
   },
 })

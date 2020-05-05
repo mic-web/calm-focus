@@ -15,12 +15,22 @@ if (module.hot) {
     renderRootElement(require('./App').default)
   })
 }
+
+let swRegistration: ServiceWorkerRegistration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/service-worker.js')
-      .then((registration) => {
+      .then((registration: ServiceWorkerRegistration) => {
+        swRegistration = registration
         console.log('SW registered: ', registration)
+        setTimeout(
+          () =>
+            swRegistration.showNotification &&
+            swRegistration.showNotification('Welcome back. Service worker registered.'),
+          0
+        )
+        setTimeout(() => alert(`SW has show Notification? ${!!swRegistration.showNotification}`), 3000)
       })
       .catch((registrationError) => {
         console.log('SW registration failed: ', registrationError, registrationError.message)
@@ -54,12 +64,12 @@ function onInstallPrompt(e: any) {
     // Stash the event so it can be triggered later.
     deferredPrompt = e
     // Update UI notify the user they can install the PWA
-    window.removeEventListener('beforeinstallprompt', onInstallPrompt)
     askForInstallation()
   }
 }
 
 if (!localStorage.getItem('denyedInstallation')) {
+  console.log('register event listener')
   window.addEventListener('beforeinstallprompt', onInstallPrompt)
 } else {
   console.log("Installation has been denied earlier, don't ask again")
