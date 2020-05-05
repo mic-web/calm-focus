@@ -24,15 +24,20 @@ if (isSupported()) {
 }
 
 const askForInstallation = () => {
-  deferredPrompt.prompt()
-  // Wait for the user to respond to the prompt
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'dismissed') {
-      console.log('User dismissed the install prompt')
-      localStorage.setItem(prevInstallKey, prevInstallDismissed)
-    }
-  })
-  deferredPrompt = null
+  deferredPrompt
+    .prompt()
+    .then((result) => console.log('Install prompt result', result))
+    .then(() => {
+      // Wait for the user to respond to the prompt
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'dismissed') {
+          console.log('User dismissed the install prompt')
+          localStorage.setItem(prevInstallKey, prevInstallDismissed)
+        }
+        deferredPrompt = null
+      })
+    })
+    .catch((error) => console.error(error))
 }
 
 let asked = false
