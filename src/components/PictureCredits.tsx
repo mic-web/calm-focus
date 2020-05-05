@@ -6,6 +6,7 @@ const PictureCredit = () => (
     <a
       target="_blank"
       rel="noopener noreferrer"
+      tabIndex={-1}
       href="https://unsplash.com/@stayandroam?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
     >
       Gemma Evans
@@ -15,6 +16,7 @@ const PictureCredit = () => (
       target="_blank"
       rel="noopener noreferrer"
       href="/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+      tabIndex={-1}
     >
       Unsplash
     </a>

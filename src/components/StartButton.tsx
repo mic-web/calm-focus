@@ -7,7 +7,7 @@ import PlayIcon from '../icons/PlayIcon'
 
 type StartButtonProps = {
   state: States
-  start: () => void
+  start: (event?: React.MouseEvent) => void
   className?: string
 }
 

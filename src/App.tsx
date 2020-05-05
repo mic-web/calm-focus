@@ -14,8 +14,8 @@ import { States } from './types'
 import notification from './notifications'
 import sounds from './sounds'
 
-const milliSecondsPerSecond = 10
-const sessionMinutes = 1
+const milliSecondsPerSecond = 1000
+const sessionMinutes = 0.05
 const sessionSeconds = sessionMinutes * 60 - 1
 const breakMinutes = 5
 
@@ -119,7 +119,6 @@ const ControlsContainer = styled.div`
 const CreditsContainer = styled.div`
   display: flex;
   position: absolute;
-  left: 10px;
   bottom: 10px;
 `
 
@@ -142,7 +141,7 @@ const App: React.FC = () => {
     if (secondsLeft === 0) {
       deleteStartDate()
       if (!document.hasFocus()) {
-        notification.showNotification('Done', `Take a break for ${breakMinutes} minutes`)
+        notification.showNotification('Done', { body: `Take a break for ${breakMinutes} minutes` })
       }
       sounds.playTimeOver()
     }
@@ -172,7 +171,10 @@ const App: React.FC = () => {
     setIsInitial(true)
     deleteStartDate()
   }
-  function start() {
+  function start(event?: React.MouseEvent) {
+    // Init audio for iOS
+    sounds.initOnInteraction(event)
+
     if (!notification.isGranted() && notification.isNotificationAvailable()) {
       notification.askPermission().catch((error) => console.error(error))
     }

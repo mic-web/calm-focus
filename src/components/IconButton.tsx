@@ -8,16 +8,23 @@ type Props = {
   invisible?: boolean
   highlight?: boolean
   title?: string
-  onClick: (e?: React.MouseEvent) => void
+  onClick: (event?: React.MouseEvent) => void
   className?: string
   css?: string
 }
 
-const IconButton: React.FC<Props> = ({ onClick, className, children, title }) => (
-  <button className={className} onClick={onClick} type="button" onKeyUp={() => onClick()} tabIndex={0} title={title}>
-    {children}
-  </button>
-)
+const IconButton: React.FC<Props> = ({ onClick, className, children, title }) => {
+  const onKeyUp = (event: React.KeyboardEvent) => {
+    if (event.keyCode === 13 || event.keyCode === 32) {
+      onClick()
+    }
+  }
+  return (
+    <button className={className} onClick={onClick} type="button" onKeyUp={onKeyUp} tabIndex={0} title={title}>
+      {children}
+    </button>
+  )
+}
 
 const StyledIconButton = styled(IconButton)`
   outline: none;
@@ -45,7 +52,8 @@ const StyledIconButton = styled(IconButton)`
     color: ${props.theme.colors.white};
   `}
 
-  &:hover:not(.disabled) {
+  &:hover:not(.disabled),
+  &:focus:not(.disabled) {
     cursor: pointer;
     opacity: 1;
     transform: scale(1.1);
