@@ -1,4 +1,4 @@
-import serviceWorker from './service-worker'
+import * as serviceWorker from './service-worker'
 
 export const browserNotificationSupported = () => {
   console.log('Browser notification available?', !!window.Notification)
@@ -6,6 +6,12 @@ export const browserNotificationSupported = () => {
 }
 
 let granted = false
+
+const notificationsEnabledKey = 'notificationsEnabledKey'
+if (!window.localStorage.getItem(notificationsEnabledKey) && Notification.permission !== 'denied') {
+  window.localStorage.setItem(notificationsEnabledKey, 'true')
+}
+let enabled = window.localStorage.getItem(notificationsEnabledKey) === 'true'
 
 export const askPermission = () => {
   if (!browserNotificationSupported()) {
@@ -24,21 +30,31 @@ export const askPermission = () => {
       throw new Error("We weren't granted permission.")
     }
     granted = true
+    return true
   })
 }
 
 export const browserNotificationGranted = () => granted
 
 export const showNotification = (title: string, options: NotificationOptions) => {
-  if (serviceWorker.isSupported() && serviceWorker.isReady()) {
-    console.log('Show service worker notification')
-    serviceWorker.showNotification(title, options)
-  } else if (browserNotificationGranted() && browserNotificationSupported()) {
-    console.log('Show browser notification')
-    const notification = new Notification(title, options)
-    notification.onclick = () => {
-      window.focus()
-      notification.close()
+  if (enabled) {
+    if (serviceWorker.isSwSupported() && serviceWorker.isReady()) {
+      console.log('Show service worker notification')
+      serviceWorker.showNotification(title, options)
+    } else if (browserNotificationSupported() && browserNotificationGranted()) {
+      console.log('Show browser notification')
+      const notification = new Notification(title, options)
+      notification.onclick = () => {
+        window.focus()
+        notification.close()
+      }
     }
   }
 }
+
+export const setIsEnabled = (isEnabled: boolean) => {
+  enabled = isEnabled
+  window.localStorage.setItem(notificationsEnabledKey, `${isEnabled}`)
+}
+
+export const isEnabled = () => enabled

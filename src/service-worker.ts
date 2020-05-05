@@ -5,15 +5,15 @@ let deferredPrompt: BeforeInstallPromptEvent
 const prevInstallKey = 'previousInstall'
 const prevInstallDismissed = 'dismissed'
 
-const isSupported = () => 'serviceWorker' in navigator
+export const isSwSupported = () => 'serviceWorker' in navigator
 
-if (isSupported()) {
+if (isSwSupported()) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/service-worker.js')
       .then((registration: ServiceWorkerRegistration) => {
-        console.log('Service Worker registered: ', registeredSW)
         registeredSW = registration
+        console.log('Service Worker registered: ', registeredSW)
       })
       .catch((registrationError) => {
         console.log('Service Worker registration failed: ', registrationError, registrationError.message)
@@ -23,54 +23,59 @@ if (isSupported()) {
   console.warn('Service Workers not supported')
 }
 
-const askForInstallation = () => {
-  deferredPrompt
-    .prompt()
-    .then((result) => console.log('Install prompt result', result))
-    .then(() => {
-      // Wait for the user to respond to the prompt
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'dismissed') {
-          console.log('User dismissed the install prompt')
-          localStorage.setItem(prevInstallKey, prevInstallDismissed)
-        }
-        deferredPrompt = null
+export const askForInstallation = () => {
+  if (deferredPrompt) {
+    return deferredPrompt
+      .prompt()
+      .then((result) => console.log('Install prompt result', result))
+      .then(() => {
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'dismissed') {
+            console.log('User dismissed the install prompt')
+            localStorage.setItem(prevInstallKey, prevInstallDismissed)
+          }
+          deferredPrompt = null
+        })
       })
-    })
-    .catch((error) => console.error(error))
+      .catch((error) => console.error(error))
+  }
+  return Promise.reject(new Error('Asking for installation not (yet) possible - no prompt yet'))
 }
 
-let asked = false
-const onInstallPrompt = (event: BeforeInstallPromptEvent) => {
-  if (!asked) {
-    asked = true
+let beforeInstallPromptReceived = false
+
+type callbackType = () => void
+let installPossibleSubscriber: null | callbackType = null
+
+export const installAlreadyPossible = () => !!beforeInstallPromptReceived
+export const onInstallPossible = (sub: () => void) => {
+  installPossibleSubscriber = sub
+}
+const onBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
+  if (!beforeInstallPromptReceived) {
+    beforeInstallPromptReceived = true
     // Prevent the mini-infobar from appearing on mobile
     event.preventDefault()
     // Stash the event so it can be triggered later.
     deferredPrompt = event
-    // Update UI notify the user they can install the PWA
-    askForInstallation()
+  }
+  if (installPossibleSubscriber) {
+    installPossibleSubscriber()
   }
 }
 
 if (localStorage.getItem(prevInstallKey) === prevInstallDismissed) {
   console.log("Installation has been denied earlier, don't ask again")
 } else {
-  window.addEventListener('beforeinstallprompt', onInstallPrompt)
+  window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
 }
 
 window.addEventListener('appinstalled', (evt) => {
   console.log('Successfully installed', evt)
 })
 
-const showNotification = (title: string, options?: NotificationOptions) => {
+export const showNotification = (title: string, options?: NotificationOptions) =>
   registeredSW.showNotification(title, options)
-}
 
-const isReady = () => !!registeredSW
-
-export default {
-  showNotification,
-  isReady,
-  isSupported,
-}
+export const isReady = () => !!registeredSW

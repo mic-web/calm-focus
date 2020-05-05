@@ -2,6 +2,8 @@ import React from 'react'
 import styled, { keyframes, css, ThemeProvider } from 'styled-components'
 import ResetButton from './components/ResetButton'
 import StartButton from './components/StartButton'
+import InstallButton from './components/InstallButton'
+import NotificationsButton from './components/NotificationsButton'
 import BackgroundOverlay from './components/BackgroundOverlay'
 import Box from './components/Box'
 import AnimatedCircle from './components/AnimatedCircle'
@@ -34,7 +36,6 @@ const MainContainer = styled.main`
   align-items: center;
   justify-content: space-between;
   flex: 1;
-  z-index: 1; /* Put elements on top of completed-background */
 `
 const tickShine = keyframes`
   0% {
@@ -88,10 +89,18 @@ const ControlsContainer = styled.div`
   margin-right: 10px;
   margin-bottom: auto;
 `
-const CreditsContainer = styled.div`
+const InfoContainer = styled.div`
   display: flex;
+  flex-direction: column;
   position: absolute;
   bottom: 10px;
+`
+const ActionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
 `
 
 const initialState = timer.getInitialState()
@@ -114,7 +123,10 @@ const App: React.FC = () => {
     }
     if (secondsLeft === 0) {
       timer.deleteStartDate()
-      notification.showNotification('Done', { body: `Take a break for ${timer.breakMinutes} minutes` })
+      notification.showNotification('Done', {
+        body: `Take a break for ${timer.breakMinutes} minutes`,
+        icon: 'images/icon-192.png',
+      })
       sounds.playTimeOver()
     }
     return () => {
@@ -144,10 +156,14 @@ const App: React.FC = () => {
     timer.deleteStartDate()
   }
   function start(event?: React.MouseEvent) {
-    // Init audio for iOS
     sounds.initOnInteraction(event)
 
-    if (!notification.browserNotificationGranted() && notification.browserNotificationSupported()) {
+    if (
+      notification.isEnabled() &&
+      !notification.browserNotificationGranted() &&
+      notification.browserNotificationSupported()
+    ) {
+      console.log('Ask Permission')
       notification.askPermission().catch((error) => console.error(error))
     }
 
@@ -161,9 +177,13 @@ const App: React.FC = () => {
   return (
     <AppContainer>
       <BackgroundOverlay state={getState()} />
-      <CreditsContainer>
+      <InfoContainer>
         <PictureCredits />
-      </CreditsContainer>
+      </InfoContainer>
+      <ActionsContainer>
+        <NotificationsButton />
+        <InstallButton state={getState()} />
+      </ActionsContainer>
       <MainContainer>
         <TimeContainer state={getState()}>
           <AnimatedCircle progress={getProgress()} />

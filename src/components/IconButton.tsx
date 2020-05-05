@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components'
 import React from 'react'
 
 type Props = {
-  disabled?: boolean
+  disabledLook?: boolean
   subtle?: boolean
   invisible?: boolean
   highlight?: boolean
+  small?: boolean
   title?: string
   onClick: (event?: React.MouseEvent) => void
   className?: string
@@ -29,10 +30,9 @@ const IconButton: React.FC<Props> = ({ onClick, className, children, title }) =>
 const StyledIconButton = styled(IconButton)`
   outline: none;
   fill: #fff;
+  stroke: #fff;
   display: flex;
   text-align: center;
-  height: 35px;
-  width: 35px;
   transition: opacity 0.5s ease, transform 0.3s ease;
   border: none;
   background: none;
@@ -40,9 +40,9 @@ const StyledIconButton = styled(IconButton)`
     (props.invisible && {
       visibility: 'hidden',
     }) ||
-    (props.disabled && {
-      opacity: 0.3,
-      pointerEvents: 'none',
+    (props.disabledLook && {
+      fill: '#ccc',
+      stroke: '#ccc',
     }) ||
     (props.subtle && {
       opacity: 0.6,
@@ -52,8 +52,21 @@ const StyledIconButton = styled(IconButton)`
     color: ${props.theme.colors.white};
   `}
 
-  &:hover:not(.disabled),
-  &:focus:not(.disabled) {
+  ${(props) => {
+    if (props.small) {
+      return css`
+        width: 25px;
+        height: 25px;
+      `
+    }
+    return css`
+      width: 35px;
+      height: 35px;
+    `
+  }}
+
+  &:hover,
+  &:focus {
     cursor: pointer;
     opacity: 1;
     transform: scale(1.1);
