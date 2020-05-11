@@ -7,7 +7,7 @@ export const browserNotificationSupported = () => {
 
 let granted = false
 
-const notificationsEnabledKey = 'notificationsEnabledKey'
+const notificationsEnabledKey = 'notificationsEnabled'
 if (!window.localStorage.getItem(notificationsEnabledKey) && Notification.permission !== 'denied') {
   window.localStorage.setItem(notificationsEnabledKey, 'true')
 }
@@ -58,3 +58,9 @@ export const setIsEnabled = (isEnabled: boolean) => {
 }
 
 export const isEnabled = () => enabled
+
+export const checkNotificationsEnabled = () => {
+  if (isEnabled() && !browserNotificationGranted() && browserNotificationSupported()) {
+    askPermission().catch((error) => console.error(error))
+  }
+}

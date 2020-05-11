@@ -15,21 +15,20 @@ const NotificationButton: React.FC<NotificationButtonProps> = () => {
     notifications.setIsEnabled(isEnabled)
   }, [isEnabled])
   const onClick = () => {
-    console.log('')
     if (
       !notifications.isEnabled() &&
       !notifications.browserNotificationGranted() &&
       notifications.browserNotificationSupported()
     ) {
-      console.log('Ask Permission')
       notifications
         .askPermission()
         .then((granted) => setIsEnabled(true))
-        .catch((error) =>
+        .catch(() => {
+          console.warn('Notification permission failed')
           alert(
             'If you want to enable notifications again, "Allow" notifications in the tool bar of your browser (to the left side of the address)'
           )
-        )
+        })
     } else {
       setIsEnabled(!isEnabled)
     }

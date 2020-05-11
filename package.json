@@ -1,5 +1,5 @@
 {
-  "name": "break-timer",
+  "name": "focus-timer",
   "version": "0.1.0",
   "private": true,
   "description": "",
@@ -14,9 +14,11 @@
     "test:watch": "npm run test -- --watch --maxWorkers=1"
   },
   "keywords": [
+    "Calm Focus",
     "Timer",
-    "Break Timer",
-    "Pomodoro"
+    "Focus",
+    "Pomodoro",
+    "Work"
   ],
   "author": "Michael Adlfinger",
   "license": "MIT",

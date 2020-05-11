@@ -1,25 +1,16 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { States } from '../types'
 import IconButton from './IconButton'
 import ResetIcon from '../icons/ResetIcon'
 
 type ResetButtonProps = {
-  state: States
   className?: string
-  reset: () => void
+  reset: (event: React.SyntheticEvent) => void
 }
 
-const ResetButton: React.FC<ResetButtonProps> = ({ state, className, reset }) => {
+const ResetButton: React.FC<ResetButtonProps> = ({ className, reset }) => {
   return (
-    <IconButton
-      onClick={reset}
-      className={className}
-      subtle={state === States.RUNNING}
-      invisible={state === States.INITIAL}
-      title="Reset time"
-    >
+    <IconButton onClick={reset} className={className} subtle title="Reset time">
       <ResetIcon />
     </IconButton>
   )

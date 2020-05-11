@@ -9,7 +9,7 @@
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom"]
-  },
-  "exclude": ["node_modules"]
+    "lib": ["dom"],
+    "skipLibCheck": true
+  }
 }

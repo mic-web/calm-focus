@@ -17,8 +17,8 @@ export default styled(Background)`
   opacity: 0.1;
   ${(props) => {
     switch (props.state) {
-      case States.COMPLETED:
-      case States.INITIAL:
+      case States.WORK_READY:
+      case States.REST_READY:
         return css`
           opacity: 0;
           transition: opacity 2s ease;

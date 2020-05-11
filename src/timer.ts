@@ -1,45 +1,49 @@
-export const milliSecondsPerSecond = 1000
-const sessionMinutes = 0.05
-export const sessionSeconds = sessionMinutes * 60 - 1
-export const breakMinutes = 5
+import { States, Seconds, Minutes, Milliseconds } from './types'
+import * as storage from './storage'
 
-const startDateKey = 'startDate'
-export const saveStartDate = () => window.localStorage.setItem(startDateKey, new Date().toString())
-export const deleteStartDate = () => window.localStorage.removeItem(startDateKey)
-
-const getSavedSeconds = (): number | null => {
-  const savedStartDate = window.localStorage.getItem(startDateKey)
-  if (!savedStartDate) {
-    return null
-  }
-  const passedSeconds = (new Date().getTime() - new Date(savedStartDate).getTime()) / 1000
-  const remainingSeconds = Math.round(sessionSeconds - passedSeconds)
-  if (remainingSeconds < 0) {
-    deleteStartDate()
-    return null
-  }
-  return remainingSeconds
-}
+export const MILLISECONDS_PER_SECOND: Milliseconds = 1000
+export const WORK_PHASE_MINUTES: Minutes = 0.1
+export const REST_PHASE_MINUTES: Minutes = 0.1
+const getStartSecondsFromMinutes = (phaseMinutes: Minutes): Seconds => phaseMinutes * 60 - 1
+export const WORK_PHASE_SECONDS: Seconds = getStartSecondsFromMinutes(WORK_PHASE_MINUTES)
+export const REST_PHASE_SECONDS: Seconds = getStartSecondsFromMinutes(REST_PHASE_MINUTES)
 
 type TimerStatus = {
-  secondsLeft: number
-  isActive: boolean
-  isInitial: boolean
+  secondsLeft: Seconds
+  state: States
 }
+
+export const getPhaseSeconds = (state: States): Seconds =>
+  ({
+    [States.WORK]: WORK_PHASE_SECONDS,
+    [States.WORK_READY]: WORK_PHASE_SECONDS,
+    [States.REST]: REST_PHASE_SECONDS,
+    [States.REST_READY]: REST_PHASE_SECONDS,
+  }[state])
 
 export const getInitialState = (): TimerStatus => {
-  const initialSeconds = getSavedSeconds()
-  let secondsLeft
-  if (initialSeconds == null) {
-    secondsLeft = sessionSeconds
-  } else {
-    secondsLeft = initialSeconds
+  const state = storage.getSavedState() || States.WORK_READY
+  const savedStartDate = storage.getSavedStartDate()
+  const phaseSeconds = getPhaseSeconds(state)
+  const defaultInitialState = {
+    secondsLeft: Math.round(phaseSeconds),
+    state,
+  }
+  if (!savedStartDate) {
+    return defaultInitialState
+  }
+  const passedSeconds = (new Date().getTime() - new Date(savedStartDate).getTime()) / MILLISECONDS_PER_SECOND
+  const remainingSeconds = Math.round(phaseSeconds - passedSeconds)
+  if (remainingSeconds < 0) {
+    storage.deleteStartDate()
+    return defaultInitialState
   }
   return {
-    secondsLeft,
-    isActive: initialSeconds !== null,
-    isInitial: initialSeconds === null,
+    secondsLeft: remainingSeconds,
+    state,
   }
 }
 
-export const getPercentage = (secondsLeft: number) => (sessionSeconds - secondsLeft) / sessionSeconds
+export const getPercentage = (secondsLeft: Seconds, phaseSeconds: Seconds) => {
+  return (phaseSeconds - secondsLeft) / phaseSeconds
+}

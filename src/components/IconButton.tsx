@@ -9,7 +9,7 @@ type Props = {
   highlight?: boolean
   small?: boolean
   title?: string
-  onClick: (event?: React.MouseEvent) => void
+  onClick: (event: React.SyntheticEvent) => void
   className?: string
   css?: string
 }
@@ -17,7 +17,7 @@ type Props = {
 const IconButton: React.FC<Props> = ({ onClick, className, children, title }) => {
   const onKeyUp = (event: React.KeyboardEvent) => {
     if (event.keyCode === 13 || event.keyCode === 32) {
-      onClick()
+      onClick(event)
     }
   }
   return (

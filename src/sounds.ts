@@ -5,7 +5,7 @@ let initialized = false
 
 // On iOS, sounds have to be enabled through user interaction.
 // Playing an empty audio object on user interaction enables playing further audio.
-export const initOnInteraction = (event: React.MouseEvent) => {
+export const initOnInteraction = (event: React.SyntheticEvent) => {
   if (!initialized) {
     initialized = true
     audio.play()

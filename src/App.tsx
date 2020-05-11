@@ -1,8 +1,9 @@
 import React from 'react'
-import styled, { keyframes, css, ThemeProvider } from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 import ResetButton from './components/ResetButton'
 import StartButton from './components/StartButton'
 import InstallButton from './components/InstallButton'
+import * as Container from './components/Containers'
 import NotificationsButton from './components/NotificationsButton'
 import BackgroundOverlay from './components/BackgroundOverlay'
 import Box from './components/Box'
@@ -14,193 +15,115 @@ import GlobalStyle from './style/GlobalStyle'
 import theme from './style/theme'
 import { States } from './types'
 import * as notification from './notifications'
+import useInterval from './helpers/useInterval'
 import * as timer from './timer'
 import * as sounds from './sounds'
-
-const AppContainer = styled.div`
-  text-align: center;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
-  position: relative;
-  ${(props) => css`
-    color: ${props.theme.colors.white};
-  `}
-`
-const MainContainer = styled.main`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1;
-`
-const tickShine = keyframes`
-  0% {
-    opacity: 0.8;
-  }
-  10% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-  }
-`
-const TimeContainer = styled.div<{ state: States }>`
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: stretch;
-  margin-top: auto;
-  height: 40vh;
-  ${(props) => {
-    switch (props.state) {
-      case States.RUNNING:
-        return css`
-          animation: 1s ${tickShine} infinite;
-        `
-      case States.COMPLETED:
-        return css`
-          opacity: 1;
-        `
-      default:
-        return css`
-          transition: opacity 2s ease;
-          opacity: 0.8;
-        `
-    }
-  }}
-`
-const HintContainer = styled.div`
-  display: flex;
-  position: absolute;
-  align-self: center;
-  bottom: 0;
-`
-const ControlsContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  flex-direction: column;
-  align-items: stretch;
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: auto;
-`
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 10px;
-`
-const ActionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 10px;
-  right: 30px;
-`
+import * as storage from './storage'
 
 const initialState = timer.getInitialState()
+const getNextState = (currentState: States) =>
+  ({
+    [States.WORK_READY]: States.WORK,
+    [States.WORK]: States.REST_READY,
+    [States.REST_READY]: States.REST,
+    [States.REST]: States.WORK_READY,
+  }[currentState])
+
+const getControls = (
+  state: States,
+  start: (e: React.SyntheticEvent) => void,
+  reset: (event: React.SyntheticEvent) => void
+) => {
+  return {
+    [States.WORK_READY]: <StartButton start={start} />,
+    [States.REST_READY]: <StartButton start={start} />,
+    [States.WORK]: <ResetButton reset={reset} />,
+    [States.REST]: <ResetButton reset={reset} />,
+  }[state]
+}
+
+const onInteraction = (event: React.SyntheticEvent) => {
+  sounds.initOnInteraction(event)
+}
+
+const notifyTimeOver = (state: States) => {
+  if (state === States.WORK) {
+    notification.showNotification('Done, take a break', {
+      body: `Take a break for ${timer.REST_PHASE_MINUTES} minutes`,
+      icon: 'images/icon-192.png',
+    })
+  } else if (state === States.REST) {
+    notification.showNotification('Focus again', {
+      body: `Focus again for ${timer.WORK_PHASE_MINUTES} minutes`,
+      icon: 'images/icon-192.png',
+    })
+  }
+}
 
 const App: React.FC = () => {
   const [secondsLeft, setSecondsLeft] = React.useState(initialState.secondsLeft)
-  const [isActive, setIsActive] = React.useState(initialState.isActive)
-  const [isInitial, setIsInitial] = React.useState(initialState.isInitial)
-
+  const [state, setState] = React.useState(initialState.state)
+  const timeOver = secondsLeft === 0
+  const active = !timeOver && (state === States.WORK || state === States.REST)
+  const activateState = React.useCallback((nextState) => {
+    setState(nextState)
+    storage.saveState(nextState)
+    setSecondsLeft(timer.getPhaseSeconds(nextState))
+    if (nextState === States.WORK || nextState === States.REST) {
+      // Remember start date to allow refresh
+      storage.saveStartDate()
+    }
+  }, [])
   React.useEffect(() => {
-    function tick() {
-      setSecondsLeft(secondsLeft > 0 ? secondsLeft - 1 : 0)
-    }
-    let interval = -1
-    if (isActive) {
-      setIsInitial(false)
-      interval = window.setInterval(tick, timer.milliSecondsPerSecond)
-    } else if (!isActive && secondsLeft !== 0) {
-      clearInterval(interval)
-    }
     if (secondsLeft === 0) {
-      timer.deleteStartDate()
-      notification.showNotification('Done', {
-        body: `Take a break for ${timer.breakMinutes} minutes`,
-        icon: 'images/icon-192.png',
-      })
+      notifyTimeOver(state)
       sounds.playTimeOver()
+      activateState(getNextState(state))
     }
-    return () => {
-      clearInterval(interval)
-    }
-  }, [isActive, secondsLeft, isInitial])
-
-  function getState() {
-    if (isInitial) {
-      return States.INITIAL
-    }
-    if (secondsLeft === 0) {
-      return States.COMPLETED
-    }
-    return States.RUNNING
-  }
+  }, [state, secondsLeft, activateState])
+  useInterval(
+    () => setSecondsLeft((seconds) => seconds - 1),
+    !timeOver && !active ? null : timer.MILLISECONDS_PER_SECOND
+  )
   function getProgress() {
-    if (getState() === States.INITIAL) {
+    if (state === States.REST_READY || state === States.WORK_READY) {
       return 1
     }
-    return timer.getPercentage(secondsLeft)
+    return timer.getPercentage(secondsLeft, timer.getPhaseSeconds(state))
   }
-  function reset() {
-    setSecondsLeft(timer.sessionSeconds)
-    setIsActive(false)
-    setIsInitial(true)
-    timer.deleteStartDate()
+  function reset(event: React.SyntheticEvent) {
+    onInteraction(event)
+    activateState(States.WORK_READY)
   }
-  function start(event?: React.MouseEvent) {
-    sounds.initOnInteraction(event)
-
-    if (
-      notification.isEnabled() &&
-      !notification.browserNotificationGranted() &&
-      notification.browserNotificationSupported()
-    ) {
-      console.log('Ask Permission')
-      notification.askPermission().catch((error) => console.error(error))
-    }
-
-    if (getState() === States.COMPLETED) {
-      reset()
-    }
-    setIsActive(true)
-    timer.saveStartDate()
+  function start(event: React.SyntheticEvent) {
+    onInteraction(event)
+    notification.checkNotificationsEnabled()
+    activateState(getNextState(state))
   }
 
   return (
-    <AppContainer>
-      <BackgroundOverlay state={getState()} />
-      <InfoContainer>
+    <Container.App>
+      <BackgroundOverlay state={state} />
+      <Container.Info>
         <PictureCredits />
-      </InfoContainer>
-      <ActionsContainer>
+      </Container.Info>
+      <Container.Actions>
         <NotificationsButton />
-        <InstallButton state={getState()} />
-      </ActionsContainer>
-      <MainContainer>
-        <TimeContainer state={getState()}>
+        <InstallButton state={state} />
+      </Container.Actions>
+      <Container.Main>
+        <Container.Time state={state}>
           <AnimatedCircle progress={getProgress()} />
-          <Timer state={getState()} secondsLeft={secondsLeft} />
-        </TimeContainer>
-        <ControlsContainer>
-          <Box mt={2}>
-            {(getState() === States.RUNNING && <ResetButton state={getState()} reset={reset} />) || (
-              <StartButton state={getState()} start={start} />
-            )}
-          </Box>
-        </ControlsContainer>
-        <HintContainer>
-          <Hint state={getState()} breakMinutes={5} />
-        </HintContainer>
-      </MainContainer>
-    </AppContainer>
+          <Timer state={state} secondsLeft={secondsLeft} />
+        </Container.Time>
+        <Container.Controls>
+          <Box mt={2}>{getControls(state, start, reset)}</Box>
+        </Container.Controls>
+        <Container.Hint>
+          <Hint state={state} restMinutes={5} />
+        </Container.Hint>
+      </Container.Main>
+    </Container.App>
   )
 }
 

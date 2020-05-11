@@ -11,16 +11,43 @@ type TimerProps = {
 const Timer: React.FC<TimerProps> = ({ state, secondsLeft, className }) => {
   const minutesLeft = Math.floor(secondsLeft / 60)
   const secondsOfMinuteLeft = secondsLeft % 60
-  return (
-    <div className={className}>
-      {(state === States.INITIAL && <small>READY</small>) || (state === States.COMPLETED && <small>DONE</small>) || (
-        <>
+  switch (state) {
+    case States.WORK_READY:
+      return (
+        <div className={className}>
+          <small>READY FOR FOCUS</small>
+        </div>
+      )
+    case States.REST_READY:
+      return (
+        <div className={className}>
+          <small>TAKE A BREAK</small>
+        </div>
+      )
+    case States.WORK:
+      return (
+        <div className={className}>
+          <small>FOCUS</small>
           {minutesLeft}
           <small>{secondsOfMinuteLeft}</small>
-        </>
-      )}
-    </div>
-  )
+        </div>
+      )
+    case States.REST:
+      return (
+        <div className={className}>
+          <small>BREAK TIME</small>
+          {minutesLeft}
+          <small>{secondsOfMinuteLeft}</small>
+        </div>
+      )
+    default:
+      return (
+        <div className={className}>
+          {minutesLeft}
+          <small>{secondsOfMinuteLeft}</small>
+        </div>
+      )
+  }
 }
 
 const StyledTimer = styled(Timer)`

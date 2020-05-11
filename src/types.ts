@@ -1,5 +1,10 @@
 export enum States {
-  INITIAL = 'INITIAL',
-  COMPLETED = 'COMPLETED',
-  RUNNING = 'RUNNING',
+  WORK_READY = 'WORK_READY',
+  WORK = 'WORK',
+  REST_READY = 'REST_READY',
+  REST = 'REST',
 }
+
+export type Seconds = number
+export type Minutes = number
+export type Milliseconds = number

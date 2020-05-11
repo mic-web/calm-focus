@@ -5,14 +5,14 @@ import { States } from '../types'
 
 type HintProps = {
   state: States
-  breakMinutes: number
+  restMinutes: number
   className?: string
 }
 
-const Hint: React.FC<HintProps> = ({ state, breakMinutes, className }) =>
-  state === States.COMPLETED && (
+const Hint: React.FC<HintProps> = ({ state, restMinutes, className }) =>
+  state === States.WORK_READY && (
     // eslint-disable-next-line react/jsx-one-expression-per-line
-    <div className={className}>Take a break for {breakMinutes} minutes</div>
+    <div className={className}>Take a rest for {restMinutes} minutes</div>
   )
 
 export default styled(Hint)`

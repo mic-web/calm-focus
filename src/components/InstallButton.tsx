@@ -20,7 +20,7 @@ const InstallButton: React.FC<InstallButtonProps> = ({ state }) => {
     <IconButton
       invisible={!isInstallable}
       onClick={serviceWorker.askForInstallation}
-      highlight={state === States.INITIAL}
+      highlight={state === States.WORK_READY}
       title="Install application"
       small
     >

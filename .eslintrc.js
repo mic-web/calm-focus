@@ -44,7 +44,7 @@ module.exports = {
       "Array.prototype.push"
     ]
   },
-  plugins: ['react', '@typescript-eslint', 'compat', 'prettier'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'compat', 'prettier'],
   rules: {
     'import/extensions': [
       'error',
@@ -60,7 +60,9 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/*.test.*', 'config/*'] }],
-    'compat/compat': 'warn'
+    'compat/compat': 'warn',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn'
   },
   overrides: [
     {
