@@ -1,12 +1,29 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { makeStyles } from '@material-ui/core/styles'
+import { States } from '../types'
 
-type CircleProps = {
+type Props = {
   progress: number
-  className?: string
+  state: States
 }
 
-const Circle: React.FC<CircleProps> = ({ progress, className }) => {
+const useStyles = makeStyles(({ palette }) => ({
+  root: {
+    display: 'flex',
+  },
+  circle: {
+    fill: 'none',
+    transition: 'stroke-dashoffset 0.35s',
+    transform: 'rotate(-90deg)',
+    transformOrigin: '50% 50%',
+    stroke: palette.common.white,
+    opacity: (props: Props) => ((props.state === States.REST_READY || props.state === States.WORK_READY) && 0.5) || 1.0,
+  },
+}))
+
+const Circle: React.FC<Props> = (props) => {
+  const css = useStyles(props)
+  const { progress } = props
   const radius = 60
   const stroke = 2
 
@@ -15,7 +32,7 @@ const Circle: React.FC<CircleProps> = ({ progress, className }) => {
   const strokeDashoffset = circumference - progress * circumference
   const diameter = radius * 2
   return (
-    <div className={className}>
+    <div className={css.root}>
       <svg viewBox={`0 0 ${diameter} ${diameter}`}>
         <circle
           strokeWidth={stroke}
@@ -30,17 +47,4 @@ const Circle: React.FC<CircleProps> = ({ progress, className }) => {
   )
 }
 
-const StyledCircle = styled(Circle)`
-  display: flex;
-  circle {
-    fill: none;
-    transition: stroke-dashoffset 0.35s;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
-    ${(props) => css`
-      stroke: ${props.theme.colors.white};
-    `};
-  }
-`
-
-export default StyledCircle
+export default Circle

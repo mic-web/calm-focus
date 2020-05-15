@@ -1,17 +1,18 @@
 import React from 'react'
 
-import IconButton from './IconButton'
+import { IconButton, SvgIcon } from '@material-ui/core'
 import ResetIcon from '../icons/ResetIcon'
 
 type ResetButtonProps = {
-  className?: string
   reset: (event: React.SyntheticEvent) => void
 }
 
-const ResetButton: React.FC<ResetButtonProps> = ({ className, reset }) => {
+const ResetButton: React.FC<ResetButtonProps> = ({ reset }) => {
   return (
-    <IconButton onClick={reset} className={className} subtle title="Reset time">
-      <ResetIcon />
+    <IconButton onClick={reset} title="Reset">
+      <SvgIcon>
+        <ResetIcon />
+      </SvgIcon>
     </IconButton>
   )
 }

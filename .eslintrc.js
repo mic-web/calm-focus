@@ -30,19 +30,19 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
       webpack: {
-        config: './config/webpack.common.js'
-      }
+        config: './config/webpack.common.js',
+      },
     },
     polyfills: [
       // Example of marking entire API and all methods and properties as polyfilled
-      "Promise",
+      'Promise',
       // Example of marking specific method of an API as polyfilled
-      "WebAssembly.compile",
+      'WebAssembly.compile',
       // Example of API with no property (i.e. a function)
-      "fetch",
+      'fetch',
       // Example of instance method, must add `.prototype.`
-      "Array.prototype.push"
-    ]
+      'Array.prototype.push',
+    ],
   },
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'compat', 'prettier'],
   rules: {
@@ -62,7 +62,7 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/*.test.*', 'config/*'] }],
     'compat/compat': 'warn',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'warn',
   },
   overrides: [
     {

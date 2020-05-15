@@ -1,6 +1,7 @@
 import React from 'react'
+import styled from 'styled-components'
 
-import IconButton from './IconButton'
+import { IconButton, Box, SvgIcon } from '@material-ui/core'
 import NotificationIcon from '../icons/NotificationIcon'
 import NotificationIconInactive from '../icons/NotificationIconInactive'
 import * as notifications from '../notifications'
@@ -8,6 +9,11 @@ import * as notifications from '../notifications'
 type NotificationButtonProps = {
   className?: string
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 const NotificationButton: React.FC<NotificationButtonProps> = () => {
   const [isEnabled, setIsEnabled] = React.useState(notifications.isEnabled())
@@ -35,15 +41,25 @@ const NotificationButton: React.FC<NotificationButtonProps> = () => {
   }
   if (isEnabled) {
     return (
-      <IconButton onClick={onClick} highlight title="Notification application">
-        <NotificationIcon />
-      </IconButton>
+      <Container>
+        <IconButton onClick={onClick} title="Notification application">
+          <SvgIcon>
+            <NotificationIcon />
+          </SvgIcon>
+          <Box ml={2}>Notifications enabled</Box>
+        </IconButton>
+      </Container>
     )
   }
   return (
-    <IconButton onClick={onClick} disabledLook title="Notification application">
-      <NotificationIconInactive />
-    </IconButton>
+    <Container>
+      <IconButton onClick={onClick} title="Notification application">
+        <NotificationIconInactive />
+        <SvgIcon>
+          <Box ml={2}>Notifications disabled</Box>
+        </SvgIcon>
+      </IconButton>
+    </Container>
   )
 }
 

@@ -31,6 +31,14 @@ module.exports = {
         use: 'source-map-loader',
       },
       {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          { loader: 'postcss-loader', options: { config: { path: path.resolve(__dirname, './postcss.config.js') } } },
+        ],
+      },
+      {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {

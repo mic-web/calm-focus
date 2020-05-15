@@ -3,13 +3,15 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "module": "esnext",
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom"],
+    "lib": ["es6", "dom"],
     "skipLibCheck": true
   }
 }

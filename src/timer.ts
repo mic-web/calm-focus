@@ -21,6 +21,14 @@ export const getPhaseSeconds = (state: States): Seconds =>
     [States.REST_READY]: REST_PHASE_SECONDS,
   }[state])
 
+export const getPhaseMinutes = (state: States): Seconds =>
+  ({
+    [States.WORK]: WORK_PHASE_MINUTES,
+    [States.WORK_READY]: WORK_PHASE_MINUTES,
+    [States.REST]: REST_PHASE_MINUTES,
+    [States.REST_READY]: REST_PHASE_MINUTES,
+  }[state])
+
 export const getInitialState = (): TimerStatus => {
   const state = storage.getSavedState() || States.WORK_READY
   const savedStartDate = storage.getSavedStartDate()

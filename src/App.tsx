@@ -1,24 +1,25 @@
 import React from 'react'
-import { ThemeProvider } from 'styled-components'
+
+import Box from '@material-ui/core/Box'
+import { ThemeProvider, CssBaseline } from '@material-ui/core'
 import ResetButton from './components/ResetButton'
 import StartButton from './components/StartButton'
-import InstallButton from './components/InstallButton'
-import * as Container from './components/Containers'
-import NotificationsButton from './components/NotificationsButton'
+import TickShine from './components/TickShine'
 import BackgroundOverlay from './components/BackgroundOverlay'
-import Box from './components/Box'
 import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
-import Hint from './components/Hint'
-import PictureCredits from './components/PictureCredits'
-import GlobalStyle from './style/GlobalStyle'
 import theme from './style/theme'
+import GlobalStyle from './style/GlobalStyle'
 import { States } from './types'
 import * as notification from './notifications'
 import useInterval from './helpers/useInterval'
 import * as timer from './timer'
 import * as sounds from './sounds'
 import * as storage from './storage'
+import 'typeface-roboto'
+import Hint from './components/Hint'
+import Menu from './components/Menu'
+import MenuButton from './components/MenuButton'
 
 const initialState = timer.getInitialState()
 const getNextState = (currentState: States) =>
@@ -63,6 +64,7 @@ const notifyTimeOver = (state: States) => {
 const App: React.FC = () => {
   const [secondsLeft, setSecondsLeft] = React.useState(initialState.secondsLeft)
   const [state, setState] = React.useState(initialState.state)
+  const [menuOpen, setMenuOpen] = React.useState(false)
   const timeOver = secondsLeft === 0
   const active = !timeOver && (state === States.WORK || state === States.REST)
   const activateState = React.useCallback((nextState) => {
@@ -100,30 +102,45 @@ const App: React.FC = () => {
     notification.checkNotificationsEnabled()
     activateState(getNextState(state))
   }
+  function toggleMenu(event: React.SyntheticEvent) {
+    onInteraction(event)
+    setMenuOpen(!menuOpen)
+  }
 
   return (
-    <Container.App>
+    <Box
+      display="flex"
+      justifyContent="center"
+      flex-direction="column"
+      alignItems="center"
+      position="relative"
+      height="100vh"
+      textAlign="center"
+    >
       <BackgroundOverlay state={state} />
-      <Container.Info>
-        <PictureCredits />
-      </Container.Info>
-      <Container.Actions>
-        <NotificationsButton />
-        <InstallButton state={state} />
-      </Container.Actions>
-      <Container.Main>
-        <Container.Time state={state}>
-          <AnimatedCircle progress={getProgress()} />
-          <Timer state={state} secondsLeft={secondsLeft} />
-        </Container.Time>
-        <Container.Controls>
+      <Box display="flex" justifyContent="space-around" flex-direction="column" alignItems="center">
+        <Box display="flex" justifyContent="center" position="relative" alignItems="stretch" height="30vh">
+          <TickShine state={state}>
+            <AnimatedCircle progress={getProgress()} state={state} />
+            <Timer state={state} secondsLeft={secondsLeft} />
+          </TickShine>
+        </Box>
+        <Box display="flex" justifyContent="space-around" m="1, 1, 1, auto" alignItems="stretch" flexDirection="column">
           <Box mt={2}>{getControls(state, start, reset)}</Box>
-        </Container.Controls>
-        <Container.Hint>
-          <Hint state={state} restMinutes={5} />
-        </Container.Hint>
-      </Container.Main>
-    </Container.App>
+        </Box>
+      </Box>
+      <Box display="flex" position="absolute" top={0} width="100%">
+        <Hint state={state} restMinutes={timer.REST_PHASE_MINUTES} />
+      </Box>
+      {menuOpen && (
+        <Box display="flex" position="absolute" alignSelf="center" width="70vh" height="95vh">
+          <Menu state={state} open={menuOpen} />
+        </Box>
+      )}
+      <Box display="flex" position="absolute" mb={2} mr={2}>
+        <MenuButton state={state} toggleMenu={toggleMenu} />
+      </Box>
+    </Box>
   )
 }
 
@@ -131,6 +148,7 @@ const ThemedApp = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
+      <CssBaseline />
       <App />
     </ThemeProvider>
   )

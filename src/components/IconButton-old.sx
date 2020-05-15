@@ -1,0 +1,101 @@
+import styled from 'styled-components'
+import { IconButton } from '@material-ui/core'
+
+import React from 'react'
+
+type Props = {
+  disabledLook?: boolean
+  subtle?: boolean
+  invisible?: boolean
+  highlight?: boolean
+  small?: boolean
+  title?: string
+  label?: string
+  onClick: (event: React.SyntheticEvent) => void
+}
+
+const Label = styled.span`
+  margin-left: 5px;
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+`
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export default IconButton
+
+// const IconButton: React.FC<Props> = ({ onClick, className, children, title, label }) => {
+//   const onKeyUp = (event: React.KeyboardEvent) => {
+//     if (event.keyCode === 13 || event.keyCode === 32) {
+//       onClick(event)
+//     }
+//   }
+//   return (
+//     <Container>
+//       <button className={className} onClick={onClick} type="button" onKeyUp={onKeyUp} tabIndex={0} title={title}>
+//         {children}
+//       </button>
+//       {label && <Label onClick={onClick}>{label}</Label>}
+//     </Container>
+//   )
+// }
+
+// const StyledIconButton = styled(IconButton)<Props>`
+//   ${({ theme, invisible, disabledLook, subtle, small }) => `
+//   display: flex;
+//   outline: none;
+//   color: ${theme.palette.common.white};
+//   fill: ${theme.palette.common.white};
+//   stroke: ${theme.palette.common.white};
+//   text-align: center;
+//   transition: opacity 0.5s ease, transform 0.3s ease;
+//   border: none;
+//   background: none;
+//   ${() =>
+//     (invisible && {
+//       visibility: 'hidden',
+//     }) ||
+//     (disabledLook && {
+//       fill: '#ccc',
+//       stroke: '#ccc',
+//     }) ||
+//     (subtle && {
+//       opacity: 0.6,
+//     })}
+//   ${() => small && css}
+
+//   ${() => {
+//     if (small) {
+//       return css`
+//         width: 25px;
+//         height: 25px;
+//       `
+//     }
+//     return css`
+//       width: 35px;
+//       height: 35px;
+//     `
+//   }}
+
+//   &:hover,
+//   &:focus {
+//     cursor: pointer;
+//     opacity: 1;
+//     transform: scale(1.1);
+//     transition: transform 0s ease;
+//   }
+//   svg {
+//     display: flex;
+//     flex: 1;
+//     height: 100%;
+//     width: 100%;
+//   }
+// }`
+// `
+
+// export default StyledIconButton

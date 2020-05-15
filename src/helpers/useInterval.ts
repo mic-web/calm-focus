@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
  *  @param callback - Function to be called after delay
  *  @param delay - Delay next function call. If null, the interval will be stopped.
  * */
-function useInterval(callback: () => void, delay: number) {
+function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef<() => void>()
 
   // Remember the latest callback.
@@ -16,7 +16,9 @@ function useInterval(callback: () => void, delay: number) {
   // Set up the interval.
   useEffect(() => {
     function tick() {
-      savedCallback.current()
+      if (savedCallback.current) {
+        savedCallback.current()
+      }
     }
     if (delay !== null) {
       const id = setInterval(tick, delay)

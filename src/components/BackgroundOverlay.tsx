@@ -1,36 +1,29 @@
-import styled, { css } from 'styled-components'
-
 import React from 'react'
+import { makeStyles, fade } from '@material-ui/core/styles'
 import { States } from '../types'
 
 type Props = {
   state: States
-  className?: string
 }
 
-const Background: React.FC<Props> = ({ className }) => <div className={className} />
-
-export default styled(Background)`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0.1;
-  ${(props) => {
-    switch (props.state) {
-      case States.WORK_READY:
-      case States.REST_READY:
-        return css`
-          opacity: 0;
-          transition: opacity 2s ease;
-        `
-      default:
-        return css`
-          opacity: 0.5;
-          transition: opacity 2s ease;
-        `
+const useStyles = makeStyles(({ palette }) => ({
+  root: (props: Props) => {
+    const visibleStyle = {
+      opacity: 0.5,
+      transition: 'opacity 2s ease',
     }
-  }};
-  ${(props) => css`
-    background: ${props.theme.colors.darkBlue};
-  `};
-`
+    return {
+      background: fade(palette.common.black, 0.5),
+      opacity: 0,
+      transition: 'opacity 2s ease',
+      ...(props.state === (States.WORK || States.REST) && visibleStyle),
+    }
+  },
+}))
+
+const Background: React.FC<Props> = (props) => {
+  const classes = useStyles(props)
+  return <div className={classes.root} />
+}
+
+export default Background
