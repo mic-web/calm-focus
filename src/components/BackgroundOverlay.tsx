@@ -13,9 +13,12 @@ const useStyles = makeStyles(({ palette }) => ({
       transition: 'opacity 2s ease',
     }
     return {
+      position: 'absolute',
       background: fade(palette.common.black, 0.5),
       opacity: 0,
       transition: 'opacity 2s ease',
+      width: '100%',
+      height: '100%',
       ...(props.state === (States.WORK || States.REST) && visibleStyle),
     }
   },

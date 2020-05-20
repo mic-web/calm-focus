@@ -1,24 +1,59 @@
-import styled, { keyframes, css } from 'styled-components'
-import { States } from '../types'
+import React from 'react'
 
-export const Time = styled.div<{ state: States }>`
-  display: flex;
-  flex: 1;
-  ${(props) => {
-    switch (props.state) {
-      case States.WORK:
-        return css`
-          animation: 1s 'tick-shine' infinite;
-        `
-      case States.WORK_READY:
-        return css`
-          opacity: 1;
-        `
-      default:
-        return css`
-          transition: opacity 2s ease;
-          opacity: 0.8;
-        `
-    }
-  }}
-`
+import { Box } from '@material-ui/core'
+
+export const AppContainer: React.FC = ({ children }) => (
+  <Box
+    display="flex"
+    flexDirection="column"
+    justifyContent="center"
+    alignItems="stretch"
+    position="relative"
+    height="100vh"
+  >
+    {children}
+  </Box>
+)
+
+export const MainContainer: React.FC = ({ children }) => (
+  <Box
+    display="flex"
+    flexDirection="column"
+    justifyContent="center"
+    alignItems="center"
+    marginTop="auto"
+    marginBottom="auto"
+  >
+    {children}
+  </Box>
+)
+
+export const HintContainer: React.FC = ({ children }) => (
+  <Box display="flex" width="100%">
+    {children}
+  </Box>
+)
+
+export const TimeContainer: React.FC = ({ children }) => (
+  <Box display="flex" justifyContent="stretch" position="relative" alignItems="stretch" height="30vh">
+    {children}
+  </Box>
+)
+
+export const ControlContainer: React.FC = ({ children }) => (
+  <Box display="flex" justifyContent="space-around" mr={1} ml={1} alignItems="stretch" flexDirection="column">
+    {children}
+  </Box>
+)
+
+export const MenuButtonContainer: React.FC = ({ children }) => (
+  <Box display="flex" position="absolute" bottom={2} right={2}>
+    {children}
+  </Box>
+)
+
+export const MenuContainer: React.FC = ({ children }) => (
+  <Box display="flex" position="absolute" alignSelf="center" width="95vw" height="95vh">
+    {children}
+  </Box>
+)

@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Box from '@material-ui/core/Box'
 import { ThemeProvider, CssBaseline } from '@material-ui/core'
 import ResetButton from './components/ResetButton'
 import StartButton from './components/StartButton'
@@ -20,6 +19,15 @@ import 'typeface-roboto'
 import Hint from './components/Hint'
 import Menu from './components/Menu'
 import MenuButton from './components/MenuButton'
+import {
+  MainContainer,
+  TimeContainer,
+  ControlContainer,
+  HintContainer,
+  MenuContainer,
+  MenuButtonContainer,
+  AppContainer,
+} from './components/Containers'
 
 const initialState = timer.getInitialState()
 const getNextState = (currentState: States) =>
@@ -43,11 +51,12 @@ const getControls = (
   }[state]
 }
 
-const onInteraction = (event: React.SyntheticEvent) => {
-  sounds.initOnInteraction(event)
+const onInteraction = (_event: React.SyntheticEvent) => {
+  sounds.initOnInteraction()
 }
 
 const notifyTimeOver = (state: States) => {
+  sounds.playTimeOver()
   if (state === States.WORK) {
     notification.showNotification('Done, take a break', {
       body: `Take a break for ${timer.REST_PHASE_MINUTES} minutes`,
@@ -79,7 +88,6 @@ const App: React.FC = () => {
   React.useEffect(() => {
     if (secondsLeft === 0) {
       notifyTimeOver(state)
-      sounds.playTimeOver()
       activateState(getNextState(state))
     }
   }, [state, secondsLeft, activateState])
@@ -108,39 +116,27 @@ const App: React.FC = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      flex-direction="column"
-      alignItems="center"
-      position="relative"
-      height="100vh"
-      textAlign="center"
-    >
+    <AppContainer>
       <BackgroundOverlay state={state} />
-      <Box display="flex" justifyContent="space-around" flex-direction="column" alignItems="center">
-        <Box display="flex" justifyContent="center" position="relative" alignItems="stretch" height="30vh">
+      <HintContainer>
+        <Hint state={state} restMinutes={timer.REST_PHASE_MINUTES} />
+      </HintContainer>
+      <MainContainer>
+        <TimeContainer>
           <TickShine state={state}>
             <AnimatedCircle progress={getProgress()} state={state} />
             <Timer state={state} secondsLeft={secondsLeft} />
           </TickShine>
-        </Box>
-        <Box display="flex" justifyContent="space-around" m="1, 1, 1, auto" alignItems="stretch" flexDirection="column">
-          <Box mt={2}>{getControls(state, start, reset)}</Box>
-        </Box>
-      </Box>
-      <Box display="flex" position="absolute" top={0} width="100%">
-        <Hint state={state} restMinutes={timer.REST_PHASE_MINUTES} />
-      </Box>
+        </TimeContainer>
+        <ControlContainer>{getControls(state, start, reset)}</ControlContainer>
+      </MainContainer>
       {menuOpen && (
-        <Box display="flex" position="absolute" alignSelf="center" width="70vh" height="95vh">
-          <Menu state={state} open={menuOpen} />
-        </Box>
+        <MenuContainer>
+          <Menu state={state} opened={menuOpen} close={() => setMenuOpen(false)} />
+        </MenuContainer>
       )}
-      <Box display="flex" position="absolute" mb={2} mr={2}>
-        <MenuButton state={state} toggleMenu={toggleMenu} />
-      </Box>
-    </Box>
+      <MenuButtonContainer>{!menuOpen && <MenuButton state={state} toggleMenu={toggleMenu} />}</MenuButtonContainer>
+    </AppContainer>
   )
 }
 

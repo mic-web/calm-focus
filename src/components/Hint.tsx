@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, fade } from '@material-ui/core/styles'
 
 import { States } from '../types'
 
@@ -8,17 +8,18 @@ type Props = {
   restMinutes: number
 }
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     display: 'flex',
+    justifyContent: 'center',
     textAlign: 'center',
-    fontSize: '0.8em',
-    top: 20,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    padding: '10px 20px',
-    color: palette.common.white,
-    background: palette.common.black,
+    flexGrow: 1,
+    fontSize: '1.1rem',
+    padding: spacing(1),
+    color: palette.grey[600],
+    fontWeight: 300,
+    background: fade(palette.common.white, 0.4),
+    filter: `drop-shadow(0px 0px 5px ${palette.common.white})`,
   },
 }))
 

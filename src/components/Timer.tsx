@@ -13,12 +13,14 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     alignItems: 'center',
     flexDirection: 'column',
-    fontSize: '2.2em',
+    fontSize: '8vh',
+    lineHeight: '1.1em',
     userSelect: 'none',
     alignSelf: 'center',
     opacity: (props: Props) => ((props.state === States.REST_READY || props.state === States.WORK_READY) && 0.5) || 1.0,
     '& small': {
-      fontSize: '0.4em',
+      fontSize: '3vh',
+      lineHeight: '4vh',
     },
   },
 }))

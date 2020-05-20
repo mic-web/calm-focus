@@ -15,7 +15,9 @@ const useStyles = makeStyles(() => ({
   root: {
     opacity: 1,
     display: 'flex',
-    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexGrow: 1,
   },
   done: {
     transition: 'opacity 2s ease',
@@ -27,7 +29,7 @@ const TickShine: React.FC<Props> = (props) => {
   const css = useStyles(props)
   const { children, state } = props
   const classes = [css.root]
-  if (state === States.REST || States.WORK) {
+  if (state === States.REST || state === States.WORK) {
     classes.push(css.tick)
   } else {
     classes.push(css.done)

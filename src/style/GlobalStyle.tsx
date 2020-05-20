@@ -25,6 +25,17 @@ const GlobalCss = withStyles({
         opacity: 1,
       },
     },
+    '*::-webkit-scrollbar': {
+      width: '5px',
+    },
+    '*::-webkit-scrollbar-track': {
+      '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.0)',
+    },
+    '*::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.5)',
+      outline: '1px solid slategrey',
+    },
+    scrollbarColor: '#0A4C95 #C2D2E4',
   },
 })(() => null)
 

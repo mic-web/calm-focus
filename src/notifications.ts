@@ -11,7 +11,8 @@ const notificationsEnabledKey = 'notificationsEnabled'
 if (!window.localStorage.getItem(notificationsEnabledKey) && Notification.permission !== 'denied') {
   window.localStorage.setItem(notificationsEnabledKey, 'true')
 }
-let enabled = window.localStorage.getItem(notificationsEnabledKey) === 'true'
+
+export const readIsEnabled = () => window.localStorage.getItem(notificationsEnabledKey) === 'true'
 
 export const askPermission = () => {
   if (!browserNotificationSupported()) {
@@ -37,7 +38,7 @@ export const askPermission = () => {
 export const browserNotificationGranted = () => granted
 
 export const showNotification = (title: string, options: NotificationOptions) => {
-  if (enabled) {
+  if (readIsEnabled()) {
     if (serviceWorker.isSwSupported() && serviceWorker.isReady()) {
       console.log('Show service worker notification')
       serviceWorker.showNotification(title, options)
@@ -52,15 +53,12 @@ export const showNotification = (title: string, options: NotificationOptions) =>
   }
 }
 
-export const setIsEnabled = (isEnabled: boolean) => {
-  enabled = isEnabled
+export const writeIsEnabled = (isEnabled: boolean) => {
   window.localStorage.setItem(notificationsEnabledKey, `${isEnabled}`)
 }
 
-export const isEnabled = () => enabled
-
 export const checkNotificationsEnabled = () => {
-  if (isEnabled() && !browserNotificationGranted() && browserNotificationSupported()) {
+  if (readIsEnabled() && !browserNotificationGranted() && browserNotificationSupported()) {
     askPermission().catch((error) => console.error(error))
   }
 }
