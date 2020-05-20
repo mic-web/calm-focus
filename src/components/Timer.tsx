@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { States } from '../types'
+import { States, Seconds, Minutes } from '../types'
 
 type Props = {
   state: States
@@ -25,6 +25,8 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
+const secondsToText = (seconds: Seconds): string => (seconds <= 9 ? `0${seconds}` : `${seconds}`)
+
 const Timer: React.FC<Props> = (props) => {
   const css = useStyles(props)
   const { secondsLeft } = props
@@ -33,7 +35,7 @@ const Timer: React.FC<Props> = (props) => {
   return (
     <div className={css.root}>
       {minutesLeft}
-      <small>{secondsOfMinuteLeft}</small>
+      <small>{secondsToText(secondsOfMinuteLeft)}</small>
     </div>
   )
 }

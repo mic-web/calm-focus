@@ -27,14 +27,15 @@ If you have enough screens available, it's encouraged to keep this app open on o
 - [x] Installable PWA for mobile
 - [x] Allow push notification on mobile
 - [x] Refactor: Move time related code into own component
-- [ ] Fix:
-  - [ ] timing of animation and timer start
+- [x] Fix:
+  - [x] timing of animation and timer start
 - [ ] Add impressum
 - [ ] Add gsvo
-- [ ] Improve Typography
-- [ ] Improve theme (spacing, font-size, graphics)
-- [ ] Continuous deployment
-      https://www.gauntface.com/blog/2020/static-site-hosting-on-aws/
+- [x] Improve Typography
+- [x] Improve theme (spacing, font-size, graphics)
+- [x] Continuous deployment
+- [x] Allow activating a 5 min "pause" round (button next to the pause hint text)
+- [ ] Implement better subscriber interface between modules and components (e.g. notifciations)
+- [ ] Change "start date" to "end date" (simpler)
 - [ ] Improve UX: additional circle in the circle which visualizes seconds? (animation is clearer)
   - [ ] Show checkmark instead of 0 when finished
-- [ ] Allow activating a 5 min "pause" round (button next to the pause hint text)

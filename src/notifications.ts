@@ -1,9 +1,6 @@
 import * as serviceWorker from './service-worker'
 
-export const browserNotificationSupported = () => {
-  console.log('Browser notification available?', !!window.Notification)
-  return !!window.Notification
-}
+export const browserNotificationSupported = () => !!window.Notification
 
 let granted = false
 

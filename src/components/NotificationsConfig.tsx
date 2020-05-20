@@ -55,7 +55,9 @@ const NotificationsConfig: React.FC<Props> = () => {
         <Box display="flex" alignItems="center">
           <Switch size="small" checked={isEnabled} onChange={onToggle} color="primary" />
           <Box ml={2}>
-            <Typography variant="body1">{(isEnabled && 'Enabled') || 'Disabled'}</Typography>
+            <Typography variant="body1">
+              {(isEnabled && 'Notifications enabled') || 'Notifications disabled'}
+            </Typography>
           </Box>
         </Box>
       </Box>

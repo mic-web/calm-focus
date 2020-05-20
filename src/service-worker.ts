@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 let registeredSW: ServiceWorkerRegistration
-let deferredPrompt: BeforeInstallPromptEvent
+let deferredPrompt: BeforeInstallPromptEvent | null
 const prevInstallKey = 'previousInstall'
 const prevInstallDismissed = 'dismissed'
 
@@ -30,13 +30,15 @@ export const askForInstallation = () => {
       .then((result) => console.log('Install prompt result', result))
       .then(() => {
         // Wait for the user to respond to the prompt
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'dismissed') {
-            console.log('User dismissed the install prompt')
-            localStorage.setItem(prevInstallKey, prevInstallDismissed)
-          }
-          deferredPrompt = null
-        })
+        if (deferredPrompt) {
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'dismissed') {
+              console.log('User dismissed the install prompt')
+              localStorage.setItem(prevInstallKey, prevInstallDismissed)
+            }
+            deferredPrompt = null
+          })
+        }
       })
       .catch((error) => console.error(error))
   }

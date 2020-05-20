@@ -9,7 +9,7 @@ type Props = {
 const useStyles = makeStyles(({ palette }) => ({
   root: (props: Props) => {
     const visibleStyle = {
-      opacity: 0.5,
+      opacity: 0.7,
       transition: 'opacity 2s ease',
     }
     return {

@@ -37,7 +37,7 @@ const InstallButton: React.FC<InstallButtonProps> = () => {
         </Box>
       </Box>
       <Box display="flex" flexDirection="column" alignItems="flex-start">
-        {!isInstallable ? (
+        {isInstallable ? (
           <>
             <Typography variant="body1">
               Install this timer on your device as a PWA. You can find an explanation&nbsp;
@@ -56,7 +56,8 @@ const InstallButton: React.FC<InstallButtonProps> = () => {
         ) : (
           <>
             <Typography variant="body1">
-              This device or browser does not support the installation of this timer as a
+              This device or browser does not support the installation of the application, because PWAs are not
+              supported. You can find an explanation&nbsp;
               <PWALink />
             </Typography>
           </>

@@ -46,13 +46,13 @@ const Menu: React.FC<Props> = (props) => {
     <div className={css.root}>
       <div className={css.scrollContainer}>
         <CloseButton close={close} />
-        <Box mb={10}>
+        <Box mb={8}>
           <NotificationsConfig />
         </Box>
-        <Box mb={10}>
+        <Box mb={8}>
           <SoundsConfig />
         </Box>
-        <Box mb={10}>
+        <Box mb={8}>
           <InstallButton />
         </Box>
         <Box mt="auto">
