@@ -5,7 +5,11 @@ export const browserNotificationSupported = () => !!window.Notification
 let granted = false
 
 const notificationsEnabledKey = 'notificationsEnabled'
-if (!window.localStorage.getItem(notificationsEnabledKey) && Notification.permission !== 'denied') {
+if (
+  browserNotificationSupported() &&
+  !window.localStorage.getItem(notificationsEnabledKey) &&
+  window.Notification.permission !== 'denied'
+) {
   window.localStorage.setItem(notificationsEnabledKey, 'true')
 }
 
@@ -16,7 +20,7 @@ export const askPermission = () => {
     return Promise.reject(new Error('Notifications not available'))
   }
   return new Promise((resolve, reject) => {
-    const permissionResult = Notification.requestPermission((result) => {
+    const permissionResult = window.Notification.requestPermission((result) => {
       resolve(result)
     })
 
@@ -37,11 +41,9 @@ export const browserNotificationGranted = () => granted
 export const showNotification = (title: string, options: NotificationOptions) => {
   if (readIsEnabled()) {
     if (serviceWorker.isSwSupported() && serviceWorker.isReady()) {
-      console.log('Show service worker notification')
       serviceWorker.showNotification(title, options)
     } else if (browserNotificationSupported() && browserNotificationGranted()) {
-      console.log('Show browser notification')
-      const notification = new Notification(title, options)
+      const notification = new window.Notification(title, options)
       notification.onclick = () => {
         window.focus()
         notification.close()

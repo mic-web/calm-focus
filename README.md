@@ -12,6 +12,10 @@ If you have enough screens available, it's encouraged to keep this app open on o
 ![Demo picture](docs/demo-initial-v2.png)
 ![Demo picture](docs/demo-completed-v2.png)
 
+# Notes
+
+- Installation is only possible when PWAs are supported
+
 # Roadmap
 
 - [x] Refactor components
