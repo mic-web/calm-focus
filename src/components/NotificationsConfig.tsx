@@ -8,6 +8,15 @@ type Props = {}
 
 const NotificationsConfig: React.FC<Props> = () => {
   const [isEnabled, setIsEnabled] = React.useState(notifications.readIsEnabled())
+  React.useEffect(() => {
+    notifications.writeIsEnabled(isEnabled)
+    if (isEnabled) {
+      notifications.showNotification('Notifications enabled', {
+        body: `This is an example notification`,
+        icon: 'images/icon-192.png',
+      })
+    }
+  }, [isEnabled])
   const onToggle = () => {
     if (
       !notifications.readIsEnabled() &&
@@ -17,27 +26,23 @@ const NotificationsConfig: React.FC<Props> = () => {
       notifications
         .askPermission()
         .then((granted) => {
-          notifications.writeIsEnabled(true)
-          setIsEnabled(true)
+          if (granted) {
+            setIsEnabled(true)
+          } else {
+            setIsEnabled(false)
+          }
         })
         .catch(() => {
           setIsEnabled(false)
-          notifications.writeIsEnabled(false)
           console.warn('Notification permission failed')
           alert(
             'If you want to enable notifications again, "Allow" notifications in the tool bar of your browser (to the left side of the address)'
           )
         })
-    } else if (!isEnabled) {
+    } else if (!isEnabled && notifications.browserNotificationSupported()) {
       setIsEnabled(true)
-      notifications.writeIsEnabled(true)
-      notifications.showNotification('Notifications enabled', {
-        body: `This is an example notification`,
-        icon: 'images/icon-192.png',
-      })
     } else {
       setIsEnabled(false)
-      notifications.writeIsEnabled(false)
     }
   }
   return (
@@ -51,17 +56,25 @@ const NotificationsConfig: React.FC<Props> = () => {
             <Typography variant="h5">Notifications</Typography>
           </Box>
         </Box>
-        <Box mb={2}>
-          <Typography variant="body1">Get notified when time is over.</Typography>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Switch size="small" checked={isEnabled} onChange={onToggle} color="primary" />
-          <Box ml={2}>
-            <Typography variant="body1">
-              {(isEnabled && 'Notifications enabled') || 'Notifications disabled'}
-            </Typography>
+        {notifications.browserNotificationSupported() ? (
+          <>
+            <Box mb={2}>
+              <Typography variant="body1">Get notified when time is over.</Typography>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Switch size="small" checked={isEnabled} onChange={onToggle} color="primary" />
+              <Box ml={2}>
+                <Typography variant="body1">
+                  {(isEnabled && 'Notifications enabled') || 'Notifications disabled'}
+                </Typography>
+              </Box>
+            </Box>
+          </>
+        ) : (
+          <Box mb={2}>
+            <Typography variant="body1">Browser notifications are not supported on this browser / device</Typography>
           </Box>
-        </Box>
+        )}
       </Box>
     </>
   )
