@@ -83,6 +83,8 @@ const App: React.FC = () => {
     if (nextState === States.WORK || nextState === States.REST) {
       // Remember start date to allow refresh
       storage.saveStartDate()
+    } else {
+      storage.deleteStartDate()
     }
   }, [])
   React.useEffect(() => {

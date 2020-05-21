@@ -14,5 +14,6 @@ If you have enough screens available, it's encouraged to keep this app open on o
 
 # Notes
 
+- Remembers passed time in browser so that you don't loose progress on accidental refresh or close of browser tab.
 - Notifications have to be allowed
 - Installation is only possible when PWAs are supported - so mostly on Android devices
