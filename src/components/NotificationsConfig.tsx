@@ -21,6 +21,8 @@ const NotificationsConfig: React.FC<Props> = () => {
           setIsEnabled(true)
         })
         .catch(() => {
+          setIsEnabled(false)
+          notifications.writeIsEnabled(false)
           console.warn('Notification permission failed')
           alert(
             'If you want to enable notifications again, "Allow" notifications in the tool bar of your browser (to the left side of the address)'

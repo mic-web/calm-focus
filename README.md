@@ -14,32 +14,5 @@ If you have enough screens available, it's encouraged to keep this app open on o
 
 # Notes
 
-- Installation is only possible when PWAs are supported
-
-# Roadmap
-
-- [x] Refactor components
-- [x] Use styled components
-- [x] Remember start time in local storage
-- [x] Show notification when time is over
-  - [x] https://developer.mozilla.org/en-US/docs/Web/API/notification
-  - [x] add button for enabling
-- [x] add image
-  - [x] refer to creator
-- [x] Favicon
-- [x] PWA
-- [x] Installable PWA for mobile
-- [x] Allow push notification on mobile
-- [x] Refactor: Move time related code into own component
-- [x] Fix:
-  - [x] timing of animation and timer start
-- [ ] Add impressum
-- [ ] Add gsvo
-- [x] Improve Typography
-- [x] Improve theme (spacing, font-size, graphics)
-- [x] Continuous deployment
-- [x] Allow activating a 5 min "pause" round (button next to the pause hint text)
-- [ ] Implement better subscriber interface between modules and components (e.g. notifciations)
-- [ ] Change "start date" to "end date" (simpler)
-- [ ] Improve UX: additional circle in the circle which visualizes seconds? (animation is clearer)
-  - [ ] Show checkmark instead of 0 when finished
+- Notifications have to be allowed
+- Installation is only possible when PWAs are supported - so mostly on Android devices
