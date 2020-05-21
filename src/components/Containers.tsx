@@ -9,7 +9,8 @@ export const AppContainer: React.FC = ({ children }) => (
     justifyContent="center"
     alignItems="stretch"
     position="relative"
-    height="100vh"
+    height="100%"
+    minHeight="-webkit-fill-available"
   >
     {children}
   </Box>
