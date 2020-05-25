@@ -77,5 +77,9 @@ module.exports = {
         'react/prop-types': 'off',
       },
     },
+    {
+      files: ['**/*.worker.js'],
+      rules: { 'no-restricted-globals': [0] }, // allow 'self' in web workers
+    },
   ],
 }
