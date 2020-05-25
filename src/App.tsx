@@ -9,9 +9,8 @@ import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
 import theme from './style/theme'
 import GlobalStyle from './style/GlobalStyle'
-import { States } from './types'
+import { States, Seconds } from './types'
 import * as notification from './notifications'
-import useInterval from './helpers/useInterval'
 import * as timer from './timer'
 import * as sounds from './sounds'
 import * as storage from './storage'
@@ -28,6 +27,8 @@ import {
   MenuButtonContainer,
   AppContainer,
 } from './components/Containers'
+
+import * as webWorkers from './web-workers'
 
 const initialState = timer.getInitialState()
 const getNextState = (currentState: States) =>
@@ -74,8 +75,16 @@ const App: React.FC = () => {
   const [secondsLeft, setSecondsLeft] = React.useState(initialState.secondsLeft)
   const [state, setState] = React.useState(initialState.state)
   const [menuOpen, setMenuOpen] = React.useState(false)
-  const timeOver = secondsLeft === 0
-  const active = !timeOver && (state === States.WORK || state === States.REST)
+
+  React.useEffect(() => {
+    if (state === States.WORK || state === States.REST) {
+      const unsubscribe = webWorkers.subscribe((passedSeconds: Seconds) => {
+        const remainingSeconds = timer.getPhaseSeconds(state) - passedSeconds
+        setSecondsLeft(remainingSeconds)
+      })
+      return unsubscribe
+    }
+  }, [state])
   const activateState = React.useCallback((nextState) => {
     setState(nextState)
     storage.saveState(nextState)
@@ -87,27 +96,13 @@ const App: React.FC = () => {
       storage.deleteStartDate()
     }
   }, [])
-  // React.useEffect(() => {
-  //   const sub = webWorkers.subscribe((passedSeconds: Seconds) => {
-  //     console.log('In App: passedSeconds', passedSeconds)
-  //   })
-  //   return sub.dispose
-  // }, [])
   React.useEffect(() => {
-    console.log('secondsLeft: ', secondsLeft)
     if (secondsLeft === 0) {
       notifyTimeOver(state)
       activateState(getNextState(state))
-      // webWorkers.stopTimer()
+      webWorkers.stopTimer()
     }
   }, [state, secondsLeft, activateState])
-  useInterval(
-    () => {
-      setSecondsLeft((seconds) => seconds - 1)
-      console.log('tick - seconsLeft: ', secondsLeft - 1)
-    },
-    !timeOver && !active ? null : timer.MILLISECONDS_PER_SECOND
-  )
   function getProgress() {
     if (state === States.REST_READY || state === States.WORK_READY) {
       return 1
@@ -117,11 +112,13 @@ const App: React.FC = () => {
   function reset(event: React.SyntheticEvent) {
     onInteraction(event)
     activateState(States.WORK_READY)
+    webWorkers.stopTimer()
   }
   function start(event: React.SyntheticEvent) {
     onInteraction(event)
     notification.checkNotificationsEnabled()
     activateState(getNextState(state))
+    webWorkers.startTimer()
   }
   function toggleMenu(event: React.SyntheticEvent) {
     onInteraction(event)

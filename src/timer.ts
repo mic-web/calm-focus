@@ -2,8 +2,8 @@ import { States, Seconds, Minutes, Milliseconds } from './types'
 import * as storage from './storage'
 
 export const MILLISECONDS_PER_SECOND: Milliseconds = 1000
-export const WORK_PHASE_MINUTES: Minutes = 25
-export const REST_PHASE_MINUTES: Minutes = 5
+export const WORK_PHASE_MINUTES: Minutes = 0.2
+export const REST_PHASE_MINUTES: Minutes = 0.1
 const getStartSecondsFromMinutes = (phaseMinutes: Minutes): Seconds => phaseMinutes * 60
 export const WORK_PHASE_SECONDS: Seconds = getStartSecondsFromMinutes(WORK_PHASE_MINUTES)
 export const REST_PHASE_SECONDS: Seconds = getStartSecondsFromMinutes(REST_PHASE_MINUTES)
