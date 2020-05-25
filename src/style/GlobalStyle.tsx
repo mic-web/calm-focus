@@ -18,6 +18,9 @@ const GlobalCss = withStyles({
       backgroundSize: 'cover',
       backgroundPosition: 'center center',
     },
+    '#root': {
+      display: 'flex',
+    },
     '@keyframes tick-shine': {
       '0%': {
         opacity: 0.8,

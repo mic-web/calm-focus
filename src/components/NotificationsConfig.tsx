@@ -6,17 +6,22 @@ import * as notifications from '../notifications'
 
 type Props = {}
 
+const showExampleNotification = () =>
+  notifications.showNotification('Notifications enabled', {
+    body: `This is an example notification`,
+    icon: 'images/icon-192.png',
+  })
+
 const NotificationsConfig: React.FC<Props> = () => {
   const [isEnabled, setIsEnabled] = React.useState(notifications.readIsEnabled())
-  React.useEffect(() => {
-    notifications.writeIsEnabled(isEnabled)
-    if (isEnabled) {
-      notifications.showNotification('Notifications enabled', {
-        body: `This is an example notification`,
-        icon: 'images/icon-192.png',
-      })
+
+  const doSetEnabled = (enabled: boolean) => {
+    setIsEnabled(enabled)
+    notifications.writeIsEnabled(enabled)
+    if (enabled) {
+      showExampleNotification()
     }
-  }, [isEnabled])
+  }
   const onToggle = () => {
     if (
       !notifications.readIsEnabled() &&
@@ -27,22 +32,22 @@ const NotificationsConfig: React.FC<Props> = () => {
         .askPermission()
         .then((granted) => {
           if (granted) {
-            setIsEnabled(true)
+            doSetEnabled(true)
           } else {
-            setIsEnabled(false)
+            doSetEnabled(false)
           }
         })
         .catch(() => {
-          setIsEnabled(false)
+          doSetEnabled(false)
           console.warn('Notification permission failed')
           alert(
             'If you want to enable notifications again, "Allow" notifications in the tool bar of your browser (to the left side of the address)'
           )
         })
     } else if (!isEnabled && notifications.browserNotificationSupported()) {
-      setIsEnabled(true)
+      doSetEnabled(true)
     } else {
-      setIsEnabled(false)
+      doSetEnabled(false)
     }
   }
   return (
