@@ -15,7 +15,10 @@ export const saveState = (state: States) => {
   window.localStorage.setItem(lastStateKey, state.toString())
 }
 
-export const getSavedState = (): States => {
-  const stateValue: string = window.localStorage.getItem(lastStateKey)
-  return States[stateValue as keyof typeof States] as States
+export const getSavedState = (): States | null => {
+  const stateValue: string | null = window.localStorage.getItem(lastStateKey)
+  if (stateValue) {
+    return States[stateValue as keyof typeof States] as States
+  }
+  return null
 }

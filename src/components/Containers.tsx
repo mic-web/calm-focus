@@ -54,7 +54,7 @@ export const MenuButtonContainer: React.FC = ({ children }) => (
 )
 
 export const MenuContainer: React.FC = ({ children }) => (
-  <Box display="flex" position="absolute" alignSelf="center" width="95vw" height="95vh">
+  <Box display="flex" position="absolute" alignSelf="center" width="95%" height="95%">
     {children}
   </Box>
 )

@@ -4,7 +4,11 @@ import lakeImage from '../img/lake-compressed.jpg'
 const GlobalCss = withStyles({
   // @global is handled by jss-plugin-global.
   '@global': {
+    html: {
+      height: '100%',
+    },
     body: {
+      height: '100%',
       margin: 0,
       fontFamily: `'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen','Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'`,
       overflow: 'hidden',
