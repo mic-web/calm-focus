@@ -87,14 +87,25 @@ const App: React.FC = () => {
       storage.deleteStartDate()
     }
   }, [])
+  // React.useEffect(() => {
+  //   const sub = webWorkers.subscribe((passedSeconds: Seconds) => {
+  //     console.log('In App: passedSeconds', passedSeconds)
+  //   })
+  //   return sub.dispose
+  // }, [])
   React.useEffect(() => {
+    console.log('secondsLeft: ', secondsLeft)
     if (secondsLeft === 0) {
       notifyTimeOver(state)
       activateState(getNextState(state))
+      // webWorkers.stopTimer()
     }
   }, [state, secondsLeft, activateState])
   useInterval(
-    () => setSecondsLeft((seconds) => seconds - 1),
+    () => {
+      setSecondsLeft((seconds) => seconds - 1)
+      console.log('tick - seconsLeft: ', secondsLeft - 1)
+    },
     !timeOver && !active ? null : timer.MILLISECONDS_PER_SECOND
   )
   function getProgress() {
