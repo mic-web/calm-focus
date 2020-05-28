@@ -3,13 +3,13 @@ import React from 'react'
 import { Box, fade, makeStyles, SvgIcon, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import PictureCredits from './PictureCredits'
-import { States } from '../types'
-import NotificationsConfig from './NotificationsConfig'
-import SoundsConfig from './SoundsConfig'
-import InstallButton from './InstallButton'
+import { Phases } from '../types'
+import NotificationsConfig from '../notification/NotificationsConfig'
+import SoundsConfig from '../sound/SoundsConfig'
+import InstallButton from '../installation/InstallButton'
 
 type Props = {
-  state: States
+  phase: Phases
   opened: boolean
   close: () => void
 }

@@ -1,11 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { SvgIcon } from '@material-ui/core'
-import { States } from '../types'
+import { Phases } from '../types'
 
 type Props = {
   progress: number
-  state: States
+  phase: Phases
 }
 
 const useStyles = makeStyles(({ palette }) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ palette }) => ({
       transformOrigin: '50% 50%',
       stroke: palette.common.white,
       opacity: (props: Props) =>
-        ((props.state === States.REST_READY || props.state === States.WORK_READY) && 0.5) || 1.0,
+        ((props.phase === Phases.REST_READY || props.phase === Phases.WORK_READY) && 0.5) || 1.0,
     },
   },
 }))

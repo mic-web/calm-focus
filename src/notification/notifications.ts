@@ -1,4 +1,4 @@
-import * as serviceWorker from './service-worker'
+import * as serviceWorker from '../service-worker'
 
 export const browserNotificationSupported = () => !!window.Notification
 

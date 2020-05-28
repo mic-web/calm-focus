@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
-import { States } from '../types'
+import { Phases } from '../types'
 
 type Props = {
-  state: States
+  phase: Phases
   children: React.ReactNode
 }
 
@@ -27,15 +27,15 @@ const useStyles = makeStyles(() => ({
 
 const TickShine: React.FC<Props> = (props) => {
   const css = useStyles(props)
-  const { children, state } = props
-  const classes = [css.root]
-  if (state === States.REST || state === States.WORK) {
-    classes.push(css.tick)
-  } else {
-    classes.push(css.done)
+  const { children, phase } = props
+  const getClasses = () => {
+    if (phase === Phases.REST || phase === Phases.WORK) {
+      return clsx(css.root, css.tick)
+    }
+    return clsx(css.root, css.done)
   }
 
-  return <div className={clsx(classes)}>{children}</div>
+  return <div className={getClasses()}>{children}</div>
 }
 
 export default TickShine

@@ -2,11 +2,11 @@ import React from 'react'
 
 import { IconButton, SvgIcon } from '@material-ui/core'
 import MenuIcon from '../icons/MenuIcon'
-import { States } from '../types'
+import { Phases } from '../types'
 
 type Props = {
   className?: string
-  state: States
+  phase: Phases
   toggleMenu: (event: React.SyntheticEvent) => void
 }
 

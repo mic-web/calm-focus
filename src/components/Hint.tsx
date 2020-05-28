@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles'
 
-import { States } from '../types'
+import { Phases } from '../types'
 
 type Props = {
-  state: States
+  phase: Phases
   restMinutes: number
 }
 
@@ -25,13 +25,13 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 
 const Hint: React.FC<Props> = (props) => {
   const css = useStyles(props)
-  const { state } = props
+  const { phase } = props
   const hintText = {
-    [States.WORK_READY]: 'Get ready to focus',
-    [States.WORK]: 'Stay focused',
-    [States.REST_READY]: 'Take a short rest',
-    [States.REST]: 'Time for a rest',
-  }[state]
+    [Phases.WORK_READY]: 'Get ready to focus',
+    [Phases.WORK]: 'Stay focused',
+    [Phases.REST_READY]: 'Take a short rest',
+    [Phases.REST]: 'Time for a rest',
+  }[phase]
   return <div className={css.root}>{hintText}</div>
 }
 

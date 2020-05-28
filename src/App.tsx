@@ -1,23 +1,24 @@
 import React from 'react'
-
 import { ThemeProvider, CssBaseline } from '@material-ui/core'
+import 'typeface-roboto'
+
+import { AppContext, AppProvider } from './context'
 import ResetButton from './components/ResetButton'
 import StartButton from './components/StartButton'
 import TickShine from './components/TickShine'
 import BackgroundOverlay from './components/BackgroundOverlay'
 import AnimatedCircle from './components/AnimatedCircle'
-import Timer from './components/Timer'
+import Timer from './timer/TimerComponent'
 import theme from './style/theme'
 import GlobalStyle from './style/GlobalStyle'
-import { States, Seconds } from './types'
-import * as notification from './notifications'
-import * as timer from './timer'
-import * as sounds from './sounds'
+import { Phases, Seconds } from './types'
+import * as notification from './notification/notifications'
+import * as timer from './timer/timer'
+import * as sounds from './sound/sounds'
 import * as storage from './storage'
-import 'typeface-roboto'
 import Hint from './components/Hint'
-import Menu from './components/Menu'
-import MenuButton from './components/MenuButton'
+import Menu from './menu/Menu'
+import MenuButton from './menu/MenuButton'
 import {
   MainContainer,
   TimeContainer,
@@ -28,96 +29,100 @@ import {
   AppContainer,
 } from './components/Containers'
 
-import * as webWorkers from './web-workers'
+import * as webWorkers from './timer/web-workers'
+import { Types } from './timeReducer'
 
-const initialState = timer.getInitialState()
-const getNextState = (currentState: States) =>
+const getNextPhase = (currentPhase: Phases) =>
   ({
-    [States.WORK_READY]: States.WORK,
-    [States.WORK]: States.REST_READY,
-    [States.REST_READY]: States.REST,
-    [States.REST]: States.WORK_READY,
-  }[currentState])
+    [Phases.WORK_READY]: Phases.WORK,
+    [Phases.WORK]: Phases.REST_READY,
+    [Phases.REST_READY]: Phases.REST,
+    [Phases.REST]: Phases.WORK_READY,
+  }[currentPhase])
 
 const getControls = (
-  state: States,
+  phase: Phases,
   start: (e: React.SyntheticEvent) => void,
   reset: (event: React.SyntheticEvent) => void
 ) => {
   return {
-    [States.WORK_READY]: <StartButton start={start} />,
-    [States.REST_READY]: <StartButton start={start} />,
-    [States.WORK]: <ResetButton reset={reset} />,
-    [States.REST]: <ResetButton reset={reset} />,
-  }[state]
+    [Phases.WORK_READY]: <StartButton start={start} />,
+    [Phases.REST_READY]: <StartButton start={start} />,
+    [Phases.WORK]: <ResetButton reset={reset} />,
+    [Phases.REST]: <ResetButton reset={reset} />,
+  }[phase]
 }
 
 const onInteraction = (_event: React.SyntheticEvent) => {
   sounds.initOnInteraction()
 }
 
-const notifyTimeOver = (state: States) => {
+const notifyTimeOver = (phase: Phases) => {
   sounds.playTimeOver()
-  if (state === States.WORK) {
+  if (phase === Phases.WORK) {
     notification.showNotification('Done, take a break', {
-      body: `Take a break for ${timer.REST_PHASE_MINUTES} minutes`,
+      body: `Take a break for ${timer.DEFAULT_REST_PHASE_MINUTES} minutes`,
       icon: 'images/icon-192.png',
     })
-  } else if (state === States.REST) {
+  } else if (phase === Phases.REST) {
     notification.showNotification('Focus again', {
-      body: `Focus again for ${timer.WORK_PHASE_MINUTES} minutes`,
+      body: `Focus again for ${timer.DEFAULT_WORK_PHASE_MINUTES} minutes`,
       icon: 'images/icon-192.png',
     })
   }
 }
 
 const App: React.FC = () => {
-  const [secondsLeft, setSecondsLeft] = React.useState(initialState.secondsLeft)
-  const [state, setState] = React.useState(initialState.state)
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const { state, dispatch } = React.useContext(AppContext)
+  const { phaseDurations, phase } = state.timer
+  const phaseDuration = timer.usePhaseDuration()
+  const secondsLeft = timer.useSecondsLeft()
 
   React.useEffect(() => {
-    if (state === States.WORK || state === States.REST) {
+    storage.savePhaseSeconds(phaseDurations)
+  }, [phaseDurations])
+
+  React.useEffect(() => {
+    if (phase === Phases.WORK || phase === Phases.REST) {
+      webWorkers.startTimer()
       const unsubscribe = webWorkers.subscribe((passedSeconds: Seconds) => {
-        const remainingSeconds = timer.getPhaseSeconds(state) - passedSeconds
-        setSecondsLeft(remainingSeconds)
+        console.log('worker sub', passedSeconds)
+
+        dispatch({ type: Types.UpdatePassedSeconds, payload: { passedSeconds } })
       })
       return unsubscribe
     }
-  }, [state])
-  const activateState = React.useCallback((nextState) => {
-    setState(nextState)
-    storage.saveState(nextState)
-    setSecondsLeft(timer.getPhaseSeconds(nextState))
-    if (nextState === States.WORK || nextState === States.REST) {
-      // Remember start date to allow refresh
-      storage.saveStartDate()
-    } else {
-      storage.deleteStartDate()
-    }
-  }, [])
+    return undefined
+  }, [phase, phaseDuration, dispatch])
+  const activatePhase = React.useCallback(
+    (nextPhase) => {
+      dispatch({ type: Types.UpdatePhase, payload: { phase: nextPhase } })
+    },
+    [dispatch]
+  )
   React.useEffect(() => {
     if (secondsLeft === 0) {
-      notifyTimeOver(state)
-      activateState(getNextState(state))
+      notifyTimeOver(phase)
+      activatePhase(getNextPhase(phase))
       webWorkers.stopTimer()
     }
-  }, [state, secondsLeft, activateState])
+  }, [phase, secondsLeft, activatePhase])
   function getProgress() {
-    if (state === States.REST_READY || state === States.WORK_READY) {
+    if (phase === Phases.REST_READY || phase === Phases.WORK_READY) {
       return 1
     }
-    return timer.getPercentage(secondsLeft, timer.getPhaseSeconds(state))
+    return timer.getPercentage(secondsLeft, phaseDuration)
   }
   function reset(event: React.SyntheticEvent) {
     onInteraction(event)
-    activateState(States.WORK_READY)
+    activatePhase(Phases.WORK_READY)
     webWorkers.stopTimer()
   }
   function start(event: React.SyntheticEvent) {
     onInteraction(event)
     notification.checkNotificationsEnabled()
-    activateState(getNextState(state))
+    activatePhase(getNextPhase(phase))
     webWorkers.startTimer()
   }
   function toggleMenu(event: React.SyntheticEvent) {
@@ -127,36 +132,36 @@ const App: React.FC = () => {
 
   return (
     <AppContainer>
-      <BackgroundOverlay state={state} />
+      <BackgroundOverlay phase={phase} />
       <HintContainer>
-        <Hint state={state} restMinutes={timer.REST_PHASE_MINUTES} />
+        <Hint phase={phase} restMinutes={timer.DEFAULT_REST_PHASE_MINUTES} />
       </HintContainer>
       <MainContainer>
         <TimeContainer>
-          <TickShine state={state}>
-            <AnimatedCircle progress={getProgress()} state={state} />
-            <Timer state={state} secondsLeft={secondsLeft} />
+          <TickShine phase={phase}>
+            <AnimatedCircle progress={getProgress()} phase={phase} />
+            <Timer phase={phase} secondsLeft={secondsLeft} />
           </TickShine>
         </TimeContainer>
-        <ControlContainer>{getControls(state, start, reset)}</ControlContainer>
+        <ControlContainer>{getControls(phase, start, reset)}</ControlContainer>
       </MainContainer>
-      {menuOpen && (
-        <MenuContainer>
-          <Menu state={state} opened={menuOpen} close={() => setMenuOpen(false)} />
-        </MenuContainer>
-      )}
-      <MenuButtonContainer>{!menuOpen && <MenuButton state={state} toggleMenu={toggleMenu} />}</MenuButtonContainer>
+      <MenuContainer open={menuOpen}>
+        <Menu phase={phase} opened={menuOpen} close={() => setMenuOpen(false)} />
+      </MenuContainer>
+      <MenuButtonContainer>{!menuOpen && <MenuButton phase={phase} toggleMenu={toggleMenu} />}</MenuButtonContainer>
     </AppContainer>
   )
 }
 
 const ThemedApp = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
+    <AppProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </AppProvider>
   )
 }
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles'
-import { States } from '../types'
+import { Phases } from '../types'
 
 type Props = {
-  state: States
+  phase: Phases
 }
 
 const useStyles = makeStyles(({ palette }) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ palette }) => ({
       transition: 'opacity 2s ease',
       width: '100%',
       height: '100%',
-      ...(props.state === (States.WORK || States.REST) && visibleStyle),
+      ...(props.phase === (Phases.WORK || Phases.REST) && visibleStyle),
     }
   },
 }))
