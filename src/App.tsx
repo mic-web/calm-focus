@@ -31,6 +31,7 @@ import {
 
 import * as webWorkers from './timer/web-workers'
 import { Types } from './timeReducer'
+import useLeaveConfirmation from './useLeaveConfirmation'
 
 const getNextPhase = (currentPhase: Phases) =>
   ({
@@ -63,11 +64,13 @@ const notifyTimeOver = (phase: Phases) => {
     notification.showNotification('Done, take a break', {
       body: `Take a break for ${timer.DEFAULT_REST_PHASE_MINUTES} minutes`,
       icon: 'images/icon-192.png',
+      silent: true,
     })
   } else if (phase === Phases.REST) {
     notification.showNotification('Focus again', {
       body: `Focus again for ${timer.DEFAULT_WORK_PHASE_MINUTES} minutes`,
       icon: 'images/icon-192.png',
+      silent: true,
     })
   }
 }
@@ -78,6 +81,7 @@ const App: React.FC = () => {
   const { phaseDurations, phase } = state.timer
   const phaseDuration = timer.usePhaseDuration()
   const secondsLeft = timer.useSecondsLeft()
+  useLeaveConfirmation(phase === Phases.WORK || phase === Phases.REST)
 
   React.useEffect(() => {
     storage.savePhaseSeconds(phaseDurations)

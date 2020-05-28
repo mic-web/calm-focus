@@ -16,7 +16,6 @@ export type PhaseDurations = {
 
 export type Timer = {
   passedSeconds: Seconds
-  // startTime: Milliseconds | null // start Date, represented in Milliseconds since 1 January 1970 00:00:00
   phase: Phases
   phaseDurations: PhaseDurations
 }
