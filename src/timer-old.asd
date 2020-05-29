@@ -1,7 +1,8 @@
 import React from 'react'
 import { Phases, Seconds, Minutes, Milliseconds, PhaseDurations } from '../types'
-import * as storage from '../storage'
-import { AppContext } from '../context'
+import * as storage from './storage'
+import { AppContext } from './context'
+import { usePhase } from './services/timer'
 
 export const MILLISECONDS_PER_SECOND: Milliseconds = 1000
 export const DEFAULT_WORK_PHASE_MINUTES: Minutes = 0.2
@@ -39,6 +40,17 @@ export const useMinutesLeft = (): Seconds => {
   const secondsLeft = useSecondsLeft()
   const memoizedValue = React.useMemo(() => Math.floor(secondsLeft / 60), [secondsLeft])
   return memoizedValue
+}
+
+export const useProgress = (): number => {
+  const secondsLeft = useSecondsLeft()
+  const phase = usePhase()
+  const phaseDuration = usePhaseDuration()
+
+  if (phase === Phases.REST_READY || phase === Phases.WORK_READY) {
+    return 1
+  }
+  return (phaseDuration - secondsLeft) / phaseDuration
 }
 
 export const initPhaseSeconds = (): PhaseDurations => {

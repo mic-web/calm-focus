@@ -2,11 +2,7 @@ import React from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles'
 
 import { Phases } from '../types'
-
-type Props = {
-  phase: Phases
-  restMinutes: number
-}
+import usePhase from '../hooks/usePhase'
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
@@ -23,9 +19,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
 }))
 
-const Hint: React.FC<Props> = (props) => {
-  const css = useStyles(props)
-  const { phase } = props
+const Hint: React.FC = () => {
+  const phase = usePhase()
+  const css = useStyles({ phase })
   const hintText = {
     [Phases.WORK_READY]: 'Get ready to focus',
     [Phases.WORK]: 'Stay focused',

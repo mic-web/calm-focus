@@ -77,7 +77,10 @@ window.addEventListener('appinstalled', (evt) => {
   console.log('Successfully installed', evt)
 })
 
-export const showNotification = (title: string, options?: NotificationOptions) =>
-  registeredSW.showNotification(title, options)
+export const showNotification = (title: string, options?: NotificationOptions) => {
+  if (registeredSW) {
+    registeredSW.showNotification(title, options)
+  }
+}
 
 export const isReady = () => !!registeredSW

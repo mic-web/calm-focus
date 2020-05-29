@@ -2,9 +2,9 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { Phases } from '../types'
+import usePhase from '../hooks/usePhase'
 
 type Props = {
-  phase: Phases
   children: React.ReactNode
 }
 
@@ -26,8 +26,9 @@ const useStyles = makeStyles(() => ({
 }))
 
 const TickShine: React.FC<Props> = (props) => {
+  const phase = usePhase()
   const css = useStyles(props)
-  const { children, phase } = props
+  const { children } = props
   const getClasses = () => {
     if (phase === Phases.REST || phase === Phases.WORK) {
       return clsx(css.root, css.tick)

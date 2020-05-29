@@ -46,22 +46,3 @@ export const ControlContainer: React.FC = ({ children }) => (
     {children}
   </Box>
 )
-
-export const MenuButtonContainer: React.FC = ({ children }) => (
-  <Box display="flex" position="absolute" bottom={2} right={2}>
-    {children}
-  </Box>
-)
-
-export const MenuContainer: React.FC<{ open: boolean }> = ({ children, open }) => (
-  <Box
-    display="flex"
-    position="absolute"
-    alignSelf="center"
-    width="95%"
-    height="95%"
-    visibility={open ? 'visible' : 'hidden'}
-  >
-    {children}
-  </Box>
-)

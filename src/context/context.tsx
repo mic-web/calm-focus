@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Dispatch } from 'react'
 import { timerReducer, TimerActions } from './timeReducer'
-import { StateType, Phases } from './types'
-import * as timer from './timer/timer'
+import { StateType, Phases } from '../types'
+import * as timer from '../services/timer'
 
 const phaseSeconds = timer.initPhaseSeconds()
 

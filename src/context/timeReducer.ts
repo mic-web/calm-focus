@@ -1,5 +1,5 @@
-import { Seconds, Phases, Timer, ActionMap } from './types'
-import * as timer from './timer/timer'
+import { Seconds, Phases, Timer, ActionMap } from '../types'
+import * as timer from '../services/timer'
 
 export enum Types {
   UpdatePassedSeconds = 'UPDATE_PASSED_SECONDS',

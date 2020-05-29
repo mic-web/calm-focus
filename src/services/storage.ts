@@ -1,4 +1,4 @@
-import { PhaseDurations } from './types'
+import { PhaseDurations } from '../types'
 
 export const savePhaseSeconds = (data: PhaseDurations) => {
   window.localStorage.setItem('phaseSeconds', JSON.stringify(data))

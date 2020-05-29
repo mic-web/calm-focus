@@ -2,11 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { SvgIcon } from '@material-ui/core'
 import { Phases } from '../types'
-
-type Props = {
-  progress: number
-  phase: Phases
-}
+import usePhase from '../hooks/usePhase'
+import useProgress from '../hooks/useProgress'
 
 const useStyles = makeStyles(({ palette }) => ({
   root: {
@@ -18,15 +15,18 @@ const useStyles = makeStyles(({ palette }) => ({
       transform: 'rotate(-90deg)',
       transformOrigin: '50% 50%',
       stroke: palette.common.white,
-      opacity: (props: Props) =>
+      opacity: (props: { phase: Phases }) =>
         ((props.phase === Phases.REST_READY || props.phase === Phases.WORK_READY) && 0.5) || 1.0,
     },
   },
 }))
 
-const Circle: React.FC<Props> = (props) => {
-  const css = useStyles(props)
-  const { progress } = props
+const Circle: React.FC = () => {
+  const phase = usePhase()
+  const progress = useProgress()
+
+  const css = useStyles({ phase })
+
   const radius = 60
   const stroke = 2
 

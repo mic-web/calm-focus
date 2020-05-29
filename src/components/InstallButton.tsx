@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Button, SvgIcon, Box, Typography, Link } from '@material-ui/core'
 import GetAppIcon from '@material-ui/icons/GetApp'
-import * as serviceWorker from '../service-worker'
+import * as serviceWorker from '../services/service-worker'
 
 type InstallButtonProps = {
   className?: string

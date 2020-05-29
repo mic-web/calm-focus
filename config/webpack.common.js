@@ -73,7 +73,7 @@ module.exports = {
         to: path.resolve(__dirname, paths.distDir),
       },
       path.resolve(__dirname, paths.srcDir, 'manifest.webmanifest'),
-      path.resolve(__dirname, paths.srcDir, 'timer', 'timer.worker.js'),
+      path.resolve(__dirname, paths.srcDir, 'services', 'timer.worker.js'),
     ]),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
