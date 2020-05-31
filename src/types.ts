@@ -7,7 +7,6 @@ export enum Phases {
 
 export type Seconds = number
 export type Minutes = number
-export type Milliseconds = number
 
 export type PhaseDurations = {
   [Phases.WORK]: Seconds

@@ -26,7 +26,7 @@ import { useTimer } from './services/timer'
 const App: React.FC = () => {
   const { state } = React.useContext(AppContext)
   const { phaseDurations, phase } = state.timer
-  useLeaveConfirmation(phase === Phases.WORK || phase === Phases.REST)
+  useLeaveConfirmation(phase === Phases.REST || phase === Phases.WORK)
   useTimer()
 
   React.useEffect(() => {

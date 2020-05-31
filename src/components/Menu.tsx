@@ -4,6 +4,7 @@ import { Box, fade, makeStyles, SvgIcon, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { Phases } from '../types'
 import MenuIcon from '../icons/MenuIcon'
+import usePhase from '../hooks/usePhase'
 
 type Props = {
   phase: Phases

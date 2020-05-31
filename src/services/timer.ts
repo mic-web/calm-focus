@@ -1,5 +1,5 @@
 import React from 'react'
-import { Phases, Seconds, Minutes, Milliseconds, PhaseDurations } from '../types'
+import { Phases, Seconds, Minutes, PhaseDurations } from '../types'
 import * as storage from './storage'
 import * as webWorkers from './web-workers'
 import { AppContext } from '../context/context'
@@ -10,12 +10,10 @@ import usePhaseDuration from '../hooks/usePhaseDuration'
 import useNextPhase from '../hooks/useNextPhase'
 import useSecondsLeft from '../hooks/useSecondsLeft'
 
-export const MILLISECONDS_PER_SECOND: Milliseconds = 1000
-export const DEFAULT_WORK_PHASE_MINUTES: Minutes = 0.1
-export const DEFAULT_REST_PHASE_MINUTES: Minutes = 0.1
-const getStartSecondsFromMinutes = (phaseMinutes: Minutes): Seconds => phaseMinutes * 60
-export const DEFAULT_WORK_PHASE_SECONDS: Seconds = getStartSecondsFromMinutes(DEFAULT_WORK_PHASE_MINUTES)
-export const DEFAULT_REST_PHASE_SECONDS: Seconds = getStartSecondsFromMinutes(DEFAULT_REST_PHASE_MINUTES)
+const DEFAULT_WORK_PHASE_MINUTES: Minutes = 25
+const DEFAULT_REST_PHASE_MINUTES: Minutes = 5
+export const DEFAULT_WORK_PHASE_SECONDS: Seconds = DEFAULT_WORK_PHASE_MINUTES * 60
+export const DEFAULT_REST_PHASE_SECONDS: Seconds = DEFAULT_REST_PHASE_MINUTES * 60
 
 export const initPhaseSeconds = (): PhaseDurations => {
   const storedSeconds = storage.loadPhaseSeconds()
