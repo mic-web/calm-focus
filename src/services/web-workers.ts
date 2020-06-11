@@ -13,6 +13,9 @@ const setLastMessage = (data: number) => {
   lastMessage = data
 }
 const getLastMessage = () => lastMessage
+const resetLastMessage = () => {
+  lastMessage = null
+}
 
 export const startTimer = () => {
   if (isSupported()) {
@@ -43,6 +46,7 @@ export const subscribe = (subscriber: Subscriber): (() => void) => {
 }
 
 export const stopTimer = () => {
+  resetLastMessage()
   if (ww) {
     ww.terminate()
     ww = null
