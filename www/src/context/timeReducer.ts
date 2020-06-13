@@ -22,14 +22,14 @@ type TimerPayload = {
 
 export type TimerActions = ActionMap<TimerPayload>[keyof ActionMap<TimerPayload>]
 
-export const defaultState = {
-  phase: Phases.WORK_READY,
-  passedSeconds: 0,
-  phaseSeconds: {
-    [Phases.WORK]: timer.DEFAULT_WORK_PHASE_SECONDS,
-    [Phases.REST]: timer.DEFAULT_REST_PHASE_SECONDS,
-  },
-}
+// export const defaultState = {
+//   phase: Phases.WORK_READY,
+//   passedSeconds: 0,
+//   phaseSeconds: {
+//     [Phases.WORK]: timer.DEFAULT_WORK_PHASE_SECONDS,
+//     [Phases.REST]: timer.DEFAULT_REST_PHASE_SECONDS,
+//   },
+// }
 
 export const timerReducer = (state: Timer, action: TimerActions): Timer => {
   switch (action.type) {

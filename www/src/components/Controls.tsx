@@ -5,7 +5,7 @@ import StartButton from './StartButton'
 import ResetButton from './ResetButton'
 import { AppContext } from '../context/context'
 import * as notification from '../services/notifications'
-import * as webWorkers from '../services/web-workers'
+import * as webWorkers from '../worker/web-workers'
 import { Types } from '../context/timeReducer'
 import useNextPhase from '../hooks/useNextPhase'
 

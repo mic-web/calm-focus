@@ -2,17 +2,25 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
+const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
+
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 const paths = require('./paths')
 
-module.exports = {
-  context: path.resolve(__dirname, paths.srcDir),
+const distDir = path.resolve(__dirname, paths.distDir)
+const srcDir = path.resolve(__dirname, paths.srcDir)
+const wasmDir = path.resolve(__dirname, paths.srcDir, paths.wasmDir)
+const workerFilePath = path.resolve(__dirname, paths.workerDir, paths.wasmWorkerFileName)
+
+const appConfig = {
+  context: srcDir,
   entry: './index.tsx',
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, paths.distDir),
+    path: distDir,
+    globalObject: 'this',
   },
   devtool: 'source-map',
   resolve: {
@@ -73,11 +81,27 @@ module.exports = {
         to: path.resolve(__dirname, paths.distDir),
       },
       path.resolve(__dirname, paths.srcDir, 'manifest.webmanifest'),
-      path.resolve(__dirname, paths.srcDir, 'services', 'timer.worker.js'),
     ]),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
     }),
   ],
+}
+
+const workerConfig = {
+  entry: workerFilePath,
+  target: 'webworker',
+  resolve: {
+    extensions: ['.js', '.wasm'],
+  },
+  output: {
+    path: distDir,
+    filename: paths.wasmWorkerFileName,
+  },
+}
+
+module.exports = {
+  app: appConfig,
+  worker: workerConfig,
 }

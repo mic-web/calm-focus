@@ -1,8 +1,9 @@
 import { Seconds } from '../types'
+import { wasmWorkerFileName } from '../../config/paths'
+
+const worker = new Worker(wasmWorkerFileName)
 
 export const isSupported = () => typeof Worker !== 'undefined'
-
-let ww: Worker | null = null
 
 type Subscriber = (passedSeconds: Seconds) => void
 
@@ -19,13 +20,10 @@ const resetLastMessage = () => {
 
 export const startTimer = () => {
   if (isSupported()) {
-    if (ww === null) {
-      ww = new Worker('/timer.worker.js') // starts counting seconds immediately
-      ww.onmessage = (event) => {
-        if (getLastMessage() !== event.data) {
-          setLastMessage(event.data)
-          subs.forEach((sub) => sub(event.data))
-        }
+    worker.onmessage = (event) => {
+      if (getLastMessage() !== event.data) {
+        setLastMessage(event.data)
+        subs.forEach((sub) => sub(event.data))
       }
     }
   } else {
@@ -47,8 +45,11 @@ export const subscribe = (subscriber: Subscriber): (() => void) => {
 
 export const stopTimer = () => {
   resetLastMessage()
-  if (ww) {
-    ww.terminate()
-    ww = null
-  }
+}
+
+export const loadWorker = () => {
+  worker.addEventListener('message', (ev) => {
+    const message = ev.data
+    console.log('web-workers message', message)
+  })
 }

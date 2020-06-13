@@ -1,6 +1,6 @@
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -8,7 +8,8 @@
 /coverage
 
 # production
-/dist
+www/dist
+wasm/target
 
 # misc
 .DS_Store

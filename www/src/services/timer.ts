@@ -1,7 +1,7 @@
 import React from 'react'
 import { Phases, Seconds, Minutes, PhaseDurations } from '../types'
 import * as storage from './storage'
-import * as webWorkers from './web-workers'
+import * as webWorkers from '../worker/web-workers'
 import { AppContext } from '../context/context'
 import { Types } from '../context/timeReducer'
 import { playTimeOver } from './sounds'
@@ -55,6 +55,9 @@ export const useTimer = () => {
       dispatch({ type: Types.UpdatePhase, payload: { phase: nextPhase } })
     }
   }, [dispatch, nextPhase, phase, secondsLeft])
+  React.useEffect(() => {
+    webWorkers.loadWorker()
+  }, [])
   React.useEffect(() => {
     if (phase === Phases.WORK || phase === Phases.REST) {
       webWorkers.startTimer()
