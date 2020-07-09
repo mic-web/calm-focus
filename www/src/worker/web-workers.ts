@@ -1,9 +1,9 @@
 import { Seconds } from '../types'
 import { wasmWorkerFileName } from '../../config/paths'
 
-const worker = new Worker(wasmWorkerFileName)
-
 export const isSupported = () => typeof Worker !== 'undefined'
+
+let ww: Worker | null = null
 
 type Subscriber = (passedSeconds: Seconds) => void
 
@@ -18,14 +18,19 @@ const resetLastMessage = () => {
   lastMessage = null
 }
 
+export const loadWorker = () => {
+  ww = new Worker(wasmWorkerFileName)
+}
+
 export const startTimer = () => {
-  if (isSupported()) {
-    worker.onmessage = (event) => {
+  if (isSupported() && ww) {
+    ww.onmessage = (event) => {
       if (getLastMessage() !== event.data) {
         setLastMessage(event.data)
         subs.forEach((sub) => sub(event.data))
       }
     }
+    ww.postMessage(0)
   } else {
     console.warn('Web worker not supported')
   }
@@ -45,11 +50,4 @@ export const subscribe = (subscriber: Subscriber): (() => void) => {
 
 export const stopTimer = () => {
   resetLastMessage()
-}
-
-export const loadWorker = () => {
-  worker.addEventListener('message', (ev) => {
-    const message = ev.data
-    console.log('web-workers message', message)
-  })
 }
