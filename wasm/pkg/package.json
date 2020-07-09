@@ -1,0 +1,15 @@
+{
+  "name": "calm-focus-wasm",
+  "collaborators": [
+    "michaeladlfinger <4804412+mic-web@users.noreply.github.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "calm_focus_wasm_bg.wasm",
+    "calm_focus_wasm.js",
+    "calm_focus_wasm.d.ts"
+  ],
+  "module": "calm_focus_wasm.js",
+  "types": "calm_focus_wasm.d.ts",
+  "sideEffects": false
+}
