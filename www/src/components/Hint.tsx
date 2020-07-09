@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles'
 
+import { Typography } from '@material-ui/core'
 import { Phases } from '../types'
 import usePhase from '../hooks/usePhase'
 
@@ -10,12 +11,11 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     justifyContent: 'center',
     textAlign: 'center',
     flexGrow: 1,
-    fontSize: '1.1rem',
-    padding: spacing(1),
-    color: palette.grey[600],
-    fontWeight: 300,
-    background: fade(palette.common.white, 0.4),
-    filter: `drop-shadow(0px 0px 5px ${palette.common.white})`,
+    paddingLeft: spacing(2),
+    paddingRight: spacing(2),
+    paddingTop: spacing(1),
+    paddingBottom: spacing(1),
+    background: fade(palette.primary.dark, 0.25),
   },
 }))
 
@@ -28,7 +28,11 @@ const Hint: React.FC = () => {
     [Phases.REST_READY]: 'Take a short rest',
     [Phases.REST]: 'Time for a rest',
   }[phase]
-  return <div className={css.root}>{hintText}</div>
+  return (
+    <div className={css.root}>
+      <Typography variant="subtitle1">{hintText}</Typography>
+    </div>
+  )
 }
 
 export default Hint

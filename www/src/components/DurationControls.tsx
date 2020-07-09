@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, makeStyles, SvgIcon, TextField, Box } from '@material-ui/core'
+import { IconButton, SvgIcon, Box } from '@material-ui/core'
 import RemoveIcon from '@material-ui/icons/Remove'
 import AddIcon from '@material-ui/icons/Add'
 import { Types } from '../context/timeReducer'
@@ -11,12 +11,6 @@ type Props = {
   phase: Phases.REST | Phases.WORK
   action: 'increase' | 'decrease'
 }
-
-const useStyles = makeStyles(({ palette }) => ({
-  icon: {
-    filter: `drop-shadow(0px 0px 5px ${palette.common.white})`,
-  },
-}))
 
 export const DecreaseDuration: React.FC<{ phase: EditablePhases }> = (props) => (
   <DurationControls action="decrease" phase={props.phase} />
@@ -60,7 +54,6 @@ export const PhaseDuration: React.FC<{
 }
 
 const DurationControls: React.FC<Props> = (props) => {
-  const css = useStyles(props)
   const { state, dispatch } = React.useContext(AppContext)
   const duration: Seconds = state.timer.phaseDurations[props.phase]
   const update = (minutes: Minutes) =>
@@ -77,7 +70,7 @@ const DurationControls: React.FC<Props> = (props) => {
   if (props.action === 'increase') {
     return (
       <IconButton onClick={increase} title="Increase" color="primary" size="small">
-        <SvgIcon className={css.icon}>
+        <SvgIcon>
           <AddIcon />
         </SvgIcon>
       </IconButton>
@@ -85,7 +78,7 @@ const DurationControls: React.FC<Props> = (props) => {
   }
   return (
     <IconButton onClick={decrease} title="Decrease" color="primary" size="small">
-      <SvgIcon className={css.icon}>
+      <SvgIcon>
         <RemoveIcon />
       </SvgIcon>
     </IconButton>
