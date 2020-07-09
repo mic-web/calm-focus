@@ -63,6 +63,7 @@ module.exports = {
     'compat/compat': 'warn',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'react/destructuring-assignment': 'off',
   },
   overrides: [
     {

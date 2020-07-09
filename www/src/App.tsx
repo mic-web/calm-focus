@@ -22,6 +22,7 @@ import SoundsConfig from './components/SoundsConfig'
 import InstallButton from './components/InstallButton'
 import Controls from './components/Controls'
 import { useTimer } from './services/timer'
+import DurationsConfig from './components/DurationsConfig'
 
 const App: React.FC = () => {
   const { state } = React.useContext(AppContext)
@@ -52,13 +53,19 @@ const App: React.FC = () => {
       </MainContainer>
       <Menu>
         <MenuContent>
-          <Box mb={8}>
+          <Box mb={6}>
+            <DurationsConfig.Work />
+          </Box>
+          <Box mb={6}>
+            <DurationsConfig.Rest />
+          </Box>
+          <Box mb={6}>
             <NotificationsConfig />
           </Box>
-          <Box mb={8}>
+          <Box mb={6}>
             <SoundsConfig />
           </Box>
-          <Box mb={8}>
+          <Box mb={6}>
             <InstallButton />
           </Box>
           <Box mt="auto">

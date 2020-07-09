@@ -5,7 +5,8 @@
 
 let intervalId = null
 let passedSeconds = 0
-const resetTimer = () => {
+const resetTimer = (passed) => {
+  passedSeconds = passed
   if (intervalId !== null) {
     clearInterval(intervalId)
     intervalId = null
@@ -15,8 +16,7 @@ const resetTimer = () => {
 import('../../../wasm/pkg/calm_focus_wasm')
   .then((results) => {
     const startTimer = () => {
-      passedSeconds = 0
-      resetTimer()
+      resetTimer(0)
       intervalId = setInterval(() => {
         try {
           passedSeconds = results.tick(passedSeconds)
