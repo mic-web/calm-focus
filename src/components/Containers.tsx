@@ -41,8 +41,8 @@ export const TimeContainer: React.FC = ({ children }) => (
     position="relative"
     justifyContent="center"
     alignItems="center"
-    height="40vh"
-    width="40vh"
+    height="50vh"
+    width="50vh"
     flex={0}
     maxWidth="300px"
   >

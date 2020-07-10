@@ -3,7 +3,6 @@ import { ThemeProvider, CssBaseline, Box } from '@material-ui/core'
 import 'typeface-roboto'
 
 import { AppContext, AppProvider } from './context/context'
-import TickShine from './components/TickShine'
 import PictureCredits from './components/PictureCredits'
 import BackgroundOverlay from './components/BackgroundOverlay'
 import AnimatedCircle from './components/AnimatedCircle'
@@ -42,10 +41,8 @@ const App: React.FC = () => {
       </HintContainer>
       <MainContainer>
         <TimeContainer>
-          <TickShine>
-            <AnimatedCircle />
-            <Timer />
-          </TickShine>
+          <AnimatedCircle />
+          <Timer />
         </TimeContainer>
         <ControlContainer>
           <Controls />

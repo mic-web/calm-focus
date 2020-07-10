@@ -40,16 +40,16 @@ const GlobalCss = withStyles({
       outline: '1px solid slategrey',
     },
     scrollbarColor: '#0A4C95 #C2D2E4',
+    'input::-webkit-outer-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0,
+    },
     'input::-webkit-inner-spin-button': {
-      WebkitAppearance: 'none',
-      display: 'inline-block',
-      cursor: 'default',
-      flex: '0 0 auto',
-      alignSelf: 'stretch',
-      WebkitUserSelect: 'none',
-      opacity: '0',
-      pointerEvents: 'none',
-      WebkitUserModify: 'read-only',
+      '-webkit-appearance': 'none',
+      margin: 0,
+    },
+    'input[type=number]': {
+      '-moz-appearance': 'textfield',
     },
   },
 })(() => null)

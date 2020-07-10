@@ -15,7 +15,7 @@ const WorkDurationConfig: React.FC<Props> = () => (
         <TimelapseIcon />
       </SvgIcon>
       <Box ml={2}>
-        <Typography variant="h5">Work Minutes</Typography>
+        <Typography variant="h5">Focus Minutes</Typography>
       </Box>
     </Box>
     <Typography variant="body1" component="div">

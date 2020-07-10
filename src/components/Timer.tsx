@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     alignItems: 'center',
     flexDirection: 'column',
-    fontSize: (props: { isSmall: boolean }) => (props.isSmall && '3.5em') || '4.5em',
+    fontSize: (props: { isSmall: boolean }) => (props.isSmall && '3em') || '4.5em',
     lineHeight: '1.15em',
     userSelect: 'none',
     alignSelf: 'center',

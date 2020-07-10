@@ -71,8 +71,6 @@ export const useTimer = () => {
     if (phase === Phases.WORK || phase === Phases.REST) {
       webWorkers.startTimer()
       const unsubscribe = webWorkers.subscribe((passedSeconds: Seconds) => {
-        console.log('worker sub', passedSeconds)
-
         dispatch({ type: Types.UpdatePassedSeconds, payload: { passedSeconds } })
       })
       return unsubscribe

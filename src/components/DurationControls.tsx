@@ -44,9 +44,15 @@ export const PhaseDuration: React.FC<{
   return (
     <Box width={35}>
       <NumberInput
-        value={minutesDuration}
+        outerValue={minutesDuration}
         onChange={(number: number) => {
-          update(number)
+          if (!Number.isNaN(number)) {
+            if (number < 1) {
+              update(1)
+            } else {
+              update(number)
+            }
+          }
         }}
       />
     </Box>
