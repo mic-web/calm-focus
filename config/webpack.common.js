@@ -9,7 +9,7 @@ const paths = require('./paths')
 
 const distDir = path.resolve(__dirname, paths.distDir)
 const srcDir = path.resolve(__dirname, paths.srcDir)
-const workerFilePath = path.resolve(__dirname, paths.publicDir, paths.timerWorkerFileName)
+const workerFilePath = path.resolve(__dirname, paths.srcDir, paths.workerDir, paths.timerWorkerFileName)
 
 const appConfig = {
   context: srcDir,
@@ -73,6 +73,10 @@ const appConfig = {
       title: 'Progressive Web App',
     }),
     new CopyPlugin([
+      {
+        from: workerFilePath,
+        to: path.resolve(__dirname, paths.distDir, paths.timerWorkerFileName),
+      },
       {
         from: path.resolve(__dirname, paths.publicDir),
         to: path.resolve(__dirname, paths.distDir),
