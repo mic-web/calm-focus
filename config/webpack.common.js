@@ -9,6 +9,7 @@ const paths = require('./paths')
 
 const distDir = path.resolve(__dirname, paths.distDir)
 const srcDir = path.resolve(__dirname, paths.srcDir)
+const workerFilePath = path.resolve(__dirname, paths.workerDir, paths.timerWorkerFileName)
 
 const appConfig = {
   context: srcDir,
@@ -85,4 +86,19 @@ const appConfig = {
   ],
 }
 
-module.exports = appConfig
+const workerConfig = {
+  entry: workerFilePath,
+  target: 'webworker',
+  resolve: {
+    extensions: ['.js'],
+  },
+  output: {
+    path: distDir,
+    filename: paths.timerWorkerFileName,
+  },
+}
+
+module.exports = {
+  app: appConfig,
+  worker: workerConfig,
+}

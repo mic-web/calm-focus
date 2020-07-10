@@ -41,4 +41,4 @@ So here are the things I tried out with this project:
 - Web Workers and WebAssembly with Rust
   - I wanted to see if the setInterval could be implemented with WebAssembly/Rust well.
     Basically it was possible and cool to try out, but there was no real benefit of it, just more loading time.
-    That's why I removed it - for reference how to integrate it, see commit #
+    That's why I removed it - for reference how to integrate WebAssembly+Rust, see commit #bdadafe.

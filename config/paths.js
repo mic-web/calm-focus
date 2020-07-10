@@ -3,4 +3,5 @@ module.exports = {
   distDir: '../dist',
   publicDir: '../public',
   workerDir: '../src/worker/',
+  timerWorkerFileName: 'timer.worker.js',
 }
