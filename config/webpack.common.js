@@ -9,7 +9,7 @@ const paths = require('./paths')
 
 const distDir = path.resolve(__dirname, paths.distDir)
 const srcDir = path.resolve(__dirname, paths.srcDir)
-const workerFilePath = path.resolve(__dirname, paths.workerDir, paths.timerWorkerFileName)
+const workerFilePath = path.resolve(__dirname, paths.publicDir, paths.timerWorkerFileName)
 
 const appConfig = {
   context: srcDir,
