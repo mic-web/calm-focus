@@ -12,8 +12,9 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     alignItems: 'center',
     flexDirection: 'column',
-    fontSize: (props: { isSmall: boolean }) => (props.isSmall && '3em') || '4.5em',
-    lineHeight: '1.15em',
+    fontSize: (props: { isSmall: boolean }) => (props.isSmall && '4em') || '6em',
+    lineHeight: '1em',
+    marginTop: -5,
     userSelect: 'none',
     alignSelf: 'center',
     opacity: (props: { phase: Phases }) =>
