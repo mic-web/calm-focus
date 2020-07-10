@@ -9,6 +9,8 @@ type Props = {
 const useStyles = makeStyles(({ palette }) => ({
   icon: {
     filter: `drop-shadow(0px 0px 5px ${palette.common.white})`,
+    width: '1.3em',
+    height: '1.3em',
   },
 }))
 

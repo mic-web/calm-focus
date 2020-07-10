@@ -23,9 +23,9 @@ My plan is to try out further libraries / tools / code patterns within this repo
 
 So here are the things I tried out with this project:
 
-- Web Workers and WebAssembly with Rust
-  - Reasoning: setInterval is not reliable enough, thus a 25 minutes timer can result in e.g. a 25 minutes + x seconds timer. It can also happen that a tab gets completely inactive and thus the timer gets paused for quite some time. To fix this I used a Web Worker, which is not affected by this pausing. And just out of interest, I decided to try out running a WebAssembly built with Rust inside this WebWorker. Works really well.
-- Progressive Web Application (for installation and offline/caching capability)
+- Service Worker, Progressive Web Application (for installation and offline/caching capability)
+- Web Worker for calculating timing:
+  - Reasoning: setInterval is not reliable enough, thus a 25 minutes timer can result in e.g. a 25 minutes + x seconds timer. It can also happen that a tab gets completely inactive and thus the timer gets paused for quite some time. To fix this I used a Web Worker, which is not affected by this pausing. And just out of interest, I decided to try out running a WebAssembly built with Rust inside this WebWorker. Works really well
 - Browser notification API
 - Cross-browser compatiblity, also for mobile
 - React + almost all React Hooks: useContext, useReducer, useCallback etc.
@@ -38,3 +38,7 @@ So here are the things I tried out with this project:
   - Custom Hooks
   - Observer pattern
   - global state vs. local state
+- Web Workers and WebAssembly with Rust
+  - I wanted to see if the setInterval could be implemented with WebAssembly/Rust well.
+    Basically it was possible and cool to try out, but there was no real benefit of it, just more loading time.
+    That's why I removed it - for reference how to integrate it, see commit #

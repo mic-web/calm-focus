@@ -3,6 +3,4 @@ module.exports = {
   distDir: '../dist',
   publicDir: '../public',
   workerDir: '../src/worker/',
-  wasmWorkerFileName: 'wasm.worker.js',
-  wasmDir: '../../wasm/',
 }

@@ -4,7 +4,6 @@ import { Box, fade, makeStyles, SvgIcon, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { Phases } from '../types'
 import MenuIcon from '../icons/MenuIcon'
-import usePhase from '../hooks/usePhase'
 
 type Props = {
   phase: Phases
@@ -48,6 +47,10 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     top: spacing(1),
     right: spacing(4),
   },
+  icon: {
+    width: '1.3em',
+    height: '1.3em',
+  },
 }))
 
 export const MenuContent: React.FC = (props) => {
@@ -88,13 +91,14 @@ const MenuCloseButton: React.FC = () => {
 
 export const MenuOpenButton: React.FC = () => {
   const { open, setOpen } = useMenuContext()
+  const css = useStyles()
   if (open) {
     return null
   }
   return (
     <Box display="flex" position="absolute" bottom={2} right={2}>
       <IconButton onClick={() => setOpen(true)} title="Menu">
-        <SvgIcon>
+        <SvgIcon className={css.icon}>
           <MenuIcon />
         </SvgIcon>
       </IconButton>

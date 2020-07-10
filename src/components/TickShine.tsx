@@ -17,7 +17,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
     flexGrow: 1,
+    maxWidth: '300px',
   },
   done: {
     transition: 'opacity 2s ease',

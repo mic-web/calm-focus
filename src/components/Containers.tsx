@@ -36,7 +36,16 @@ export const HintContainer: React.FC = ({ children }) => (
 )
 
 export const TimeContainer: React.FC = ({ children }) => (
-  <Box display="flex" justifyContent="stretch" position="relative" alignItems="stretch" height="30vh">
+  <Box
+    display="flex"
+    position="relative"
+    justifyContent="center"
+    alignItems="center"
+    height="40vh"
+    width="40vh"
+    flex={0}
+    maxWidth="300px"
+  >
     {children}
   </Box>
 )

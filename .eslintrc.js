@@ -36,8 +36,6 @@ module.exports = {
     polyfills: [
       // Example of marking entire API and all methods and properties as polyfilled
       'Promise',
-      // Example of marking specific method of an API as polyfilled
-      'WebAssembly.compile',
       // Example of API with no property (i.e. a function)
       'fetch',
       // Example of instance method, must add `.prototype.`

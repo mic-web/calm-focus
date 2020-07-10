@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     paddingRight: spacing(2),
     paddingTop: spacing(1),
     paddingBottom: spacing(1),
-    background: fade(palette.primary.dark, 0.25),
+    background: fade(palette.primary.dark, 0.2),
   },
 }))
 

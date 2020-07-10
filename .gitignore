@@ -9,7 +9,6 @@ node_modules/
 
 # production
 www/dist
-wasm/target
 
 # misc
 .DS_Store

@@ -35,17 +35,15 @@ const Circle: React.FC = () => {
   const strokeDashoffset = circumference - progress * circumference
   const diameter = radius * 2
   return (
-    <SvgIcon className={css.root}>
-      <svg viewBox={`0 0 ${diameter} ${diameter}`}>
-        <circle
-          strokeWidth={stroke}
-          strokeDasharray={`${circumference} ${circumference}`}
-          style={{ strokeDashoffset }}
-          r={normalizedRadius}
-          cx={radius}
-          cy={radius}
-        />
-      </svg>
+    <SvgIcon className={css.root} viewBox={`0 0 ${diameter} ${diameter}`}>
+      <circle
+        strokeWidth={stroke}
+        strokeDasharray={`${circumference} ${circumference}`}
+        style={{ strokeDashoffset }}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+      />
     </SvgIcon>
   )
 }

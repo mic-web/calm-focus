@@ -2,8 +2,6 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
-
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
@@ -11,8 +9,6 @@ const paths = require('./paths')
 
 const distDir = path.resolve(__dirname, paths.distDir)
 const srcDir = path.resolve(__dirname, paths.srcDir)
-const wasmDir = path.resolve(__dirname, paths.srcDir, paths.wasmDir)
-const workerFilePath = path.resolve(__dirname, paths.workerDir, paths.wasmWorkerFileName)
 
 const appConfig = {
   context: srcDir,
@@ -89,19 +85,4 @@ const appConfig = {
   ],
 }
 
-const workerConfig = {
-  entry: workerFilePath,
-  target: 'webworker',
-  resolve: {
-    extensions: ['.js', '.wasm'],
-  },
-  output: {
-    path: distDir,
-    filename: paths.wasmWorkerFileName,
-  },
-}
-
-module.exports = {
-  app: appConfig,
-  worker: workerConfig,
-}
+module.exports = appConfig
