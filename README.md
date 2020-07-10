@@ -7,8 +7,9 @@ If you have enough screens available, it's encouraged to keep this app open on o
 
 # Features
 
-![Demo picture](docs/demo-initial-v2.png)
-![Demo picture](docs/demo-completed-v2.png)
+![Demo picture](docs/demo-initial-v3.png)
+![Demo picture](docs/demo-running-v3.png)
+![Demo picture](docs/demo-menu-v3.png)
 
 # Notes
 
