@@ -6,10 +6,15 @@ const GlobalCss = withStyles({
   '@global': {
     html: {
       height: '100%',
+      margin: 0,
+      display: 'flex',
+      flexDirection: 'column',
     },
     body: {
       height: '100%',
       margin: 0,
+      display: 'flex',
+      flexDirection: 'column',
       fontFamily: `'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen','Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'`,
       overflow: 'hidden',
       touchAction: 'none',
