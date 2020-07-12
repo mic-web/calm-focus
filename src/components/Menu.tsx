@@ -2,12 +2,7 @@ import React from 'react'
 
 import { Box, fade, makeStyles, SvgIcon, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { Phases } from '../types'
 import MenuIcon from '../icons/MenuIcon'
-
-type Props = {
-  phase: Phases
-}
 
 type MenuContextType = {
   open: boolean
@@ -16,7 +11,7 @@ type MenuContextType = {
 
 const MenuContext = React.createContext<MenuContextType | undefined>(undefined)
 
-const useMenuContext = () => {
+export const useMenuContext = () => {
   const context = React.useContext(MenuContext)
   if (!context) {
     throw new Error(`Menu compound components cannot be rendered outside the Menu component`)

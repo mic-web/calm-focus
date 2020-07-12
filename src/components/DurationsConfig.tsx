@@ -5,10 +5,12 @@ import TimelapseIcon from '@material-ui/icons/Timelapse'
 import RestoreIcon from '@material-ui/icons/Restore'
 import { DecreaseDuration, IncreaseDuration, PhaseDuration } from './DurationControls'
 import { Phases } from '../types'
+import useUpdateMinutes from '../hooks/useUpdateMinutes'
+import { narrowEditablePhase } from '../services/timer'
+import useKeyboardEvent from '../hooks/useKeyboardEvent'
+import { useMenuContext } from './Menu'
 
-type Props = {}
-
-const WorkDurationConfig: React.FC<Props> = () => (
+const WorkDurationConfig: React.FC = () => (
   <>
     <Box display="flex" alignItems="center" mb={2}>
       <SvgIcon>
@@ -30,7 +32,7 @@ const WorkDurationConfig: React.FC<Props> = () => (
   </>
 )
 
-const RestDurationConfig: React.FC<Props> = () => (
+const RestDurationConfig: React.FC = () => (
   <>
     <Box display="flex" alignItems="center" mb={2}>
       <SvgIcon>
@@ -52,7 +54,22 @@ const RestDurationConfig: React.FC<Props> = () => (
   </>
 )
 
+const DurationsConfigShortcuts: React.FC<{ phase: Phases }> = ({ phase }) => {
+  const { increase, decrease } = useUpdateMinutes(narrowEditablePhase(phase))
+  const { open, setOpen } = useMenuContext()
+  useKeyboardEvent('keydown', 'ArrowUp', increase, !open)
+  useKeyboardEvent('keydown', 'ArrowDown', decrease, !open)
+  useKeyboardEvent('keyup', 'Escape', () => setOpen(false), open)
+  return (
+    <Typography variant="body1">
+      ProTip: there is a shortcut when the menu is closed: Press up / down on your keyboard to change the minutes of the
+      active phase.
+    </Typography>
+  )
+}
+
 export default {
   Work: WorkDurationConfig,
   Rest: RestDurationConfig,
+  Shortcuts: DurationsConfigShortcuts,
 }

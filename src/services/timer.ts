@@ -1,5 +1,5 @@
 import React from 'react'
-import { Phases, Seconds, Minutes, PhaseDurations } from '../types'
+import { Phases, Seconds, Minutes, PhaseDurations, EditablePhases } from '../types'
 import * as storage from './storage'
 import * as webWorkers from '../worker/web-workers'
 import { AppContext } from '../context/context'
@@ -25,6 +25,14 @@ export const initPhaseSeconds = (): PhaseDurations => {
     [Phases.REST]: (storedSeconds && storedSeconds[Phases.REST]) || DEFAULT_REST_PHASE_SECONDS,
   }
 }
+
+export const narrowEditablePhase = (phase: Phases): EditablePhases =>
+  ({
+    [Phases.REST_READY]: Phases.REST,
+    [Phases.WORK_READY]: Phases.WORK,
+    [Phases.REST]: Phases.REST,
+    [Phases.WORK]: Phases.WORK,
+  }[phase] as EditablePhases)
 
 const notifyTimeOver = (phase: Phases) => {
   playTimeOver()

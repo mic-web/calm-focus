@@ -53,8 +53,11 @@ const App: React.FC = () => {
           <Box mb={6}>
             <DurationsConfig.Work />
           </Box>
-          <Box mb={6}>
+          <Box mb={4}>
             <DurationsConfig.Rest />
+          </Box>
+          <Box mb={6}>
+            <DurationsConfig.Shortcuts phase={phase} />
           </Box>
           <Box mb={6}>
             <NotificationsConfig />

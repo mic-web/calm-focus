@@ -14,7 +14,8 @@ const parse = (value: string) => Number.parseInt(value, 10)
 const NumberInput: React.FC<{
   outerValue: number
   onChange: (value: number) => void
-}> = ({ outerValue, onChange }) => {
+  min?: number
+}> = ({ outerValue, onChange, min = 0 }) => {
   const css = useStyles()
   const [tempValue, setTempValue] = React.useState(`${outerValue}`) // Needs to be string to allow temporarily invalid values
 
@@ -42,16 +43,23 @@ const NumberInput: React.FC<{
       value={tempValue}
       onChange={(e) => {
         const parsed = parse(e.target.value)
-        setTempValue(`${parsed}`)
+        // Allow temporary empty input, but prevent negative input
+        if (e.target.value === '' || parsed >= min) {
+          setTempValue(`${parsed}`)
+        }
       }}
       onBlur={(e) => {
         const parsed = parse(e.target.value)
         // Reset invalid input to previous value on blur
         if (Number.isNaN(parsed)) {
           setTempValue(`${outerValue}`)
-        } else {
+        } else if (parsed > min) {
           setTempValue(`${parsed}`)
         }
+      }}
+      onKeyDown={(e) => {
+        // Handle the keyboard event locally
+        e.stopPropagation()
       }}
       InputLabelProps={{
         shrink: true,

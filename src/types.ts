@@ -5,7 +5,7 @@ export enum Phases {
   REST = 'REST',
 }
 
-export type EditablePhases = Phases.WORK | Phases.REST
+export type EditablePhases = Exclude<Phases, Phases.WORK_READY | Phases.REST_READY>
 
 export type Seconds = number
 export type Minutes = number
