@@ -59,10 +59,10 @@ const App: React.FC = () => {
             <DurationsConfig.Shortcuts phase={phase} />
           </Box>
           <Box mb={6}>
-            <NotificationsConfig />
+            <SoundsConfig />
           </Box>
           <Box mb={6}>
-            <SoundsConfig />
+            <NotificationsConfig />
           </Box>
           <Box mb={6}>
             <InstallButton />

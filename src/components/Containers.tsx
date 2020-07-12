@@ -24,8 +24,8 @@ export const MainContainer: React.FC = ({ children }) => (
     alignItems="stretch"
     marginTop="auto"
     marginBottom="auto"
-    height="50vh"
-    width="50vh"
+    height="60vh"
+    width="60vh"
     maxWidth="300px"
   >
     {children}
@@ -39,13 +39,21 @@ export const HintContainer: React.FC = ({ children }) => (
 )
 
 export const TimeContainer: React.FC = ({ children }) => (
-  <Box display="flex" position="relative" justifyContent="center" alignItems="center" flexShrink={0}>
+  <Box display="flex" position="relative" justifyContent="center" alignItems="stretch" flex={1}>
     {children}
   </Box>
 )
 
 export const ControlContainer: React.FC = ({ children }) => (
-  <Box display="flex" justifyContent="space-around" mr={1} ml={1} alignItems="center" flexDirection="column">
+  <Box
+    display="flex"
+    justifyContent="space-around"
+    mr={1}
+    ml={1}
+    alignItems="center"
+    flexDirection="column"
+    flexShrink="0"
+  >
     {children}
   </Box>
 )

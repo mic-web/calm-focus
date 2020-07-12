@@ -77,7 +77,7 @@ const NotificationsConfig: React.FC<Props> = () => {
           </>
         ) : (
           <Box mb={2}>
-            <Typography variant="body1">Browser notifications are not supported on this browser / device</Typography>
+            <Typography variant="body1">Not supported by this browser.</Typography>
           </Box>
         )}
       </Box>

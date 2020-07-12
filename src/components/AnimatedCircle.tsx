@@ -37,6 +37,7 @@ const Circle: React.FC = () => {
     <svg className={css.root} viewBox={`0 0 ${diameter} ${diameter}`}>
       <circle
         strokeWidth={stroke}
+        strokeLinecap="round"
         strokeDasharray={`${circumference} ${circumference}`}
         style={{ strokeDashoffset }}
         r={normalizedRadius}

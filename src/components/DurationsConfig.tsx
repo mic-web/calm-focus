@@ -54,15 +54,22 @@ const RestDurationConfig: React.FC = () => (
   </>
 )
 
+const isMobile = (): boolean =>
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
 const DurationsConfigShortcuts: React.FC<{ phase: Phases }> = ({ phase }) => {
   const { increase, decrease } = useUpdateMinutes(narrowEditablePhase(phase))
   const { open, setOpen } = useMenuContext()
   useKeyboardEvent('keydown', 'ArrowUp', increase, !open)
   useKeyboardEvent('keydown', 'ArrowDown', decrease, !open)
   useKeyboardEvent('keyup', 'Escape', () => setOpen(false), open)
+  if (isMobile()) {
+    return null
+  }
   return (
     <Typography variant="body1">
-      ProTip: there is a shortcut when the menu is closed: Press up / down on your keyboard to change the minutes of the
+      <em>ProTip:</em>
+      &nbsp; there is a shortcut when the menu is closed: Press up / down on your keyboard to change the minutes of the
       active phase.
     </Typography>
   )
