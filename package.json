@@ -84,8 +84,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-components": "^5.1.0",
-    "styled-normalize": "^8.0.7",
-    "typeface-roboto": "0.0.75"
+    "styled-normalize": "^8.0.7"
   },
   "husky": {
     "hooks": {

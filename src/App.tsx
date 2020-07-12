@@ -1,6 +1,5 @@
 import React from 'react'
 import { ThemeProvider, CssBaseline, Box } from '@material-ui/core'
-import 'typeface-roboto'
 
 import { AppContext, AppProvider } from './context/context'
 import PictureCredits from './components/PictureCredits'
