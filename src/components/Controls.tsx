@@ -9,6 +9,7 @@ import * as webWorkers from '../worker/web-workers'
 import { TimerAction } from '../context/timeReducer'
 import useNextPhase from '../selectors/useNextPhase'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onInteraction = (_event: React.SyntheticEvent) => {
   sounds.initOnInteraction()
 }

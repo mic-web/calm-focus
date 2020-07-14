@@ -28,6 +28,7 @@ export const PhaseDuration: React.FC<{
   const update = useUpdateMinutes(props.phase)
   const onChange = React.useCallback(
     (number: number) => {
+      // eslint-disable-next-line compat/compat
       if (!Number.isNaN(number)) {
         if (number < 1) {
           update(1)

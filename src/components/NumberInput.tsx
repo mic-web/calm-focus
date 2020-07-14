@@ -35,7 +35,7 @@ const NumberInput: React.FC<{
     if (!Number.isNaN(parsedTempValue) && outerValue !== parsedTempValue) {
       debouncedChange.current(parsedTempValue)
     }
-  }, [tempValue])
+  }, [tempValue, outerValue])
 
   return (
     <TextField

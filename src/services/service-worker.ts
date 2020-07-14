@@ -9,6 +9,7 @@ export const isSwSupported = () => 'serviceWorker' in navigator
 
 if (isSwSupported()) {
   window.addEventListener('load', () => {
+    // eslint-disable-next-line compat/compat
     navigator.serviceWorker
       .register('/service-worker.js')
       .then((registration: ServiceWorkerRegistration) => {

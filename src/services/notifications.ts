@@ -58,6 +58,7 @@ export const writeIsEnabled = (isEnabled: boolean) => {
 
 export const checkNotificationsEnabled = () => {
   if (readIsEnabled() && !browserNotificationGranted() && browserNotificationSupported()) {
+    // eslint-disable-next-line no-console
     askPermission().catch((error) => console.error(error))
   }
 }

@@ -24,6 +24,7 @@ export const initOnInteraction = () => {
         .then(() => {
           audio.pause()
         })
+        // eslint-disable-next-line no-console
         .catch((error) => console.error(error))
     }
   }
@@ -42,6 +43,7 @@ export const playTimeOver = () => {
     audioPromise = audio.play()
     if (audioPromise) {
       audioPromise
+        // eslint-disable-next-line no-console
         .catch((error) => console.error(error))
         .then(() => {
           audioPromise = null
