@@ -13,13 +13,13 @@ const workerFilePath = path.resolve(__dirname, paths.srcDir, paths.workerDir, pa
 
 const appConfig = {
   context: srcDir,
+  mode: 'production',
   entry: './index.tsx',
   output: {
     filename: '[name].js',
     path: distDir,
     globalObject: 'this',
   },
-  devtool: 'source-map',
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
@@ -88,10 +88,22 @@ const appConfig = {
       skipWaiting: true,
     }),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
 }
 
 const workerConfig = {
   entry: workerFilePath,
+  mode: 'production',
   target: 'webworker',
   resolve: {
     extensions: ['.js'],
