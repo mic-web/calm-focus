@@ -15,20 +15,20 @@ export type PhaseDurations = {
   [Phases.REST]: Seconds
 }
 
-export type Timer = {
+export type TimerState = {
   passedSeconds: Seconds
   phase: Phases
   phaseDurations: PhaseDurations
 }
 
-export type StateType = {
-  timer: Timer
+export type AppState = {
+  timer: TimerState
 }
 
 // Automatic generation of actions
 // TODO: see this link for alternative:
 // dev.to/elisealcala/react-context-with-usereducer-and-typescript-4obm
-export type ActionMap<M extends { [index: string]: any }> = {
+export type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined
     ? {
         type: Key

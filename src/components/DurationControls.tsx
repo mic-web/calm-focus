@@ -2,10 +2,10 @@ import React from 'react'
 import { IconButton, SvgIcon, Box } from '@material-ui/core'
 import RemoveIcon from '@material-ui/icons/Remove'
 import AddIcon from '@material-ui/icons/Add'
-import { Phases, Seconds, EditablePhases } from '../types'
-import { AppContext } from '../context/context'
+import { Phases, EditablePhases } from '../types'
 import NumberInput from './NumberInput'
-import useUpdateMinutes from '../hooks/useUpdateMinutes'
+import useUpdateMinutes, { useIncreaseMinutes, useDecreaseMinutes } from '../selectors/useUpdateMinutes'
+import usePhaseDuration from '../selectors/usePhaseDuration'
 
 type Props = {
   phase: Phases.REST | Phases.WORK
@@ -19,35 +19,35 @@ export const DecreaseDuration: React.FC<{ phase: EditablePhases }> = (props) => 
 export const IncreaseDuration: React.FC<{ phase: EditablePhases }> = (props) => (
   <DurationControls action="increase" phase={props.phase} />
 )
+
 export const PhaseDuration: React.FC<{
   phase: EditablePhases
 }> = (props) => {
-  const { state } = React.useContext(AppContext)
-  const secondsDuration: Seconds = state.timer.phaseDurations[props.phase]
+  const secondsDuration = usePhaseDuration(props.phase)
   const minutesDuration = Math.floor(secondsDuration / 60)
-  const { update } = useUpdateMinutes(props.phase)
+  const update = useUpdateMinutes(props.phase)
+  const onChange = React.useCallback(
+    (number: number) => {
+      if (!Number.isNaN(number)) {
+        if (number < 1) {
+          update(1)
+        } else {
+          update(number)
+        }
+      }
+    },
+    [update]
+  )
   return (
     <Box width={35}>
-      <NumberInput
-        outerValue={minutesDuration}
-        min={1}
-        onChange={(number: number) => {
-          if (!Number.isNaN(number)) {
-            if (number < 1) {
-              update(1)
-            } else {
-              update(number)
-            }
-          }
-        }}
-      />
+      <NumberInput outerValue={minutesDuration} min={1} onChange={onChange} />
     </Box>
   )
 }
 
 const DurationControls: React.FC<Props> = (props) => {
-  const { increase, decrease } = useUpdateMinutes(props.phase)
-
+  const increase = useIncreaseMinutes(props.phase)
+  const decrease = useDecreaseMinutes(props.phase)
   if (props.action === 'increase') {
     return (
       <IconButton onClick={increase} title="Increase" color="primary" size="small">

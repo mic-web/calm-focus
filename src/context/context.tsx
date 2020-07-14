@@ -1,11 +1,11 @@
 import React, { createContext, useReducer, Dispatch } from 'react'
 import { timerReducer, TimerActions } from './timeReducer'
-import { StateType, Phases } from '../types'
-import * as timer from '../services/timer'
+import { AppState, Phases } from '../types'
+import * as timeService from '../services/timer'
 
-const phaseSeconds = timer.initPhaseSeconds()
+const phaseSeconds = timeService.initPhaseSeconds()
 
-const initialState: StateType = {
+const initialState: AppState = {
   timer: {
     phase: Phases.WORK_READY,
     phaseDurations: phaseSeconds,
@@ -14,15 +14,15 @@ const initialState: StateType = {
 }
 
 const AppContext = createContext<{
-  state: StateType
+  state: AppState
   dispatch: Dispatch<TimerActions>
 }>({
   state: initialState,
   dispatch: () => null,
 })
 
-const mainReducer = ({ timer: products }: StateType, action: TimerActions) => ({
-  timer: timerReducer(products, action),
+const mainReducer = ({ timer }: AppState, action: TimerActions) => ({
+  timer: timerReducer(timer, action as TimerActions),
 })
 
 const AppProvider: React.FC = ({ children }) => {

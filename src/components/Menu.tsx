@@ -48,8 +48,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   },
 }))
 
-export const MenuContent: React.FC = (props) => {
-  const { children } = props
+export const MenuContent: React.FC = ({ children }) => {
   const css = useStyles()
   const { open } = useMenuContext()
   return (
@@ -59,12 +58,16 @@ export const MenuContent: React.FC = (props) => {
       alignSelf="center"
       width="95%"
       height="95%"
+      // Hide but don't remove from DOM to avoid
+      // ugly rerendering on every open.
       visibility={open ? 'visible' : 'hidden'}
     >
       <div className={css.root}>
         <div className={css.scrollContainer}>
-          <MenuCloseButton />
-          {children}
+          <>
+            <MenuCloseButton />
+            {children}
+          </>
         </div>
       </div>
     </Box>
@@ -101,11 +104,9 @@ export const MenuOpenButton: React.FC = () => {
   )
 }
 
-const Container: React.FC = (props) => {
+export const MenuProvider: React.FC = (props) => {
   const { children } = props
   const [open, setOpen] = React.useState(false)
   const value = React.useMemo(() => ({ open, setOpen }), [open])
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>
 }
-
-export default Container

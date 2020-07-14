@@ -1,6 +1,6 @@
-import { Seconds, Phases, Timer, ActionMap } from '../types'
+import { Seconds, Phases, TimerState, ActionMap } from '../types'
 
-export enum Types {
+export enum TimerAction {
   UpdatePassedSeconds = 'UPDATE_PASSED_SECONDS',
   Reset = 'RESET_TIMER',
   UpdatePhase = 'UPDATE_PHASE',
@@ -9,16 +9,16 @@ export enum Types {
 }
 
 type TimerPayload = {
-  [Types.UpdatePassedSeconds]: {
+  [TimerAction.UpdatePassedSeconds]: {
     passedSeconds: Seconds
   }
-  [Types.Reset]: {
+  [TimerAction.Reset]: {
     phaseDuration: Seconds
   }
-  [Types.UpdatePhase]: {
+  [TimerAction.UpdatePhase]: {
     phase: Phases
   }
-  [Types.UpdatePhaseSeconds]: {
+  [TimerAction.UpdatePhaseSeconds]: {
     phase: Phases
     seconds: Seconds
   }
@@ -26,26 +26,26 @@ type TimerPayload = {
 
 export type TimerActions = ActionMap<TimerPayload>[keyof ActionMap<TimerPayload>]
 
-export const timerReducer = (state: Timer, action: TimerActions): Timer => {
+export const timerReducer = (state: TimerState, action: TimerActions): TimerState => {
   switch (action.type) {
-    case Types.Reset:
+    case TimerAction.Reset:
       return {
         ...state,
         phase: Phases.WORK_READY,
         passedSeconds: 0,
       }
-    case Types.UpdatePassedSeconds:
+    case TimerAction.UpdatePassedSeconds:
       return {
         ...state,
         passedSeconds: action.payload.passedSeconds,
       }
-    case Types.UpdatePhase:
+    case TimerAction.UpdatePhase:
       return {
         ...state,
         phase: action.payload.phase,
         passedSeconds: 0,
       }
-    case Types.UpdatePhaseSeconds:
+    case TimerAction.UpdatePhaseSeconds:
       return {
         ...state,
         phaseDurations: {

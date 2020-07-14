@@ -14,6 +14,5 @@ export default (): Phases => {
   const { state } = React.useContext(AppContext)
   const { phase } = state.timer
 
-  const memoizedValue = React.useMemo(() => getNextPhase(phase), [phase])
-  return memoizedValue
+  return getNextPhase(phase)
 }

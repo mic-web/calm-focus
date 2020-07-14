@@ -8,6 +8,5 @@ export default (): Seconds => {
   const { passedSeconds } = state.timer
   const phaseDuration = usePhaseDuration()
 
-  const memoizedValue = React.useMemo(() => phaseDuration - passedSeconds, [phaseDuration, passedSeconds])
-  return memoizedValue
+  return phaseDuration - passedSeconds
 }

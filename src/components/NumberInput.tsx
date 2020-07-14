@@ -31,9 +31,9 @@ const NumberInput: React.FC<{
   React.useEffect(() => {
     // Allow input of temporarily invalid data,
     // but only locally. Don't propagate the value change.
-    const parsed = parse(tempValue)
-    if (!Number.isNaN(parsed)) {
-      debouncedChange.current(parsed)
+    const parsedTempValue = parse(tempValue)
+    if (!Number.isNaN(parsedTempValue) && outerValue !== parsedTempValue) {
+      debouncedChange.current(parsedTempValue)
     }
   }, [tempValue])
 

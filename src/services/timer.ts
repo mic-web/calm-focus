@@ -3,12 +3,12 @@ import { Phases, Seconds, Minutes, PhaseDurations, EditablePhases } from '../typ
 import * as storage from './storage'
 import * as webWorkers from '../worker/web-workers'
 import { AppContext } from '../context/context'
-import { Types } from '../context/timeReducer'
+import { TimerAction } from '../context/timeReducer'
 import { playTimeOver } from './sounds'
 import { showNotification } from './service-worker'
-import usePhaseDuration from '../hooks/usePhaseDuration'
-import useNextPhase from '../hooks/useNextPhase'
-import useSecondsLeft from '../hooks/useSecondsLeft'
+import usePhaseDuration from '../selectors/usePhaseDuration'
+import useNextPhase from '../selectors/useNextPhase'
+import useSecondsLeft from '../selectors/useSecondsLeft'
 
 const DEFAULT_WORK_PHASE_MINUTES: Minutes = 25
 const DEFAULT_REST_PHASE_MINUTES: Minutes = 5
@@ -57,10 +57,11 @@ export const useTimer = () => {
   const phaseDuration = usePhaseDuration()
   const nextPhase = useNextPhase()
   const secondsLeft = useSecondsLeft()
+
   React.useEffect(() => {
     if (secondsLeft === 0) {
       notifyTimeOver(phase)
-      dispatch({ type: Types.UpdatePhase, payload: { phase: nextPhase } })
+      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase } })
     }
   }, [dispatch, nextPhase, phase, secondsLeft])
   React.useEffect(() => {
@@ -79,7 +80,7 @@ export const useTimer = () => {
     if (phase === Phases.WORK || phase === Phases.REST) {
       webWorkers.startTimer()
       const unsubscribe = webWorkers.subscribe((passedSeconds: Seconds) => {
-        dispatch({ type: Types.UpdatePassedSeconds, payload: { passedSeconds } })
+        dispatch({ type: TimerAction.UpdatePassedSeconds, payload: { passedSeconds } })
       })
       return unsubscribe
     }

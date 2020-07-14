@@ -3,7 +3,7 @@ import { makeStyles, fade } from '@material-ui/core/styles'
 
 import { Typography } from '@material-ui/core'
 import { Phases } from '../types'
-import usePhase from '../hooks/usePhase'
+import usePhase from '../selectors/usePhase'
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
 }))
 
-const Hint: React.FC = () => {
+const Hint: React.FC = React.memo(() => {
   const phase = usePhase()
   const css = useStyles({ phase })
   const hintText = {
@@ -33,6 +33,6 @@ const Hint: React.FC = () => {
       <Typography variant="subtitle1">{hintText}</Typography>
     </div>
   )
-}
+})
 
 export default Hint

@@ -1,8 +1,8 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Phases } from '../types'
-import usePhase from '../hooks/usePhase'
-import useProgress from '../hooks/useProgress'
+import usePhase from '../selectors/usePhase'
+import useProgress from '../selectors/useProgress'
 
 const useStyles = makeStyles(({ palette }) => ({
   root: {

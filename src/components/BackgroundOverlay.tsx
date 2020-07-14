@@ -1,13 +1,10 @@
 import React from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import { Phases } from '../types'
-
-type Props = {
-  phase: Phases
-}
+import usePhase from '../selectors/usePhase'
 
 const useStyles = makeStyles(({ palette }) => ({
-  root: (props: Props) => {
+  root: (props: { phase: Phases }) => {
     const visibleStyle = {
       opacity: 0.7,
       transition: 'opacity 2s ease',
@@ -24,8 +21,9 @@ const useStyles = makeStyles(({ palette }) => ({
   },
 }))
 
-const Background: React.FC<Props> = (props) => {
-  const classes = useStyles(props)
+const Background: React.FC = () => {
+  const phase = usePhase()
+  const classes = useStyles({ phase })
   return <div className={classes.root} />
 }
 

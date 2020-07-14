@@ -1,10 +1,10 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Phases, Seconds } from '../types'
-import useSecondsLeft from '../hooks/useSecondsLeft'
-import useMinutesLeft from '../hooks/useMinutesLeft'
-import usePhase from '../hooks/usePhase'
+import useSecondsLeft from '../selectors/useSecondsLeft'
+import useMinutesLeft from '../selectors/useMinutesLeft'
+import usePhase from '../selectors/usePhase'
 
 const useStyles = makeStyles(() => ({
   root: {

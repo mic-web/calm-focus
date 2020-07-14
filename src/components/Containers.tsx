@@ -20,7 +20,7 @@ export const MainContainer: React.FC = ({ children }) => (
   <Box
     display="flex"
     flexDirection="column"
-    justifyContent="stretch"
+    justifyContent="center"
     alignItems="stretch"
     marginTop="auto"
     marginBottom="auto"
@@ -39,7 +39,7 @@ export const HintContainer: React.FC = ({ children }) => (
 )
 
 export const TimeContainer: React.FC = ({ children }) => (
-  <Box display="flex" position="relative" justifyContent="center" alignItems="stretch" flex={1}>
+  <Box display="flex" position="relative" justifyContent="center" alignItems="stretch" flexShrink="0">
     {children}
   </Box>
 )
