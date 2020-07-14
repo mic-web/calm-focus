@@ -18,17 +18,34 @@ let initialized = false
 export const initOnInteraction = () => {
   if (!initialized) {
     initialized = true
-    audio.play()
+    const promise = audio.play()
+    if (promise) {
+      promise
+        .then(() => {
+          audio.pause()
+        })
+        .catch((error) => console.error(error))
+    }
   }
 }
 
+let audioPromise: Promise<void> | null = null
 export const playTimeOver = () => {
   if (readIsEnabled()) {
-    initOnInteraction()
-    audio.pause()
-    audio.currentTime = 0
+    initialized = true
+    if (audioPromise) {
+      audio.pause()
+    }
     audio.src = 'finish-sound.mp3'
     audio.volume = 0.3
-    audio.play().catch((error) => console.error(error))
+    audio.currentTime = 0
+    audioPromise = audio.play()
+    if (audioPromise) {
+      audioPromise
+        .catch((error) => console.error(error))
+        .then(() => {
+          audioPromise = null
+        })
+    }
   }
 }
