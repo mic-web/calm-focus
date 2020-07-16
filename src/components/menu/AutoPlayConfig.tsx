@@ -6,6 +6,7 @@ import useAutoPlayEnabled from '../../selectors/useAutoPlayEnabled'
 import { AppContext } from '../../context/context'
 import { TimerAction } from '../../context/timeReducer'
 import * as storage from '../../services/storage'
+import useKeyboardEvent from '../../hooks/useKeyboardEvent'
 
 const AutoRenewConfig: React.FC = () => {
   const { dispatch } = React.useContext(AppContext)
@@ -18,6 +19,8 @@ const AutoRenewConfig: React.FC = () => {
       }),
     [dispatch]
   )
+  useKeyboardEvent('keyup', 'a', toggle)
+
   React.useEffect(() => {
     storage.saveAutoPlay(isEnabled)
   }, [isEnabled])
@@ -36,7 +39,7 @@ const AutoRenewConfig: React.FC = () => {
           <Typography variant="body1">When time is over, the next phase will be started directly.</Typography>
         </Box>
         <Box display="flex" alignItems="center">
-          <Checkbox size="small" checked={isEnabled} onChange={toggle} color="primary" />
+          <Checkbox size="small" checked={isEnabled} onChange={toggle} color="primary" title="Shortcut: a" />
           <Box ml={2}>
             <Typography variant="body1">{(isEnabled && 'Enabled') || 'Disabled'}</Typography>
           </Box>

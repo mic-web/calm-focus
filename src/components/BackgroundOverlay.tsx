@@ -10,9 +10,9 @@ const useStyles = makeStyles(({ palette }) => ({
       opacity: 0.7,
       transition: 'opacity 2s ease',
     }
-    let background = fade(palette.common.black, 0.6)
+    let background = fade(palette.common.black, 0.5)
     if (props.phase === Phases.REST) {
-      background = fade(palette.common.white, 0.6)
+      background = fade(palette.common.white, 0.5)
     }
     return {
       position: 'absolute',

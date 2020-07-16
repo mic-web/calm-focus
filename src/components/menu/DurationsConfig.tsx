@@ -62,8 +62,7 @@ export const DurationsConfigShortcuts: React.FC = () => {
   return (
     <Typography variant="body1">
       <em>ProTip:</em>
-      &nbsp; there is a shortcut when the menu is closed: Press up / down on your keyboard to change the minutes of the
-      active phase.
+      &nbsp; Shortcut when menu is closed: Press up / down arrows on your keyboard.
     </Typography>
   )
 }

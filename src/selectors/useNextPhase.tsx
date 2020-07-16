@@ -15,7 +15,7 @@ export const useNextPhase = (): Phases => {
   const { state } = React.useContext(AppContext)
   const { phase } = state.timer
 
-  if (state.timer.autoPlay && !state.timer.autoPlayStarted && isActivePhase(phase)) {
+  if (state.timer.autoPlay && state.timer.autoPlayStarted && isActivePhase(phase)) {
     // Switch to second next phase only when timer is already running
     // Else, there would be an endless loop of "ready" phases
     return getNextPhase(getNextPhase(phase))

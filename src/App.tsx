@@ -36,7 +36,9 @@ const AppWideBehavior: React.FC = () => {
   useKeyboardEvent('keydown', 'ArrowDown', decrease, !open)
 
   const closeMenu = React.useCallback(() => setOpen(false), [setOpen])
+  const toggleMenu = React.useCallback(() => setOpen(!open), [setOpen, open])
   useKeyboardEvent('keyup', 'Escape', closeMenu, open)
+  useKeyboardEvent('keyup', 'm', toggleMenu)
 
   useTimer()
   useLeaveConfirmation(isActivePhase(phase))
