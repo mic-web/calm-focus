@@ -32,12 +32,12 @@ const useUpdateMinutes = (phase: EditablePhases) => {
   return update
 }
 
-export const useDecreaseMinutes = (phase: EditablePhases, enableQuarterSteps = false) => {
+export const useDecreaseMinutes = (phase: EditablePhases) => {
   const seconds = usePhaseDuration(phase)
   const update = useUpdateMinutes(phase)
   const decrease = React.useCallback(() => {
     const minutes = secondsToMinutes(seconds)
-    if (enableQuarterSteps && minutes <= 2) {
+    if (minutes <= 2) {
       // Allow finer adjustment - e.g. for HIIT training
       if (minutes > 0.25) {
         update(minutes - 0.25)
@@ -46,22 +46,22 @@ export const useDecreaseMinutes = (phase: EditablePhases, enableQuarterSteps = f
       // Use 1.25 to avoid race conditions when configuring while time is runing
       update(minutes - 1)
     }
-  }, [seconds, update, enableQuarterSteps])
+  }, [seconds, update])
   return decrease
 }
 
-export const useIncreaseMinutes = (phase: EditablePhases, enableQuarterSteps = false) => {
+export const useIncreaseMinutes = (phase: EditablePhases) => {
   const seconds = usePhaseDuration(phase)
   const update = useUpdateMinutes(phase)
   const increase = React.useCallback(() => {
     const minutes = secondsToMinutes(seconds)
-    if (enableQuarterSteps && minutes < 2) {
+    if (minutes < 2) {
       // Allow finer adjustment - e.g. for HIIT training
       update(minutes + 0.25)
     } else {
       update(secondsToMinutes(seconds) + 1)
     }
-  }, [seconds, update, enableQuarterSteps])
+  }, [seconds, update])
   return increase
 }
 

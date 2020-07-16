@@ -30,8 +30,8 @@ const AppWideBehavior: React.FC = () => {
   const { phaseDurations, phase } = state.timer
   const { open, setOpen } = useMenuContext()
 
-  const decrease = useDecreaseMinutes(narrowEditablePhase(phase), true)
-  const increase = useIncreaseMinutes(narrowEditablePhase(phase), true)
+  const decrease = useDecreaseMinutes(narrowEditablePhase(phase))
+  const increase = useIncreaseMinutes(narrowEditablePhase(phase))
   useKeyboardEvent('keydown', 'ArrowUp', increase, !open)
   useKeyboardEvent('keydown', 'ArrowDown', decrease, !open)
 
