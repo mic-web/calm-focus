@@ -5,7 +5,7 @@ import * as webWorkers from '../worker/web-workers'
 import { AppContext } from '../context/context'
 import { TimerAction } from '../context/timeReducer'
 import { playTimeOver } from './sounds'
-import { showNotification } from './service-worker'
+import * as serviceWorker from './service-worker'
 import usePhaseDuration from '../selectors/usePhaseDuration'
 import useNextPhase from '../selectors/useNextPhase'
 import useSecondsLeft from '../selectors/useSecondsLeft'
@@ -38,13 +38,13 @@ export const narrowEditablePhase = (phase: Phases): EditablePhases =>
 const notifyTimeOver = (phase: Phases, durations: PhaseDurations) => {
   playTimeOver()
   if (phase === Phases.WORK) {
-    showNotification('Done, take a break', {
+    serviceWorker.showNotification('Done, take a break', {
       body: `Rest for ${durations[phase]} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
   } else if (phase === Phases.REST) {
-    showNotification('Focus again', {
+    serviceWorker.showNotification('Focus again', {
       body: `Focus again for ${durations[phase]} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
