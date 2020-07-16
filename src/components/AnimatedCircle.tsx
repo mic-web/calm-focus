@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { SvgIcon } from '@material-ui/core'
 import { Phases } from '../types'
 import usePhase from '../selectors/usePhase'
 import useProgress from '../selectors/useProgress'
@@ -8,6 +9,8 @@ import { isActivePhase } from '../services/timer'
 const useStyles = makeStyles(({ palette }) => ({
   root: {
     flex: 1,
+    height: '100%',
+    width: '100%',
     '& circle': {
       fill: 'none',
       transition: 'stroke-dashoffset 0.35s',
@@ -33,7 +36,7 @@ const Circle: React.FC = () => {
   const strokeDashoffset = circumference - progress * circumference
   const diameter = radius * 2
   return (
-    <svg className={css.root} viewBox={`0 0 ${diameter} ${diameter}`}>
+    <SvgIcon className={css.root} viewBox={`0 0 ${diameter} ${diameter}`}>
       <circle
         strokeWidth={stroke}
         strokeLinecap="round"
@@ -43,7 +46,7 @@ const Circle: React.FC = () => {
         cx={radius}
         cy={radius}
       />
-    </svg>
+    </SvgIcon>
   )
 }
 

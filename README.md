@@ -1,9 +1,16 @@
 # Description
 
-This projects provides a simple, clean 25-minutes-timer in the style of the Pomodoro technique.
+"Calm Focus" is a simple timer for improving focus on any tasks.
+The concept is partially based on the principles of the well-known [Pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique)
 
-The app design is focused on avoiding distraction until the time is over (after 25 minutes).
-If you have enough screens available, it's encouraged to keep this app open on one side-screen, e.g. on the laptop, as it won't clame your attention until time is over.
+But the use cases are not limited working. The web-app can be useful for:
+
+- Focus on work / study
+- Workout - especially useful for HIIT training (when activating the "AutoPlay" option)
+- Cooking
+- Meditation
+
+The design focuses on avoiding distraction until time is over (by default after 25 minutes).
 
 # Features
 
@@ -11,14 +18,18 @@ If you have enough screens available, it's encouraged to keep this app open on o
 ![Demo picture](docs/demo-running-v3.png)
 ![Demo picture](docs/demo-menu-v3.png)
 
-# Notes
-
-- Notifications have to be allowed
-- Installation is only possible when PWAs are supported - so mostly on Android devices
+- Notifications: get notified when time is over (needs browser permission)
+- Sounds: hear a sound when time is over
+- Installation as PWA (only possible when PWAs are supported - so mostly on Android devices and Google Chrome)
 
 # Technologies used
 
-I used this repository mainly for learning purposes. There are already a lot of pomodoro timer projects. The reason I still wanted to creat my own was that this type of project is small enough to be able to refactor it quickly, but complex enough to try out multiple programming patterns, technologies etc. Furthermore I'm using the pomodoro technique on my own frequently. This leads to a lot of long-term manual testing and learnings from that, in comparison to a one-time-built-and-never-used project.
+I used this repository mainly for learning purposes. There are already some pomodoro timer projects.
+The reason I still wanted to create my own was that this type of project is small enough to be able to refactor it quickly, but complex enough to try out multiple programming patterns and technologies (e.g. Web Workers, WebAssembly, Service Worker, etc.) and check cross-device / cross-browser compatiblity.
+
+As I'm using the pomodoro technique
+I'm using the pomodoro technique on my own which helps me with discovering some use case.
+in comparison to a one-time-built-and-never-used project.
 
 My plan is to try out further libraries / tools / code patterns within this repository in the future.
 
