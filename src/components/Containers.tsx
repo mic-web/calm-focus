@@ -1,36 +1,40 @@
 import React from 'react'
 
-import { Box } from '@material-ui/core'
+import { Box, useMediaQuery } from '@material-ui/core'
 
 export const AppContainer: React.FC = ({ children }) => (
   <Box
     display="flex"
     flexDirection="column"
-    justifyContent="center"
-    flex={1}
+    justifyContent="stretch"
     alignItems="center"
     position="relative"
     minHeight="-webkit-fill-available"
+    flex={1}
+    overflow="hidden auto"
   >
     {children}
   </Box>
 )
 
-export const MainContainer: React.FC = ({ children }) => (
-  <Box
-    display="flex"
-    flexDirection="column"
-    justifyContent="center"
-    alignItems="stretch"
-    marginTop="auto"
-    marginBottom="auto"
-    height="60vh"
-    width="60vh"
-    maxWidth="300px"
-  >
-    {children}
-  </Box>
-)
+export const MainContainer: React.FC = ({ children }) => {
+  const isSmall = useMediaQuery('(max-height:  400px), (max-width: 400px)')
+  const size = isSmall ? '200px' : '300px'
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="stretch"
+      alignItems="stretch"
+      marginTop="auto"
+      marginBottom="auto"
+      width={size}
+      height={size}
+    >
+      {children}
+    </Box>
+  )
+}
 
 export const HintContainer: React.FC = ({ children }) => (
   <Box display="flex" width="100%">
@@ -39,7 +43,7 @@ export const HintContainer: React.FC = ({ children }) => (
 )
 
 export const TimeContainer: React.FC = ({ children }) => (
-  <Box display="flex" position="relative" justifyContent="center" alignItems="stretch" flexShrink="0">
+  <Box display="flex" position="relative" justifyContent="center" alignItems="stretch" minHeight="0" flex="1">
     {children}
   </Box>
 )

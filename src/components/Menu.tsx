@@ -58,6 +58,7 @@ export const MenuContent: React.FC = ({ children }) => {
       alignSelf="center"
       width="95%"
       height="95%"
+      top="2.5%"
       // Hide but don't remove from DOM to avoid
       // ugly rerendering on every open.
       visibility={open ? 'visible' : 'hidden'}
@@ -94,7 +95,7 @@ export const MenuOpenButton: React.FC = () => {
     return null
   }
   return (
-    <Box display="flex" position="absolute" bottom={2} right={2}>
+    <Box display="flex" position="absolute" bottom="5px" right="0px">
       <IconButton onClick={() => setOpen(true)} title="Menu">
         <SvgIcon className={css.icon}>
           <MenuIcon />

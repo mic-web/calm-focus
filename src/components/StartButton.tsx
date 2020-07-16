@@ -9,18 +9,16 @@ type Props = {
 const useStyles = makeStyles(({ palette }) => ({
   icon: {
     filter: `drop-shadow(0px 0px 5px ${palette.common.white})`,
-    width: '1.3em',
-    height: '1.3em',
   },
 }))
 
 const StartButton: React.FC<Props> = (props) => {
-  const css = useStyles(props)
+  const css = useStyles()
   const { start } = props
 
   return (
-    <IconButton onClick={start} title="Start" color="inherit">
-      <SvgIcon className={css.icon}>
+    <IconButton onClick={start} title="Start" color="inherit" className={css.icon}>
+      <SvgIcon>
         <PlayIcon />
       </SvgIcon>
     </IconButton>

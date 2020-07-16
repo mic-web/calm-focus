@@ -6,7 +6,6 @@ import useProgress from '../selectors/useProgress'
 
 const useStyles = makeStyles(({ palette }) => ({
   root: {
-    display: 'flex',
     flex: 1,
     '& circle': {
       fill: 'none',

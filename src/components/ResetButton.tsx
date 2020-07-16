@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { IconButton, SvgIcon, makeStyles } from '@material-ui/core'
+import { IconButton, makeStyles, SvgIcon } from '@material-ui/core'
 import ResetIcon from '../icons/ResetIcon'
 
 type ResetButtonProps = {
@@ -8,17 +8,14 @@ type ResetButtonProps = {
 }
 
 const useStyles = makeStyles(() => ({
-  icon: {
-    width: '1.3em',
-    height: '1.3em',
-  },
+  icon: {},
 }))
 
 const ResetButton: React.FC<ResetButtonProps> = ({ reset }) => {
   const css = useStyles()
   return (
-    <IconButton onClick={reset} title="Reset">
-      <SvgIcon className={css.icon}>
+    <IconButton onClick={reset} title="Reset" className={css.icon}>
+      <SvgIcon>
         <ResetIcon />
       </SvgIcon>
     </IconButton>
