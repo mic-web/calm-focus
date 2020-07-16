@@ -1,6 +1,7 @@
 import React from 'react'
 import { Phases } from '../types'
 import { AppContext } from '../context/context'
+import { isActivePhase } from '../services/timer'
 
 export const getNextPhase = (currentPhase: Phases) =>
   ({
@@ -14,7 +15,7 @@ export const useNextPhase = (): Phases => {
   const { state } = React.useContext(AppContext)
   const { phase } = state.timer
 
-  if ((state.timer.autoPlay && phase === Phases.WORK) || phase === Phases.REST) {
+  if (state.timer.autoPlay && !state.timer.autoPlayStarted && isActivePhase(phase)) {
     // Switch to second next phase only when timer is already running
     // Else, there would be an endless loop of "ready" phases
     return getNextPhase(getNextPhase(phase))

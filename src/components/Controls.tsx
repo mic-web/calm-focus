@@ -5,9 +5,11 @@ import StartButton from './StartButton'
 import ResetButton from './ResetButton'
 import { AppContext } from '../context/context'
 import * as notification from '../services/notifications'
-import * as webWorkers from '../worker/web-workers'
 import { TimerAction } from '../context/timeReducer'
-import useNextPhase from '../selectors/useNextPhase'
+import { useNextPhase } from '../selectors/useNextPhase'
+import useKeyboardEvent from '../hooks/useKeyboardEvent'
+import { useMenuContext } from './Menu'
+import { isActivePhase } from '../services/timer'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onInteraction = (_event: React.SyntheticEvent) => {
@@ -18,12 +20,12 @@ const Controls: React.FC = React.memo(() => {
   const { state, dispatch } = React.useContext(AppContext)
   const { phase } = state.timer
   const nextPhase = useNextPhase()
+  const { open } = useMenuContext()
 
   const reset = React.useCallback(
     (event: React.SyntheticEvent) => {
       onInteraction(event)
-      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: Phases.WORK_READY } })
-      webWorkers.stopTimer()
+      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: Phases.WORK_READY, autoPlayStarted: false } })
     },
     [dispatch]
   )
@@ -31,11 +33,22 @@ const Controls: React.FC = React.memo(() => {
     (event: React.SyntheticEvent) => {
       onInteraction(event)
       notification.checkNotificationsEnabled()
-      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase } })
-      webWorkers.startTimer()
+      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase, autoPlayStarted: true } })
     },
     [dispatch, nextPhase]
   )
+  const toggle = React.useCallback(
+    (event: React.SyntheticEvent) => {
+      if (!isActivePhase(phase)) {
+        start(event)
+      } else {
+        reset(event)
+      }
+    },
+    [phase, start, reset]
+  )
+  useKeyboardEvent('keyup', ' ', toggle as any, !open)
+
   return <ControlComponent start={start} reset={reset} phase={phase} />
 })
 

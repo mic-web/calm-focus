@@ -7,13 +7,9 @@ function useKeyboardEvent(
   callback: (event: KeyboardEvent) => void,
   isEnabled: boolean
 ) {
-  const debouncedCallback = React.useMemo(
-    () =>
-      _.debounce(callback, 300, {
-        leading: true,
-        trailing: true,
-      }),
-    [callback]
+  const debouncedCallback = React.useRef(
+    // Debounce sync to outer value to avoid race conditions
+    _.throttle((fn: () => void) => fn(), 50, { leading: true, trailing: true })
   )
 
   React.useEffect(() => {
@@ -21,7 +17,7 @@ function useKeyboardEvent(
 
     const onEvent = (event: KeyboardEvent) => {
       if (match(event) && isEnabled) {
-        debouncedCallback(event)
+        debouncedCallback.current(() => callback(event))
       }
     }
     window.addEventListener(eventType, onEvent)

@@ -13,6 +13,7 @@ const initialState: AppState = {
     phaseDurations: phaseSeconds,
     passedSeconds: 0,
     autoPlay,
+    autoPlayStarted: false,
   },
 }
 

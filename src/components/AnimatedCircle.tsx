@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Phases } from '../types'
 import usePhase from '../selectors/usePhase'
 import useProgress from '../selectors/useProgress'
+import { isActivePhase } from '../services/timer'
 
 const useStyles = makeStyles(({ palette }) => ({
   root: {
@@ -13,8 +14,7 @@ const useStyles = makeStyles(({ palette }) => ({
       transform: 'rotate(-90deg)',
       transformOrigin: '50% 50%',
       stroke: palette.common.white,
-      opacity: (props: { phase: Phases }) =>
-        ((props.phase === Phases.REST_READY || props.phase === Phases.WORK_READY) && 0.5) || 1.0,
+      opacity: (props: { phase: Phases }) => (!isActivePhase(props.phase) && 0.5) || 1.0,
     },
   },
 }))

@@ -8,7 +8,6 @@ import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
 import theme from './style/theme'
 import GlobalStyle from './style/GlobalStyle'
-import { Phases } from './types'
 import Hint from './components/Hint'
 import { MenuContent, MenuOpenButton, MenuProvider, useMenuContext } from './components/Menu'
 import { MainContainer, TimeContainer, ControlContainer, HintContainer, AppContainer } from './components/Containers'
@@ -19,7 +18,7 @@ import SoundsConfig from './components/menu/SoundsConfig'
 import AutoPlayConfig from './components/menu/AutoPlayConfig'
 import InstallButton from './components/InstallButton'
 import Controls from './components/Controls'
-import { narrowEditablePhase } from './services/timer'
+import { useTimer, narrowEditablePhase, isActivePhase } from './services/timer'
 import { DurationsConfigShortcuts, WorkDurationConfig, RestDurationConfig } from './components/menu/DurationsConfig'
 import { useDecreaseMinutes, useIncreaseMinutes } from './selectors/useUpdateMinutes'
 import useKeyboardEvent from './hooks/useKeyboardEvent'
@@ -39,7 +38,8 @@ const AppWideBehavior: React.FC = () => {
   const closeMenu = React.useCallback(() => setOpen(false), [setOpen])
   useKeyboardEvent('keyup', 'Escape', closeMenu, open)
 
-  useLeaveConfirmation(phase === Phases.REST || phase === Phases.WORK)
+  useTimer()
+  useLeaveConfirmation(isActivePhase(phase))
 
   React.useEffect(() => {
     storage.savePhaseSeconds(phaseDurations)

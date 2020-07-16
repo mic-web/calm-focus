@@ -17,14 +17,13 @@ export const DEFAULT_REST_PHASE_SECONDS: Seconds = DEFAULT_REST_PHASE_MINUTES * 
 
 export const initPhaseSeconds = (): PhaseDurations => {
   const storedSeconds = storage.loadPhaseSeconds()
-  if (storedSeconds) {
-    return storedSeconds
-  }
   return {
     [Phases.WORK]: (storedSeconds && storedSeconds[Phases.WORK]) || DEFAULT_WORK_PHASE_SECONDS,
     [Phases.REST]: (storedSeconds && storedSeconds[Phases.REST]) || DEFAULT_REST_PHASE_SECONDS,
   }
 }
+
+export const isActivePhase = (phase: Phases): boolean => phase === Phases.REST || phase === Phases.WORK
 
 export const narrowEditablePhase = (phase: Phases): EditablePhases =>
   ({
@@ -59,7 +58,7 @@ export const useTimer = () => {
   const secondsLeft = useSecondsLeft()
 
   React.useEffect(() => {
-    if (secondsLeft === 0) {
+    if (secondsLeft <= 0) {
       notifyTimeOver(phase)
       dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase } })
     }
@@ -68,21 +67,19 @@ export const useTimer = () => {
     webWorkers.loadWorker()
   }, [])
   React.useEffect(() => {
-    if (phase === Phases.WORK || phase === Phases.REST) {
+    // On phase change, start or stop the timer
+    if (isActivePhase(phase)) {
       webWorkers.startTimer()
-    }
-    if (phase === Phases.WORK_READY || phase === Phases.REST_READY) {
+    } else {
       webWorkers.stopTimer()
     }
   }, [phase])
 
   React.useEffect(() => {
-    if (phase === Phases.WORK || phase === Phases.REST) {
-      webWorkers.startTimer()
-      const unsubscribe = webWorkers.subscribe((passedSeconds: Seconds) => {
+    if (isActivePhase(phase)) {
+      return webWorkers.subscribe((passedSeconds: Seconds) => {
         dispatch({ type: TimerAction.UpdatePassedSeconds, payload: { passedSeconds } })
       })
-      return unsubscribe
     }
     return undefined
   }, [phase, phaseDuration, dispatch])

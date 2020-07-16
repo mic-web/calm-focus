@@ -17,6 +17,7 @@ type TimerPayload = {
   }
   [TimerAction.UpdatePhase]: {
     phase: Phases
+    autoPlayStarted?: boolean
   }
   [TimerAction.UpdatePhaseSeconds]: {
     phase: Phases
@@ -45,6 +46,7 @@ export const timerReducer = (state: TimerState, action: TimerActions): TimerStat
         ...state,
         phase: action.payload.phase,
         passedSeconds: 0,
+        autoPlayStarted: action.payload.autoPlayStarted ?? state.autoPlayStarted,
       }
     case TimerAction.UpdatePhaseSeconds:
       return {
@@ -58,6 +60,7 @@ export const timerReducer = (state: TimerState, action: TimerActions): TimerStat
       return {
         ...state,
         autoPlay: !state.autoPlay,
+        autoPlayStarted: state.autoPlay && state.autoPlayStarted,
       }
     default:
       return state

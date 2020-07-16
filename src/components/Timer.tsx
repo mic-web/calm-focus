@@ -5,6 +5,7 @@ import { Phases, Seconds } from '../types'
 import useSecondsLeft from '../selectors/useSecondsLeft'
 import useMinutesLeft from '../selectors/useMinutesLeft'
 import usePhase from '../selectors/usePhase'
+import { isActivePhase } from '../services/timer'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,8 +17,7 @@ const useStyles = makeStyles(() => ({
     lineHeight: '1em',
     userSelect: 'none',
     alignSelf: 'center',
-    opacity: (props: { phase: Phases }) =>
-      ((props.phase === Phases.REST_READY || props.phase === Phases.WORK_READY) && 0.5) || 1.0,
+    opacity: (props: { phase: Phases }) => (!isActivePhase(props.phase) && 0.5) || 1.0,
     '& small': {
       fontSize: '0.35em',
       lineHeight: '1em',
