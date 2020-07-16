@@ -35,17 +35,17 @@ export const narrowEditablePhase = (phase: Phases): EditablePhases =>
     [Phases.WORK]: Phases.WORK,
   }[phase] as EditablePhases)
 
-const notifyTimeOver = (phase: Phases) => {
+const notifyTimeOver = (phase: Phases, durations: PhaseDurations) => {
   playTimeOver()
   if (phase === Phases.WORK) {
     showNotification('Done, take a break', {
-      body: `Take a break for ${DEFAULT_REST_PHASE_MINUTES} minutes`,
+      body: `Rest for ${durations[phase]} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
   } else if (phase === Phases.REST) {
     showNotification('Focus again', {
-      body: `Focus again for ${DEFAULT_WORK_PHASE_MINUTES} minutes`,
+      body: `Focus again for ${durations[phase]} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
@@ -61,10 +61,10 @@ export const useTimer = () => {
 
   React.useEffect(() => {
     if (secondsLeft <= 0) {
-      notifyTimeOver(phase)
+      notifyTimeOver(phase, state.timer.phaseDurations)
       dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase } })
     }
-  }, [dispatch, nextPhase, phase, secondsLeft])
+  }, [dispatch, nextPhase, phase, secondsLeft, state.timer.phaseDurations])
   React.useEffect(() => {
     webWorkers.loadWorker()
   }, [])
