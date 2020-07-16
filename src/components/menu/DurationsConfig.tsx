@@ -4,7 +4,7 @@ import { Box, SvgIcon, Typography } from '@material-ui/core'
 import TimelapseIcon from '@material-ui/icons/Timelapse'
 import RestoreIcon from '@material-ui/icons/Restore'
 import { DecreaseDuration, IncreaseDuration, PhaseDuration } from './DurationControls'
-import { Phases } from '../types'
+import { Phases } from '../../types'
 
 export const WorkDurationConfig: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ export const WorkDurationConfig: React.FC = () => {
           <TimelapseIcon />
         </SvgIcon>
         <Box ml={2}>
-          <Typography variant="h5">Focus Minutes</Typography>
+          <Typography variant="h5">Focus Duration</Typography>
         </Box>
       </Box>
       <Typography variant="body1" component="div">
@@ -37,7 +37,7 @@ export const RestDurationConfig: React.FC = () => (
         <RestoreIcon />
       </SvgIcon>
       <Box ml={2}>
-        <Typography variant="h5">Rest Minutes</Typography>
+        <Typography variant="h5">Rest Duration</Typography>
       </Box>
     </Box>
     <Typography variant="body1" component="div">

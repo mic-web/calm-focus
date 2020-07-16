@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Box, SvgIcon, Typography, Switch } from '@material-ui/core'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
-import * as sounds from '../services/sounds'
+import * as sounds from '../../services/sounds'
 
 type Props = {}
 

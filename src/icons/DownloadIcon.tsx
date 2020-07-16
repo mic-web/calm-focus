@@ -7,7 +7,7 @@ function Icon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      viewBox="0 0 24 24"
+      viewBox="0 -3 24 24"
       stroke="currentColor"
     >
       <path d="M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3" />

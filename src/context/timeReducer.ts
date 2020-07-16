@@ -4,8 +4,8 @@ export enum TimerAction {
   UpdatePassedSeconds = 'UPDATE_PASSED_SECONDS',
   Reset = 'RESET_TIMER',
   UpdatePhase = 'UPDATE_PHASE',
-  LoadData = 'LOAD_DATA',
   UpdatePhaseSeconds = 'UPDATE_PHASE_SECONDS',
+  ToggleAutoPlay = 'TOGGLE_AUTO_PLAY',
 }
 
 type TimerPayload = {
@@ -22,6 +22,7 @@ type TimerPayload = {
     phase: Phases
     seconds: Seconds
   }
+  [TimerAction.ToggleAutoPlay]: undefined
 }
 
 export type TimerActions = ActionMap<TimerPayload>[keyof ActionMap<TimerPayload>]
@@ -52,6 +53,11 @@ export const timerReducer = (state: TimerState, action: TimerActions): TimerStat
           ...state.phaseDurations,
           [action.payload.phase]: action.payload.seconds,
         },
+      }
+    case TimerAction.ToggleAutoPlay:
+      return {
+        ...state,
+        autoPlay: !state.autoPlay,
       }
     default:
       return state

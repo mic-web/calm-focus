@@ -19,6 +19,7 @@ export type TimerState = {
   passedSeconds: Seconds
   phase: Phases
   phaseDurations: PhaseDurations
+  autoPlay: boolean
 }
 
 export type AppState = {

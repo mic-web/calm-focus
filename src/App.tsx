@@ -14,12 +14,13 @@ import { MenuContent, MenuOpenButton, MenuProvider, useMenuContext } from './com
 import { MainContainer, TimeContainer, ControlContainer, HintContainer, AppContainer } from './components/Containers'
 
 import useLeaveConfirmation from './hooks/useLeaveConfirmation'
-import NotificationsConfig from './components/NotificationsConfig'
-import SoundsConfig from './components/SoundsConfig'
+import NotificationsConfig from './components/menu/NotificationsConfig'
+import SoundsConfig from './components/menu/SoundsConfig'
+import AutoPlayConfig from './components/menu/AutoPlayConfig'
 import InstallButton from './components/InstallButton'
 import Controls from './components/Controls'
-import { useTimer, narrowEditablePhase } from './services/timer'
-import { DurationsConfigShortcuts, WorkDurationConfig, RestDurationConfig } from './components/DurationsConfig'
+import { narrowEditablePhase } from './services/timer'
+import { DurationsConfigShortcuts, WorkDurationConfig, RestDurationConfig } from './components/menu/DurationsConfig'
 import { useDecreaseMinutes, useIncreaseMinutes } from './selectors/useUpdateMinutes'
 import useKeyboardEvent from './hooks/useKeyboardEvent'
 import * as storage from './services/storage'
@@ -30,15 +31,14 @@ const AppWideBehavior: React.FC = () => {
   const { phaseDurations, phase } = state.timer
   const { open, setOpen } = useMenuContext()
 
-  const decrease = useDecreaseMinutes(narrowEditablePhase(phase))
-  const increase = useIncreaseMinutes(narrowEditablePhase(phase))
+  const decrease = useDecreaseMinutes(narrowEditablePhase(phase), true)
+  const increase = useIncreaseMinutes(narrowEditablePhase(phase), true)
   useKeyboardEvent('keydown', 'ArrowUp', increase, !open)
   useKeyboardEvent('keydown', 'ArrowDown', decrease, !open)
 
   const closeMenu = React.useCallback(() => setOpen(false), [setOpen])
   useKeyboardEvent('keyup', 'Escape', closeMenu, open)
 
-  useTimer()
   useLeaveConfirmation(phase === Phases.REST || phase === Phases.WORK)
 
   React.useEffect(() => {
@@ -58,6 +58,9 @@ const Menu = () => (
     </Box>
     <Box mb={6}>
       <DurationsConfigShortcuts />
+    </Box>
+    <Box mb={4}>
+      <AutoPlayConfig />
     </Box>
     <Box mb={6}>
       <SoundsConfig />

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Box, SvgIcon, Typography, Switch } from '@material-ui/core'
 import NotificationsIcon from '@material-ui/icons/Notifications'
-import * as notifications from '../services/notifications'
+import * as notifications from '../../services/notifications'
 
 type Props = {}
 

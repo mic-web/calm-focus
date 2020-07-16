@@ -24,15 +24,24 @@ const msgMemo = (() => {
 
 export const loadWorker = () => new Worker('/timer.worker.js')
 
+export const stopTimer = () => {
+  if (ww) {
+    ww.terminate()
+    ww = null
+  }
+  msgMemo.reset()
+}
+
 export const startTimer = () => {
   if (isSupported()) {
-    if (!ww) {
-      ww = loadWorker() // starts counting seconds immediately
-      ww.onmessage = (event) => {
-        if (msgMemo.get() !== event.data) {
-          msgMemo.set(event.data)
-          subs.forEach((sub) => sub(event.data))
-        }
+    if (ww) {
+      stopTimer()
+    }
+    ww = loadWorker() // starts counting seconds immediately
+    ww.onmessage = (event) => {
+      if (msgMemo.get() !== event.data) {
+        msgMemo.set(event.data)
+        subs.forEach((sub) => sub(event.data))
       }
     }
   } else {
@@ -50,12 +59,4 @@ export const subscribe = (subscriber: Subscriber): (() => void) => {
     const idx = subs.findIndex((sub) => sub === subscriber)
     subs.splice(idx, 1)
   }
-}
-
-export const stopTimer = () => {
-  if (ww) {
-    ww.terminate()
-    ww = null
-  }
-  msgMemo.reset()
 }
