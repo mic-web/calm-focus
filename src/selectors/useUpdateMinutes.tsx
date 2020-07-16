@@ -6,9 +6,8 @@ import usePhaseDuration from './usePhaseDuration'
 
 const minToSec = (minutes: Minutes): Seconds => minutes * 60
 
-const secToMin = (seconds: Seconds): Minutes => {
-  const restSeconds = seconds % 60
-  return seconds / 60 - restSeconds
+const secondsToMinutes = (seconds: Seconds): Minutes => {
+  return seconds / 60
 }
 
 const useUpdateMinutes = (phase: EditablePhases) => {
@@ -29,24 +28,36 @@ const useUpdateMinutes = (phase: EditablePhases) => {
   return update
 }
 
-export const useDecreaseMinutes = (phase: EditablePhases) => {
-  const duration = usePhaseDuration(phase)
+export const useDecreaseMinutes = (phase: EditablePhases, enableQuarterSteps = false) => {
+  const seconds = usePhaseDuration(phase)
   const update = useUpdateMinutes(phase)
-  const mayDecrease = secToMin(duration) > 1
   const decrease = React.useCallback(() => {
-    if (mayDecrease) {
-      update(secToMin(duration) - 1)
+    const minutes = secondsToMinutes(seconds)
+    if (enableQuarterSteps && minutes < 1.25) {
+      // Allow finer adjustment - e.g. for HIIT training
+      if (minutes > 0.25) {
+        update(minutes - 0.25)
+      }
+    } else if (minutes >= 1.25) {
+      // Use 1.25 to avoid race conditions when configuring while time is runing
+      update(minutes - 1)
     }
-  }, [duration, update, mayDecrease])
+  }, [seconds, update, enableQuarterSteps])
   return decrease
 }
 
-export const useIncreaseMinutes = (phase: EditablePhases) => {
-  const duration = usePhaseDuration(phase)
+export const useIncreaseMinutes = (phase: EditablePhases, enableQuarterSteps = false) => {
+  const seconds = usePhaseDuration(phase)
   const update = useUpdateMinutes(phase)
   const increase = React.useCallback(() => {
-    update(secToMin(duration) + 1)
-  }, [duration, update])
+    const minutes = secondsToMinutes(seconds)
+    if (enableQuarterSteps && minutes < 1) {
+      // Allow finer adjustment - e.g. for HIIT training
+      update(minutes + 0.25)
+    } else {
+      update(secondsToMinutes(seconds) + 1)
+    }
+  }, [seconds, update, enableQuarterSteps])
   return increase
 }
 
