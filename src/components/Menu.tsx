@@ -80,7 +80,7 @@ const MenuCloseButton: React.FC = () => {
   const { setOpen } = useMenuContext()
   const close = () => setOpen(false)
   return (
-    <IconButton className={css.close} onClick={close} title="Close" color="inherit">
+    <IconButton className={css.close} onClick={close} title="Close (Shortcut: Escape)" color="inherit">
       <SvgIcon>
         <CloseIcon />
       </SvgIcon>
@@ -96,7 +96,7 @@ export const MenuOpenButton: React.FC = () => {
   }
   return (
     <Box display="flex" position="absolute" bottom="5px" right="0px">
-      <IconButton onClick={() => setOpen(true)} title="Menu">
+      <IconButton onClick={() => setOpen(true)} title="Menu (Shortcut: m)">
         <SvgIcon className={css.icon}>
           <MenuIcon />
         </SvgIcon>

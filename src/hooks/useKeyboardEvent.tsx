@@ -5,7 +5,7 @@ function useKeyboardEvent(
   eventType: 'keydown' | 'keyup',
   key: string,
   callback: (event: KeyboardEvent) => void,
-  isEnabled: boolean
+  isEnabled = true
 ) {
   const debouncedCallback = React.useRef(
     // Debounce sync to outer value to avoid race conditions

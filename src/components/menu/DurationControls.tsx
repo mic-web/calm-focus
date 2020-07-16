@@ -2,7 +2,7 @@ import React from 'react'
 import { IconButton, SvgIcon, Box } from '@material-ui/core'
 import RemoveIcon from '@material-ui/icons/Remove'
 import AddIcon from '@material-ui/icons/Add'
-import { Phases, EditablePhases } from '../../types'
+import { Phases, EditablePhases, Minutes, Seconds } from '../../types'
 import NumberInput from '../NumberInput'
 import useUpdateMinutes, { useIncreaseMinutes, useDecreaseMinutes } from '../../selectors/useUpdateMinutes'
 import usePhaseDuration from '../../selectors/usePhaseDuration'
@@ -23,23 +23,25 @@ export const IncreaseDuration: React.FC<{ phase: EditablePhases }> = (props) => 
 export const PhaseDuration: React.FC<{
   phase: EditablePhases
 }> = (props) => {
-  const min = 0.2
   const secondsDuration = usePhaseDuration(props.phase)
-  const minutesDuration = Math.floor(secondsDuration / 60)
+  const minutesDuration: Minutes = secondsDuration / 60
   const update = useUpdateMinutes(props.phase)
-  const onChange = React.useCallback(
-    (number: number) => {
-      if (number < min) {
-        update(min)
+  const onBlur = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const parsed = Number.parseFloat(e.target.value)
+      if (parsed < 0.25) {
+        update(0.25)
       } else {
-        update(number)
+        update(parsed)
       }
     },
     [update]
   )
+
   return (
     <Box width={50}>
-      <NumberInput outerValue={minutesDuration} min={min} onChange={onChange} />
+      {/* Use 0 as min input, as with 0.25, the stepping with arrow keys is confusing */}
+      <NumberInput outerValue={minutesDuration} min={0} onBlur={onBlur} precision={2} />
     </Box>
   )
 }

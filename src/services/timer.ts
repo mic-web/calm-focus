@@ -23,6 +23,8 @@ export const initPhaseSeconds = (): PhaseDurations => {
   }
 }
 
+export const roundToQuarter = (minutes: Minutes) => Math.round(minutes * 4) / 4
+
 export const isActivePhase = (phase: Phases): boolean => phase === Phases.REST || phase === Phases.WORK
 
 export const narrowEditablePhase = (phase: Phases): EditablePhases =>
