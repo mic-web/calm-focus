@@ -1,19 +1,20 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 
 type State = {
   hasError: boolean
+  errorDescription: string
 }
 
 class ErrorBoundary extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props)
-    this.state = { hasError: false }
+    this.state = { hasError: false, errorDescription: '' }
   }
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(error: Error) {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true }
+    return { hasError: true, errorDescription: error.message }
   }
 
   componentDidCatch(error: Error, errorInfo: unknown) {
@@ -27,6 +28,9 @@ class ErrorBoundary extends React.Component<{}, State> {
         <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" flexGrow={1}>
           <h1>Something went wrong</h1>
           <h3>Please try again</h3>
+          <Box mt="auto" mb={2}>
+            <Typography variant="body2">{this.state.errorDescription}</Typography>
+          </Box>
         </Box>
       )
     }
