@@ -11,11 +11,10 @@ const useStyles = makeStyles(({ palette }) => ({
     flex: 1,
     height: '100%',
     width: '100%',
+    transform: 'rotate(-90deg)', // translate for Safari to stay in center when zooming
     '& circle': {
       fill: 'none',
       transition: 'stroke-dashoffset 0.35s',
-      transform: 'rotate(-90deg)',
-      transformOrigin: '50% 50%',
       stroke: palette.common.white,
       opacity: (props: { phase: Phases }) => (!isActivePhase(props.phase) && 0.5) || 1.0,
     },
