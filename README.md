@@ -1,56 +1,87 @@
 # Description
 
-"Calm Focus" is a simple timer for improving focus on any tasks.
-The concept is partially based on the principles of the well-known [Pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique)
+![Demo picture](docs/icon-50x50.png)
 
-But the use cases are not limited working. The web-app can be useful for:
-
-- Focus on work / study
-- Workout - especially useful for HIIT training (when activating the "AutoPlay" option)
-- Cooking
-- Meditation
-
-The design focuses on avoiding distraction until time is over (by default after 25 minutes).
-
-# Features
+"Calm Focus" is a simple and clean timer which will improve your focus on any task.
 
 ![Demo picture](docs/demo-initial-v3.png)
-![Demo picture](docs/demo-running-v3.png)
+
+The concept is partially based on the principles of the well-known [Pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique):
+
+1. Focus (~25 min.)
+2. Rest (~5 min.)
+3. Repeat 1.-2. about four times. The fourth rest phase shall be longer.
+4. Continue with 1.
+
+Here's a short list that summarizes the features and use cases:
+
+- Improve your focus and plan rest times
+- Clean design avoids distraction until time is over
+  - Will enable you to continue longer focus periods when you switch notifications off
+  - Good to use in multi-monitor setup - e.g. use laptop screen for this timer.
+- Configurable: many options to fit individual requirements
+  - Work focus timer
+  - HIIT workout timer (especially when auto-continue is activated)
+  - Cooking timer
+  - Meditation timer (sound will notify when time is over)
+- Reactive: adjust configurations at anytime - e.g. increase focus duration even when time is already running
+- Remembers your configurations (no login required, stored locally in your browser)
+- Keyboard shortcuts for quicker configuration (Hover buttons to see which are available)
+- Platform-independent web-app
+- Installation possible on devices that support PWAs ([Progressive Web Apps](https://en.wikipedia.org/wiki/Progressive_web_application"))
+- Browser notifications (visual and acoustic) when time is over
+- Fast reload and offline usage, due to caching as PWA
+
+# Screenshot
+
+## Focus
+
+![Demo picture](docs/demo-focus-v3.png)
+
+## Rest
+
+![Demo picture](docs/demo-rest-v3.png)
+
+## Configure to your needs
+
 ![Demo picture](docs/demo-menu-v3.png)
 
-- Notifications: get notified when time is over (needs browser permission)
-- Sounds: hear a sound when time is over
-- Installation as PWA (only possible when PWAs are supported - so mostly on Android devices and Google Chrome)
+# Side notes
 
-# Technologies used
+I used this repository mainly for learning purposes - there are already many timers available. The reasons I still wanted to create my own where are that this type of project is small enough to be able to refactor it quickly, but complex enough to try out multiple programming patterns and technologies (e.g. React Context, Web Workers, WebAssembly, Service Worker, etc.). Furthermore it's quickly testable on multiple devices and browsers, so cross-browser/-device pecularities can be discovered quickly.
 
-I used this repository mainly for learning purposes. There are already some pomodoro timer projects.
-The reason I still wanted to create my own was that this type of project is small enough to be able to refactor it quickly, but complex enough to try out multiple programming patterns and technologies (e.g. Web Workers, WebAssembly, Service Worker, etc.) and check cross-device / cross-browser compatiblity.
+Some technical aspects that were touched with this project:
 
-As I'm using the pomodoro technique
-I'm using the pomodoro technique on my own which helps me with discovering some use case.
-in comparison to a one-time-built-and-never-used project.
-
-My plan is to try out further libraries / tools / code patterns within this repository in the future.
-
-So here are the things I tried out with this project:
-
-- Service Worker, Progressive Web Application (for installation and offline/caching capability)
-- Web Worker for calculating timing:
-  - Reasoning: setInterval is not reliable enough, thus a 25 minutes timer can result in e.g. a 25 minutes + x seconds timer. It can also happen that a tab gets completely inactive and thus the timer gets paused for quite some time. To fix this I used a Web Worker, which is not affected by this pausing. And just out of interest, I decided to try out running a WebAssembly built with Rust inside this WebWorker. Works really well
+- React + almost all React Hooks, Typescript, Material UI, CSS-in-JS
+  - tried out styled-components first, but switched to Material UI
+- Progressive Web Application, Service Workers (for installation and offline/caching capability)
 - Browser notification API
-- Cross-browser compatiblity, also for mobile
-- React + almost all React Hooks: useContext, useReducer, useCallback etc.
-- Typescript
-- Material UI, CSS-in-JS (was trying out styled-components first, but switched to Material UI)
+- Cross-browser/-device compatiblity
+- Web Workers (for calculating passed seconds)
 - Local Storage
 - CI: Host with Netlify, deploy on Github commits on master
 - Programming patterns
+  - React useContext + useReducer as an alternative to Redux
   - Compound components
   - Custom Hooks
   - Observer pattern
-  - global state vs. local state
-- Web Workers and WebAssembly with Rust
-  - I wanted to see if the setInterval could be implemented with WebAssembly/Rust well.
-    Basically it was possible and cool to try out, but there was no real benefit of it, just more loading time.
-    That's why I removed it - for reference how to integrate WebAssembly+Rust, see commit #bdadafe.
+- WebAssembly with Rust
+  - I wanted to see if the setInterval could be implemented with WebAssembly/Rust well. It was possible and nice to try out, but there was no real benefit of it within this specific web app. That's why I removed it - for reference on how to integrate WebAssembly+Rust, see commit #bdadafe.
+
+# Compatibility
+
+I tested it on multiple devices and screens. Following browsers are supported:
+
+- Firefox
+- Chrome
+- Safari
+
+This webapp works basically also on mobile, but not when the mobile OS decides to pause it. This happens when the screen gets locked, or on iOS also when the browser is not opened. The app will only get privileges for working in background when installed as PWA (not available on iOS).
+On most Android devices, the timer should continue to work as long as the screen won't get locked.
+
+# Roadmap
+
+I might add some more options in the future:
+
+- When time is over, send an HTTP request to an endpoint of your choice (to integrate with other devices. Proxy on user side will be required to solve CORS issues)
+- Configurable phases (e.g. a longer Rest phase)
