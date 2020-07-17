@@ -7,6 +7,10 @@ export default (): Seconds => {
   const { state } = React.useContext(AppContext)
   const { passedSeconds } = state.timer
   const phaseDuration = usePhaseDuration()
-
-  return phaseDuration - passedSeconds
+  const secondsLeft = phaseDuration - passedSeconds
+  if (secondsLeft < 0) {
+    // Ensure that temporary negative values won't be displayed
+    return 0
+  }
+  return secondsLeft
 }
