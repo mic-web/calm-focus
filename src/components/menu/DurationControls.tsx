@@ -51,7 +51,12 @@ const DurationControls: React.FC<Props> = (props) => {
   const decrease = useDecreaseMinutes(props.phase)
   if (props.action === 'increase') {
     return (
-      <IconButton onClick={increase} title="Increase" color="primary" size="small">
+      <IconButton
+        onClick={increase}
+        color="primary"
+        size="small"
+        title="Increase (Shortcut: down key when menu is closed)"
+      >
         <SvgIcon>
           <AddIcon />
         </SvgIcon>
@@ -59,7 +64,12 @@ const DurationControls: React.FC<Props> = (props) => {
     )
   }
   return (
-    <IconButton onClick={decrease} title="Decrease" color="primary" size="small">
+    <IconButton
+      onClick={decrease}
+      color="primary"
+      size="small"
+      title="Decrease (Shortcut: down key when menu is closed)"
+    >
       <SvgIcon>
         <RemoveIcon />
       </SvgIcon>

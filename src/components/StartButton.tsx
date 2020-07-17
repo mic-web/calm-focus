@@ -17,7 +17,7 @@ const StartButton: React.FC<Props> = (props) => {
   const { start } = props
 
   return (
-    <IconButton onClick={start} title="Start" color="inherit" className={css.icon}>
+    <IconButton onClick={start} title="Start (Shortcut: Space)" color="inherit" className={css.icon}>
       <SvgIcon>
         <PlayIcon />
       </SvgIcon>

@@ -6,9 +6,24 @@ import RestoreIcon from '@material-ui/icons/Restore'
 import { DecreaseDuration, IncreaseDuration, PhaseDuration } from './DurationControls'
 import { Phases } from '../../types'
 
+const isMobile = (): boolean =>
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+export const DurationsConfigShortcuts: React.FC = () => {
+  if (isMobile()) {
+    return null
+  }
+  return (
+    <Typography variant="body1">
+      <em>Shortcut:</em>
+      &nbsp; When menu is closed, press up / down on your keyboard.
+    </Typography>
+  )
+}
+
 export const WorkDurationConfig: React.FC = () => {
   return (
-    <>
+    <Box display="flex" flexDirection="column">
       <Box display="flex" alignItems="center" mb={2}>
         <SvgIcon>
           <TimelapseIcon />
@@ -24,9 +39,13 @@ export const WorkDurationConfig: React.FC = () => {
             <PhaseDuration phase={Phases.WORK} />
           </Box>
           <IncreaseDuration phase={Phases.WORK} />
+          <Box ml={1}>minutes</Box>
         </Box>
       </Typography>
-    </>
+      <Box mt={5}>
+        <DurationsConfigShortcuts />
+      </Box>
+    </Box>
   )
 }
 
@@ -47,22 +66,8 @@ export const RestDurationConfig: React.FC = () => (
           <PhaseDuration phase={Phases.REST} />
         </Box>
         <IncreaseDuration phase={Phases.REST} />
+        <Box ml={1}>minutes</Box>
       </Box>
     </Typography>
   </>
 )
-
-const isMobile = (): boolean =>
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-
-export const DurationsConfigShortcuts: React.FC = () => {
-  if (isMobile()) {
-    return null
-  }
-  return (
-    <Typography variant="body1">
-      <em>ProTip:</em>
-      &nbsp; Shortcut when menu is closed: Press up / down arrows on your keyboard.
-    </Typography>
-  )
-}

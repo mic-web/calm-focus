@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 const ResetButton: React.FC<ResetButtonProps> = ({ reset }) => {
   const css = useStyles()
   return (
-    <IconButton onClick={reset} title="Reset" className={css.icon}>
+    <IconButton onClick={reset} title="Reset (Shortcut: Space)" className={css.icon}>
       <SvgIcon>
         <ResetIcon />
       </SvgIcon>

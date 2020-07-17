@@ -19,7 +19,7 @@ const AutoRenewConfig: React.FC = () => {
       }),
     [dispatch]
   )
-  useKeyboardEvent('keyup', 'p', toggle)
+  useKeyboardEvent('keyup', 'c', toggle)
 
   React.useEffect(() => {
     storage.saveAutoPlay(isEnabled)
@@ -32,14 +32,14 @@ const AutoRenewConfig: React.FC = () => {
             <Autorenew />
           </SvgIcon>
           <Box ml={2}>
-            <Typography variant="h5">Auto-Play</Typography>
+            <Typography variant="h5">Auto-Continue</Typography>
           </Box>
         </Box>
         <Box mb={2}>
           <Typography variant="body1">When time is over, the next phase will be started directly.</Typography>
         </Box>
         <Box display="flex" alignItems="center">
-          <Checkbox size="small" checked={isEnabled} onChange={toggle} color="primary" title="Shortcut: p" />
+          <Checkbox size="small" checked={isEnabled} onChange={toggle} color="primary" title="Shortcut: c" />
           <Box ml={2}>
             <Typography variant="body1">{(isEnabled && 'Enabled') || 'Disabled'}</Typography>
           </Box>

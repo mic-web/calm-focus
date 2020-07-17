@@ -34,8 +34,10 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     paddingTop: spacing(10),
     overflowY: 'auto',
     display: 'flex',
-    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    marginBottom: 15,
   },
   close: {
     position: 'absolute',

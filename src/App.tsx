@@ -2,7 +2,7 @@ import React from 'react'
 import { ThemeProvider, CssBaseline, Box } from '@material-ui/core'
 
 import { AppProvider, AppContext } from './context/context'
-import PictureCredits from './components/PictureCredits'
+import PictureCredits from './components/Credits'
 import BackgroundOverlay from './components/BackgroundOverlay'
 import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
@@ -17,9 +17,9 @@ import NotificationsConfig from './components/menu/NotificationsConfig'
 import SoundsConfig from './components/menu/SoundsConfig'
 import AutoPlayConfig from './components/menu/AutoPlayConfig'
 import InstallButton from './components/InstallButton'
-import Controls from './components/Controls'
+import Controls from './components/PlayControls'
 import { useTimer, narrowEditablePhase, isActivePhase } from './services/timer'
-import { DurationsConfigShortcuts, WorkDurationConfig, RestDurationConfig } from './components/menu/DurationsConfig'
+import { WorkDurationConfig, RestDurationConfig } from './components/menu/DurationsConfig'
 import { useDecreaseMinutes, useIncreaseMinutes } from './selectors/useUpdateMinutes'
 import useKeyboardEvent from './hooks/useKeyboardEvent'
 import * as storage from './services/storage'
@@ -50,34 +50,38 @@ const AppWideBehavior: React.FC = () => {
   return null
 }
 
-const Menu = () => (
-  <>
-    <Box mb={6}>
-      <WorkDurationConfig />
+const Menu = () => {
+  const MenuEntry: React.FC = ({ children }) => (
+    <Box mb={10} flexBasis="45%" minWidth="230px">
+      {children}
     </Box>
-    <Box mb={4}>
-      <RestDurationConfig />
-    </Box>
-    <Box mb={6}>
-      <DurationsConfigShortcuts />
-    </Box>
-    <Box mb={4}>
-      <AutoPlayConfig />
-    </Box>
-    <Box mb={6}>
-      <SoundsConfig />
-    </Box>
-    <Box mb={6}>
-      <NotificationsConfig />
-    </Box>
-    <Box mb={6}>
-      <InstallButton />
-    </Box>
-    <Box mt="auto">
-      <PictureCredits />
-    </Box>
-  </>
-)
+  )
+  return (
+    <>
+      <MenuEntry>
+        <WorkDurationConfig />
+      </MenuEntry>
+      <MenuEntry>
+        <RestDurationConfig />
+      </MenuEntry>
+      <MenuEntry>
+        <AutoPlayConfig />
+      </MenuEntry>
+      <MenuEntry>
+        <SoundsConfig />
+      </MenuEntry>
+      <MenuEntry>
+        <NotificationsConfig />
+      </MenuEntry>
+      <MenuEntry>
+        <InstallButton />
+      </MenuEntry>
+      <Box mt="auto" flexBasis="100%" justifyContent="center">
+        <PictureCredits />
+      </Box>
+    </>
+  )
+}
 
 const ThemedApp = () => {
   return (
