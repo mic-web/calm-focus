@@ -22,7 +22,7 @@ const msgMemo = (() => {
   }
 })()
 
-export const loadWorker = () => new Worker('/timer.worker.js')
+export const loadWorker = () => new Worker('timer.worker.js')
 
 export const stopTimer = () => {
   if (ww) {

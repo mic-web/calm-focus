@@ -4,6 +4,8 @@
 
 "Calm Focus" is a simple and clean timer which will improve your focus on any task.
 
+Try it out: [Calm Focus](https://https://mic-web.github.io/calm-focus/):
+
 ![Demo picture](docs/demo-initial-v3.png)
 
 The concept is partially based on the principles of the well-known [Pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique):
