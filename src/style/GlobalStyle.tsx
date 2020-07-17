@@ -16,7 +16,7 @@ const GlobalCss = withStyles({
       display: 'flex',
       flexDirection: 'column',
       touchAction: 'none',
-      backgroundColor: '#50646a',
+      backgroundColor: '#233236',
       background: `url(${lakeImage})`,
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',

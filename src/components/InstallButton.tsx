@@ -56,8 +56,8 @@ const InstallButton: React.FC<InstallButtonProps> = () => {
         ) : (
           <>
             <Typography variant="body1">
-              This device or browser does not support the installation of the application, because PWAs are not
-              supported. You can find an explanation&nbsp;
+              Installation not possible. There can be two reasons: either the app is already installed, or the device or
+              browser does not support installation of PWAs. You can find more infos about PWAs&nbsp;
               <PWALink />
             </Typography>
           </>
