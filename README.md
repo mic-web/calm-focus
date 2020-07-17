@@ -4,7 +4,7 @@
 
 "Calm Focus" is a simple and clean timer which will improve your focus on any task.
 
-Try it out: [Calm Focus](https://mic-web.github.io/calm-focus/)
+Try it out: [Calm Focus](https://ecstatic-noether-623282.netlify.app/)
 
 ![Demo picture](docs/demo-initial-v3.png)
 
