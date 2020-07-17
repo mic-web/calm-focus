@@ -66,7 +66,10 @@ const appConfig = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      // Exclude .git folder which is used for publishing to github pages
+      cleanOnceBeforeBuildPatterns: [path.resolve(distDir, '*'), `!${path.resolve(distDir, '.git')}`],
+    }),
     new HtmlWebpackPlugin({
       template: './index.html',
       favicon: path.resolve(__dirname, paths.srcDir, 'favicon.ico'),
