@@ -11,7 +11,7 @@ if (isSwSupported()) {
   window.addEventListener('load', () => {
     // eslint-disable-next-line compat/compat
     navigator.serviceWorker
-      .register('/service-worker.js')
+      .register('service-worker.js')
       .then((registration: ServiceWorkerRegistration) => {
         registeredSW = registration
         console.log('Service Worker registered: ', registeredSW)
