@@ -36,14 +36,12 @@
     "@types/node": "^13.13.5",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "@types/styled-components": "^5.1.0",
     "@types/webpack-env": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
     "autoprefixer": "^9.7.6",
     "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
-    "babel-plugin-styled-components": "^1.10.7",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.5.3",
@@ -83,7 +81,6 @@
     "lodash": "^4.17.19",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "styled-components": "^5.1.0",
     "styled-normalize": "^8.0.7"
   },
   "husky": {
