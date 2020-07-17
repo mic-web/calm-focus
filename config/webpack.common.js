@@ -89,6 +89,7 @@ const appConfig = {
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
+      exclude: [/.*\.DS_Store/],
     }),
   ],
   optimization: {
