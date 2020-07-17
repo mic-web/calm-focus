@@ -40,7 +40,7 @@ export const browserNotificationGranted = () => granted
 
 export const showNotification = (title: string, options: NotificationOptions) => {
   if (readIsEnabled()) {
-    if (serviceWorker.isSwSupported() && serviceWorker.isReady()) {
+    if (serviceWorker.isSwSupported() && serviceWorker.isReady() && serviceWorker.showNotification) {
       serviceWorker.showNotification(title, options)
     } else if (browserNotificationSupported() && browserNotificationGranted()) {
       const notification = new window.Notification(title, options)

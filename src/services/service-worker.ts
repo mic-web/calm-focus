@@ -79,7 +79,7 @@ window.addEventListener('appinstalled', (evt) => {
 })
 
 export const showNotification = (title: string, options?: NotificationOptions) => {
-  if (registeredSW) {
+  if (registeredSW && registeredSW.showNotification) {
     registeredSW.showNotification(title, options)
   }
 }
