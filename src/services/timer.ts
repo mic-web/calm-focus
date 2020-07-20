@@ -37,14 +37,14 @@ export const narrowEditablePhase = (phase: Phases): EditablePhases =>
 
 const notifyTimeOver = (phase: Phases, durations: PhaseDurations) => {
   playTimeOver()
-  if (phase === Phases.WORK) {
+  if (phase === Phases.REST) {
     const minutes: Minutes = durations[phase] / 60
     serviceWorker.showNotification('Done, take a break', {
       body: `Rest for ${minutes} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
-  } else if (phase === Phases.REST) {
+  } else if (phase === Phases.WORK) {
     const minutes: Minutes = durations[phase] / 60
     serviceWorker.showNotification('Focus again', {
       body: `Focus again for ${minutes} minutes`,
