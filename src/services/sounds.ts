@@ -18,14 +18,11 @@ let initialized = false
 export const initOnInteraction = () => {
   if (!initialized) {
     initialized = true
-    const promise = audio.play()
-    if (promise) {
-      promise
-        .then(() => {
-          audio.pause()
-        })
-        // eslint-disable-next-line no-console
-        .catch((error) => console.error(error))
+    audio.play()
+    try {
+      audio.pause()
+    } catch (e) {
+      // Error is expected here - as play will not stop that quickly
     }
   }
 }
