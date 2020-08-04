@@ -35,17 +35,17 @@ export const narrowEditablePhase = (phase: Phases): EditablePhases =>
     [Phases.WORK]: Phases.WORK,
   }[phase] as EditablePhases)
 
-const notifyTimeOver = (phase: Phases, durations: PhaseDurations) => {
+const notifyTimeOver = (nextPhase: Phases, durations: PhaseDurations) => {
   playTimeOver()
-  if (phase === Phases.REST) {
-    const minutes: Minutes = durations[phase] / 60
+  if (nextPhase === Phases.REST) {
+    const minutes: Minutes = durations[nextPhase] / 60
     serviceWorker.showNotification('Done, take a break', {
       body: `Rest for ${minutes} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
-  } else if (phase === Phases.WORK) {
-    const minutes: Minutes = durations[phase] / 60
+  } else if (nextPhase === Phases.WORK) {
+    const minutes: Minutes = durations[nextPhase] / 60
     serviceWorker.showNotification('Focus again', {
       body: `Focus again for ${minutes} minutes`,
       icon: 'images/icon-192.png',
@@ -63,7 +63,7 @@ export const useTimer = () => {
 
   React.useEffect(() => {
     if (secondsLeft <= 0) {
-      notifyTimeOver(phase, state.timer.phaseDurations)
+      notifyTimeOver(nextPhase, state.timer.phaseDurations)
       dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase } })
     }
   }, [dispatch, nextPhase, phase, secondsLeft, state.timer.phaseDurations])
