@@ -68,7 +68,7 @@ Some technical aspects that were touched with this project:
   - Custom Hooks
   - Observer pattern
 - WebAssembly with Rust
-  - I wanted to see if the setInterval could be implemented with WebAssembly/Rust well. It was possible and nice to try out, but there was no real benefit of it within this specific web app. That's why I removed it - for reference on how to integrate WebAssembly+Rust, see commit #bdadafe.
+  - I wanted to see if the setInterval could be implemented with WebAssembly/Rust well. It was possible and nice to try out, but there was no real benefit of it within this specific web app. That's why I removed it - for reference on how to integrate WebAssembly+Rust, see commit ([#bdadafe](https://github.com/mic-web/calm-focus/commit/bdadafef5d70b2a9727575e31a260b4f3d70c0f1)).
 
 # Compatibility
 
