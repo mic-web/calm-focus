@@ -37,20 +37,23 @@ export const narrowEditablePhase = (phase: Phases): EditablePhases =>
 
 const notifyTimeOver = (nextPhase: Phases, durations: PhaseDurations) => {
   playTimeOver()
-  if (nextPhase === Phases.REST) {
-    const minutes: Minutes = durations[nextPhase] / 60
+  const nextMainPhase = narrowEditablePhase(nextPhase)
+  if (nextMainPhase === Phases.REST) {
+    const minutes: Minutes = durations[nextMainPhase] / 60
     serviceWorker.showNotification('Done, take a break', {
       body: `Rest for ${minutes} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
-  } else if (nextPhase === Phases.WORK) {
-    const minutes: Minutes = durations[nextPhase] / 60
+  } else if (nextMainPhase === Phases.WORK) {
+    const minutes: Minutes = durations[nextMainPhase] / 60
     serviceWorker.showNotification('Focus again', {
       body: `Focus again for ${minutes} minutes`,
       icon: 'images/icon-192.png',
       silent: true,
     })
+  } else {
+    console.warn('No notification available for this phase:', nextPhase)
   }
 }
 
