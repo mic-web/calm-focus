@@ -30,7 +30,7 @@ Here's a short list that summarizes the features and use cases:
 - Remembers your configurations (no login required, stored locally in your browser)
 - Keyboard shortcuts for quicker configuration (Hover buttons to see which are available)
 - Platform-independent web-app
-- Installation possible on devices that support PWAs ([Progressive Web Apps](https://en.wikipedia.org/wiki/Progressive_web_application"))
+- Installation possible on devices that support PWAs ([Progressive Web Apps](https://en.wikipedia.org/wiki/Progressive_web_application))
 - Browser notifications (visual and acoustic) when time is over
 - Fast reload and offline usage, due to caching as PWA
 
