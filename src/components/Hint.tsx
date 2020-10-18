@@ -11,6 +11,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     justifyContent: 'center',
     textAlign: 'center',
     flexGrow: 1,
+    whiteSpace: 'nowrap',
     paddingLeft: spacing(2),
     paddingRight: spacing(2),
     paddingTop: spacing(1),
