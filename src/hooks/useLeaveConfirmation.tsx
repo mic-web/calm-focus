@@ -2,11 +2,10 @@ import React from 'react'
 
 export default (preventDefault: boolean) => {
   React.useEffect(() => {
-    if (preventDefault) {
-      const handleBeforeUnload = (event: Event) => event.preventDefault()
-      window.addEventListener('beforeunload', handleBeforeUnload)
-      return () => {
-        window.removeEventListener('beforeunload', handleBeforeUnload)
+    window.onbeforeunload = (event: Event) => {
+      if (preventDefault) {
+        event.preventDefault()
+        return ''
       }
     }
     return undefined
