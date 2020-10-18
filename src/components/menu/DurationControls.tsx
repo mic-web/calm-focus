@@ -64,12 +64,7 @@ const DurationControls: React.FC<Props> = (props) => {
     )
   }
   return (
-    <IconButton
-      onClick={decrease}
-      color="primary"
-      size="small"
-      title="Decrease (Shortcut: down key when menu is closed)"
-    >
+    <IconButton onClick={decrease} color="primary" size="small" title="Decrease (Shortcut: up key when menu is closed)">
       <SvgIcon>
         <RemoveIcon />
       </SvgIcon>
