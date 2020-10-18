@@ -14,7 +14,7 @@ const josefin = {
   fontStyle: 'normal',
   fontWeight: 400,
   src: `
-    url('${woff2}') format('wof=f2'), /* Super Modern Browsers */
+    url('${woff2}') format('woff2'), /* Super Modern Browsers */
     url('${woff}') format('woff'), /* Pretty Modern Browsers */
   `,
 }
