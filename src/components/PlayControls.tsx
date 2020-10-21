@@ -1,53 +1,41 @@
 import React from 'react'
-import * as sounds from '../services/sounds'
 import { Phases } from '../types'
 import StartButton from './StartButton'
 import ResetButton from './ResetButton'
 import { AppContext } from '../context/context'
-import * as notification from '../services/notifications'
 import { TimerAction } from '../context/timeReducer'
 import { useNextPhase } from '../selectors/useNextPhase'
 import useKeyboardEvent from '../hooks/useKeyboardEvent'
 import { useMenuContext } from './Menu'
 import { isActivePhase } from '../services/timer'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const onInteraction = (_event: React.SyntheticEvent) => {
-  sounds.initOnInteraction()
-}
+import { useNotificationManager } from '../services/NotificationsProvider'
+import { useSoundManager } from '../services/SoundProvider'
 
 const Controls: React.FC = React.memo(() => {
   const { state, dispatch } = React.useContext(AppContext)
+  const notification = useNotificationManager()
+  const sounds = useSoundManager()
   const { phase } = state.timer
   const nextPhase = useNextPhase()
   const { open } = useMenuContext()
 
-  const reset = React.useCallback(
-    (event: React.SyntheticEvent) => {
-      onInteraction(event)
-      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: Phases.WORK_READY, autoPlayStarted: false } })
-    },
-    [dispatch]
-  )
-  const start = React.useCallback(
-    (event: React.SyntheticEvent) => {
-      onInteraction(event)
-      notification.checkNotificationsEnabled()
-      dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase, autoPlayStarted: true } })
-    },
-    [dispatch, nextPhase]
-  )
-  const toggle = React.useCallback(
-    (event: React.SyntheticEvent) => {
-      if (!isActivePhase(phase)) {
-        start(event)
-      } else {
-        reset(event)
-      }
-    },
-    [phase, start, reset]
-  )
-  useKeyboardEvent('keyup', ' ', toggle as any, !open)
+  const reset = React.useCallback(() => {
+    sounds.initOnInteraction()
+    dispatch({ type: TimerAction.UpdatePhase, payload: { phase: Phases.WORK_READY, autoPlayStarted: false } })
+  }, [dispatch, sounds])
+  const start = React.useCallback(() => {
+    sounds.initOnInteraction()
+    notification.tryAskPermission()
+    dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase, autoPlayStarted: true } })
+  }, [dispatch, nextPhase, notification, sounds])
+  const toggle = React.useCallback(() => {
+    if (!isActivePhase(phase)) {
+      start()
+    } else {
+      reset()
+    }
+  }, [phase, start, reset])
+  useKeyboardEvent('keyup', ' ', toggle, !open)
 
   return <ControlComponent start={start} reset={reset} phase={phase} />
 })

@@ -6,7 +6,7 @@ import PictureCredits from './components/Credits'
 import BackgroundOverlay from './components/BackgroundOverlay'
 import AnimatedCircle from './components/AnimatedCircle'
 import Timer from './components/Timer'
-import theme from './style/theme'
+import theme, { AppThemeProvider } from './style/theme'
 import GlobalStyle from './style/GlobalStyle'
 import Hint from './components/Hint'
 import { MenuContent, MenuOpenButton, MenuProvider, useMenuContext } from './components/Menu'
@@ -16,7 +16,6 @@ import useLeaveConfirmation from './hooks/useLeaveConfirmation'
 import NotificationsConfig from './components/menu/NotificationsConfig'
 import SoundsConfig from './components/menu/SoundsConfig'
 import AutoPlayConfig from './components/menu/AutoPlayConfig'
-import InstallButton from './components/InstallButton'
 import Controls from './components/PlayControls'
 import { useTimer, narrowEditablePhase, isActivePhase } from './services/timer'
 import { WorkDurationConfig, RestDurationConfig } from './components/menu/DurationsConfig'
@@ -24,6 +23,9 @@ import { useDecreaseMinutes, useIncreaseMinutes } from './selectors/useUpdateMin
 import useKeyboardEvent from './hooks/useKeyboardEvent'
 import * as storage from './services/storage'
 import ErrorBoundary from './components/ErrorBoundary'
+import { ServiceWorkerProvider } from './services/ServiceWorkerProvider'
+import { NotificationProvider } from './services/NotificationsProvider'
+import { SoundProvider } from './services/SoundProvider'
 
 const AppWideBehavior: React.FC = () => {
   const { state } = React.useContext(AppContext)
@@ -74,11 +76,8 @@ const Menu = () => {
         <NotificationsConfig />
       </MenuEntry>
       <MenuEntry>
-        <InstallButton />
-      </MenuEntry>
-      <Box mt="auto" flexBasis="100%" justifyContent="center">
         <PictureCredits />
-      </Box>
+      </MenuEntry>
     </>
   )
 }
@@ -86,34 +85,38 @@ const Menu = () => {
 const ThemedApp = () => {
   return (
     <ErrorBoundary>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <CssBaseline />
+      <AppThemeProvider>
         <AppProvider>
-          <MenuProvider>
-            <AppWideBehavior />
-            <AppContainer>
-              <BackgroundOverlay />
-              <HintContainer>
-                <Hint />
-              </HintContainer>
-              <MainContainer>
-                <TimeContainer>
-                  <AnimatedCircle />
-                  <Timer />
-                </TimeContainer>
-                <ControlContainer>
-                  <Controls />
-                </ControlContainer>
-              </MainContainer>
-              <MenuContent>
-                <Menu />
-              </MenuContent>
-              <MenuOpenButton />
-            </AppContainer>
-          </MenuProvider>
+          <ServiceWorkerProvider>
+            <NotificationProvider>
+              <SoundProvider>
+                <MenuProvider>
+                  <AppWideBehavior />
+                  <AppContainer>
+                    <BackgroundOverlay />
+                    <HintContainer>
+                      <Hint />
+                    </HintContainer>
+                    <MainContainer>
+                      <TimeContainer>
+                        <AnimatedCircle />
+                        <Timer />
+                      </TimeContainer>
+                      <ControlContainer>
+                        <Controls />
+                      </ControlContainer>
+                    </MainContainer>
+                    <MenuContent>
+                      <Menu />
+                    </MenuContent>
+                    <MenuOpenButton />
+                  </AppContainer>
+                </MenuProvider>
+              </SoundProvider>
+            </NotificationProvider>
+          </ServiceWorkerProvider>
         </AppProvider>
-      </ThemeProvider>
+      </AppThemeProvider>
     </ErrorBoundary>
   )
 }

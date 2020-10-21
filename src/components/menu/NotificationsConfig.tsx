@@ -2,32 +2,28 @@ import React from 'react'
 
 import { Box, SvgIcon, Typography, Switch } from '@material-ui/core'
 import NotificationsIcon from '@material-ui/icons/Notifications'
-import * as notifications from '../../services/notifications'
+import { useServiceWorkerManager } from '../../services/ServiceWorkerProvider'
+import { NotificationManager } from '../../services/NotificationsProvider'
 
 type Props = {}
 
-const showExampleNotification = () =>
-  notifications.showNotification('Notifications enabled', {
-    body: `This is an example notification`,
-    icon: 'images/icon-192.png',
-  })
-
 const NotificationsConfig: React.FC<Props> = () => {
+  const serviceWorkerManager = useServiceWorkerManager()
+  const notifications = new NotificationManager(serviceWorkerManager)
   const [isEnabled, setIsEnabled] = React.useState(notifications.readIsEnabled())
 
   const doSetEnabled = (enabled: boolean) => {
     setIsEnabled(enabled)
     notifications.writeIsEnabled(enabled)
     if (enabled) {
-      showExampleNotification()
+      notifications.showNotification('Notifications enabled', {
+        body: `This is an example notification`,
+        icon: 'images/icon-192.png',
+      })
     }
   }
   const onToggle = () => {
-    if (
-      !notifications.readIsEnabled() &&
-      !notifications.browserNotificationGranted() &&
-      notifications.browserNotificationSupported()
-    ) {
+    if (!notifications.readIsEnabled() && !notifications.grantedByUser && notifications.supportedByBrowser()) {
       notifications
         .askPermission()
         .then((granted) => {
@@ -39,12 +35,14 @@ const NotificationsConfig: React.FC<Props> = () => {
         })
         .catch(() => {
           doSetEnabled(false)
+          // eslint-disable-next-line no-console
           console.warn('Notification permission failed')
+          // eslint-disable-next-line no-alert
           alert(
             'If you want to enable notifications again, "Allow" notifications in the tool bar of your browser (to the left side of the address)'
           )
         })
-    } else if (!isEnabled && notifications.browserNotificationSupported()) {
+    } else if (!isEnabled && notifications.supportedByBrowser()) {
       doSetEnabled(true)
     } else {
       doSetEnabled(false)
@@ -61,7 +59,7 @@ const NotificationsConfig: React.FC<Props> = () => {
             <Typography variant="h5">Notifications</Typography>
           </Box>
         </Box>
-        {notifications.browserNotificationSupported() ? (
+        {notifications.supportedByBrowser() ? (
           <>
             <Box mb={2}>
               <Typography variant="body1">Get notified when time is over.</Typography>

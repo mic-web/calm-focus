@@ -7,6 +7,7 @@ export default (preventDefault: boolean) => {
         event.preventDefault()
         return ''
       }
+      return null
     }
     return undefined
   }, [preventDefault])

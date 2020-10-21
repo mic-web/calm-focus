@@ -45,6 +45,7 @@ export const startTimer = () => {
       }
     }
   } else {
+    // eslint-disable-next-line no-console
     console.warn('Web worker not supported')
   }
 }

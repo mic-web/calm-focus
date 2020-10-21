@@ -4,11 +4,11 @@ import * as storage from './storage'
 import * as webWorkers from '../worker/web-workers'
 import { AppContext } from '../context/context'
 import { TimerAction } from '../context/timeReducer'
-import { playTimeOver } from './sounds'
-import * as serviceWorker from './service-worker'
 import usePhaseDuration from '../selectors/usePhaseDuration'
 import useNextPhase from '../selectors/useNextPhase'
 import useSecondsLeft from '../selectors/useSecondsLeft'
+import { useServiceWorkerManager } from './ServiceWorkerProvider'
+import { useSoundManager } from './SoundProvider'
 
 const DEFAULT_WORK_PHASE_MINUTES: Minutes = 25
 const DEFAULT_REST_PHASE_MINUTES: Minutes = 5
@@ -35,26 +35,36 @@ export const narrowEditablePhase = (phase: Phases): EditablePhases =>
     [Phases.WORK]: Phases.WORK,
   }[phase] as EditablePhases)
 
-const notifyTimeOver = (nextPhase: Phases, durations: PhaseDurations) => {
-  playTimeOver()
-  const nextMainPhase = narrowEditablePhase(nextPhase)
-  if (nextMainPhase === Phases.REST) {
-    const minutes: Minutes = durations[nextMainPhase] / 60
-    serviceWorker.showNotification('Done, take a break', {
-      body: `Rest for ${minutes} minutes`,
-      icon: 'images/icon-192.png',
-      silent: true,
-    })
-  } else if (nextMainPhase === Phases.WORK) {
-    const minutes: Minutes = durations[nextMainPhase] / 60
-    serviceWorker.showNotification('Focus again', {
-      body: `Focus again for ${minutes} minutes`,
-      icon: 'images/icon-192.png',
-      silent: true,
-    })
-  } else {
-    console.warn('No notification available for this phase:', nextPhase)
-  }
+const useNotifyTimeOver = () => {
+  const serviceWorker = useServiceWorkerManager()
+  const sound = useSoundManager()
+
+  const notifyTimeOver = React.useCallback(
+    (nextPhase: Phases, durations: PhaseDurations) => {
+      sound.playTimeOver()
+      const nextMainPhase = narrowEditablePhase(nextPhase)
+      if (nextMainPhase === Phases.REST) {
+        const minutes: Minutes = durations[nextMainPhase] / 60
+        serviceWorker.showNotification('Done, take a break', {
+          body: `Rest for ${minutes} minutes`,
+          icon: 'images/icon-192.png',
+          silent: true,
+        })
+      } else if (nextMainPhase === Phases.WORK) {
+        const minutes: Minutes = durations[nextMainPhase] / 60
+        serviceWorker.showNotification('Focus again', {
+          body: `Focus again for ${minutes} minutes`,
+          icon: 'images/icon-192.png',
+          silent: true,
+        })
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn('No notification available for this phase:', nextPhase)
+      }
+    },
+    [serviceWorker, sound]
+  )
+  return notifyTimeOver
 }
 
 export const useTimer = () => {
@@ -63,13 +73,14 @@ export const useTimer = () => {
   const phaseDuration = usePhaseDuration()
   const nextPhase = useNextPhase()
   const secondsLeft = useSecondsLeft()
+  const notifyTimeOver = useNotifyTimeOver()
 
   React.useEffect(() => {
     if (secondsLeft <= 0) {
       notifyTimeOver(nextPhase, state.timer.phaseDurations)
       dispatch({ type: TimerAction.UpdatePhase, payload: { phase: nextPhase } })
     }
-  }, [dispatch, nextPhase, phase, secondsLeft, state.timer.phaseDurations])
+  }, [dispatch, nextPhase, phase, secondsLeft, state.timer.phaseDurations, notifyTimeOver])
   React.useEffect(() => {
     webWorkers.loadWorker()
   }, [])

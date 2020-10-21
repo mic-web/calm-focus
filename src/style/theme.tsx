@@ -1,11 +1,13 @@
-import { responsiveFontSizes } from '@material-ui/core'
-import { createMuiTheme, ThemeOptions, darken } from '@material-ui/core/styles'
+import { CssBaseline, responsiveFontSizes } from '@material-ui/core'
+import { createMuiTheme, ThemeOptions, darken, ThemeProvider } from '@material-ui/core/styles'
 
 import cyan from '@material-ui/core/colors/cyan'
 import teal from '@material-ui/core/colors/teal'
 import { blueGrey } from '@material-ui/core/colors'
+import React from 'react'
 import woff from '../fonts/fira-sans-v10-latin-regular.woff'
 import woff2 from '../fonts/fira-sans-v10-latin-regular.woff2'
+import GlobalStyle from './GlobalStyle'
 
 const fontName = 'Fira Sans'
 
@@ -50,5 +52,13 @@ const defaultTheme: ThemeOptions = {
 
 const theme = createMuiTheme(defaultTheme)
 const responsiveTheme = responsiveFontSizes(theme)
+
+export const AppThemeProvider: React.FC = ({ children }) => (
+  <ThemeProvider theme={theme}>
+    <GlobalStyle />
+    <CssBaseline />
+    {children}
+  </ThemeProvider>
+)
 
 export default responsiveTheme

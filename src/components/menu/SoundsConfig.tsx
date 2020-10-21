@@ -2,11 +2,12 @@ import React from 'react'
 
 import { Box, SvgIcon, Typography, Switch } from '@material-ui/core'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
-import * as sounds from '../../services/sounds'
+import { useSoundManager } from '../../services/SoundProvider'
 
 type Props = {}
 
 const SoundsConfig: React.FC<Props> = () => {
+  const sounds = useSoundManager()
   const [isEnabled, setIsEnabled] = React.useState(sounds.readIsEnabled())
   const onToggle = () => {
     if (!sounds.readIsEnabled()) {
